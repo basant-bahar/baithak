@@ -16,15 +16,15 @@
   center {
     @apply pt-1 pb-1;
   }
-}
 
-.root {
-  --primary: #800011;
-  --primary-dark: #760010;
-  --secondary: #ffc051;
-  --secondary-dark: #ffb32d;
-  --background-light: #f9f7f7;
-  --background-border: #eae3e3;
+  :root {
+    --primary: #800011;
+    --primary-dark: #760010;
+    --secondary: #ffc051;
+    --secondary-dark: #ffb32d;
+    --background-light: #f9f7f7;
+    --background-border: #eae3e3;
+  }
 }
 
 @layer components {
@@ -35,6 +35,10 @@
     font-family: Roboto, sans-serif;
   }
 
+  .stroke-svg {
+    stroke: var(--secondary);
+  }
+
   .main-container {
     @apply bordered-container mt-24 lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm;
   }
@@ -43,5 +47,68 @@
     @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto;
     background-color: var(--background-light);
     border: 1px solid var(--background-border);
+  }
+
+  .menu-horizontal li {
+    @apply mx-1 items-center;
+  }
+  .menu-horizontal .navbar-sub.login,
+  .menu-horizontal .navbar-sub.admin {
+    left: unset;
+    right: -12px;
+  }
+  .menu-horizontal .navbar-sub.admin {
+    right: -84px;
+  }
+  .navbar {
+    background: var(--primary);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+  }
+  .nav-link {
+    @apply h-10;
+    color: var(--secondary);
+    user-select: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .navbar-drawer {
+    background: var(--primary);
+  }
+  .navbar-drawer li {
+    @apply my-1;
+  }
+  .navbar-drawer .nav-sub-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .navbar-drawer .nav-sub-wrapper:hover {
+    background-color: unset;
+  }
+  .nav-sub-link {
+    @apply nav-link block px-3 py-2 text-sm w-full text-left;
+    padding-left: 1.75rem !important;
+  }
+  .nav-link.selected {
+    background-color: var(--primary-dark);
+  }
+  .nav-sub-name {
+    @apply inline-flex items-center font-medium text-sm rounded-md color-secondary;
+  }
+  .nav-sub-link:hover {
+    background-color: var(--primary-dark);
+  }
+  .nav-hr {
+    width: 100%;
+    background-color: var(--secondary);
+    color: var(--secondary);
+    height: 1px;
+    border-width: 0;
+  }
+  .nav-item {
+    @apply px-3 rounded-md text-sm font-medium flex items-center;
   }
 }
