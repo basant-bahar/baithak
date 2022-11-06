@@ -4,6 +4,8 @@ import React, { FC, useRef } from "react";
 import { NavItem } from "./navItem";
 import Link from "next/link";
 import { Logo } from "./logo";
+import { Memberships } from "./membershipsMenu";
+import { About } from "./aboutMenu";
 
 const NavBar = ({ children }: { children: React.ReactNode }) => {
   const container = useRef(null);
@@ -53,7 +55,9 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
             </ul>
           </div>
         </div>
-        <main>{children}</main>
+        <main>
+          <div className="main-container">{children}</div>
+        </main>
       </div>
       <div className="drawer-side">
         <label htmlFor="sidebar" className="drawer-overlay"></label>
@@ -78,16 +82,16 @@ const MenuElements: FC<MenuElementsProps> = ({ isDrawer }: MenuElementsProps) =>
         <NavItem href="/" isLeaf={true} name="Home" />
       </li>
       <li>
-        <NavItem href="/" isLeaf={true} name="Concert Calendar" />
+        <NavItem href="/concerts/calendar" isLeaf={true} name="Concert Calendar" />
       </li>
       <li>
-        <NavItem href="/" name="Mailing List" />
+        <NavItem href="/subscriptions" name="Mailing List" />
       </li>
       <li>
-        <NavItem href="/" name="Memberships" />
+        <Memberships isDrawer={isDrawer} />
       </li>
       <li>
-        <NavItem href="/" name="About" />
+        <About isDrawer={isDrawer} />
       </li>
     </>
   );
