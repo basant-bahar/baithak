@@ -34,4 +34,11 @@ module.exports = {
   plugins: [
     require('daisyui'),
   ],
+  daisyui: {
+    themes: [
+      {
+        "accent": "#760010"
+      }
+    ]
+  }
 }

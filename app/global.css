@@ -28,6 +28,10 @@
 }
 
 @layer components {
+  .color-secondary {
+    color: var(--secondary);
+  }
+
   html,
   body {
     padding: 0;
@@ -66,6 +70,15 @@
     top: 0;
     width: 100%;
     z-index: 2;
+  }
+  .navbar-sub {
+    @apply navbar p-0;
+    @apply flex flex-col origin-center absolute mt-12 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none;
+    left: 0;
+  }
+  .menu-horizontal li:last-of-type .navbar-sub {
+    left: unset;
+    right: -12px;
   }
   .nav-link {
     @apply h-10;
