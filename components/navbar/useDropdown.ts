@@ -1,4 +1,4 @@
-import { KeyboardEvent, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 function onEscapeKeyPress(fn: Function) {
   const ESC_KEY = 27;
@@ -18,8 +18,8 @@ export function useDropdown<T extends HTMLElement>(): [
   const close = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
-    const handleGlobalMouseDown = ({ target }) => {
-      if (!ref.current || ref.current.contains(target)) {
+    const handleGlobalMouseDown = (e: MouseEvent) => {
+      if (!ref.current || ref.current.contains(e.target as Node)) {
         return;
       }
       close();
