@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
-const Calendar: FC<void> = () => {
+const About: FC = () => {
   return <div>TODO: About us</div>;
 };
 
-export default Calendar;
+export default About;
