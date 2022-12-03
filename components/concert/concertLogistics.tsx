@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { MapPinIcon, CalendarIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import format from "date-fns/format";
 import { venueDetails } from "../../graphql/concert";
 import { FragmentType, useFragment } from "../../__generated__";
@@ -28,7 +28,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   const isFree = props.memberPrice === 0;
   const localDate = props.startTime ? new Date(new Date(props.startTime + "Z")) : new Date();
   const localEndDate = props.endTime ? new Date(new Date(props.endTime + "Z")) : new Date();
-  let localDateStr = localDate.toLocaleDateString("en-US", options);
+  const localDateStr = localDate.toLocaleDateString("en-US", options);
   const isNonSaturday = localDate.getDay() !== 6;
   const isBefore5pm = localDate.getHours() < 17;
   const specialNoteStyle = isNonSaturday || isBefore5pm ? "pb-4" : "";
@@ -43,9 +43,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
     ? venue.street + ", " + venue.city + " " + venue.state + " " + venue.zip
     : "";
 
-  function venueLink() {
-    return "https://maps.google.com/?q=" + venueAddress;
-  }
+  const venueLink = "https://maps.google.com/?q=" + venueAddress;
 
   function googleEventDateLink() {
     let venueString = "";
@@ -77,8 +75,8 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   }
 
   return (
-    <div className="concert-logistics">
-      <div className={`special-note ${specialNoteStyle}`}>
+    <div className="mx-auto max-w-screen-sm bg-gray-100 rounded-xl p-2">
+      <div className={`text-center text-primary bg-secondary ${specialNoteStyle}`}>
         {isNonSaturday && (
           <div className="font-bold p-4 pb-0">Please note this is a {day} concert.</div>
         )}
@@ -88,7 +86,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
           </div>
         )}
       </div>
-      <div className="logistics">
+      <div className="p-4 text-center text-white bg-primary">
         <div className="flex flex-wrap justify-center mb-4">
           <span>Tickets: {props.nonMemberPrice} (available at the gate)</span>
           <span className="xs:block hidden mr-1">,</span>
@@ -109,15 +107,15 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         <div className="mt-4">
           <div className="flex justify-center align-center">
             {dateStr}
-            <a href={googleEventDateLink()} target="_blank">
-              <CalendarIcon className="link-icon ml-1" />
+            <a className="link-icon ml-1 w-5" href={googleEventDateLink()} target="_blank">
+              <CalendarIcon />
             </a>
           </div>
           <div className="flex justify-center align-center">
             {venue.name} {showAddress && <>, {venueAddress}</>}
             {showAddress && (
-              <a href={venueLink()} target="_blank">
-                <MapPinIcon className="link-icon ml-1" />
+              <a className="link-icon ml-1 w-5" href={venueLink} target="_blank">
+                <MapPinIcon />
               </a>
             )}
           </div>
