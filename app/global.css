@@ -16,22 +16,9 @@
   center {
     @apply pt-1 pb-1;
   }
-
-  :root {
-    --primary: #800011;
-    --primary-dark: #760010;
-    --secondary: #ffc051;
-    --secondary-dark: #ffb32d;
-    --background-light: #f9f7f7;
-    --background-border: #eae3e3;
-  }
 }
 
 @layer components {
-  .color-secondary {
-    color: var(--secondary);
-  }
-
   html,
   body {
     padding: 0;
@@ -39,18 +26,12 @@
     font-family: Roboto, sans-serif;
   }
 
-  .stroke-svg {
-    stroke: var(--secondary);
-  }
-
   .main-container {
     @apply bordered-container mt-24 lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm;
   }
 
   .bordered-container {
-    @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto;
-    background-color: var(--background-light);
-    border: 1px solid var(--background-border);
+    @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto bg-gray-50 border-gray-200;
   }
 
   .menu-horizontal li {
@@ -65,7 +46,7 @@
     right: -84px;
   }
   .navbar {
-    background: var(--primary);
+    @apply bg-primary;
     position: fixed;
     top: 0;
     width: 100%;
@@ -81,14 +62,13 @@
     right: -12px;
   }
   .nav-link {
-    @apply h-10;
-    color: var(--secondary);
+    @apply h-10 text-secondary;
     user-select: none;
     cursor: pointer;
     padding: 0;
   }
   .navbar-drawer {
-    background: var(--primary);
+    @apply bg-primary;
   }
   .navbar-drawer li {
     @apply my-1;
@@ -102,22 +82,18 @@
     background-color: unset;
   }
   .nav-sub-link {
-    @apply nav-link block px-3 py-2 text-sm w-full text-left;
+    @apply nav-link block px-3 py-2 text-sm w-full text-left hover:bg-primary-dark;
     padding-left: 1.75rem !important;
   }
   .nav-link.selected {
-    background-color: var(--primary-dark);
+    @apply bg-primary-dark;
   }
   .nav-sub-name {
-    @apply inline-flex items-center font-medium text-sm rounded-md color-secondary;
-  }
-  .nav-sub-link:hover {
-    background-color: var(--primary-dark);
+    @apply inline-flex items-center font-medium text-sm rounded-md text-secondary;
   }
   .nav-hr {
+    @apply bg-secondary text-secondary;
     width: 100%;
-    background-color: var(--secondary);
-    color: var(--secondary);
     height: 1px;
     border-width: 0;
   }
