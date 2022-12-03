@@ -6,10 +6,10 @@ import {
   concertDetails,
   concertViewDetails,
   newConcertDetails,
-  venueDetails,
 } from "../../graphql/concert";
 import { imageUrl } from "../../utils";
 import { FragmentType, useFragment } from "../../__generated__";
+import { ConcertArtistInfoFragment } from "../../__generated__/graphql";
 import { ConcertLogistics } from "./concertLogistics";
 import Markdown from "./markdown";
 
@@ -17,49 +17,65 @@ type ConcertViewProps = {
   concert: FragmentType<typeof concertViewDetails>;
 };
 
+const ArtistLink = ({
+  isMain,
+  concertArtists,
+}: {
+  isMain: boolean;
+  concertArtists: readonly ConcertArtistInfoFragment[];
+}) => {
+  const artistsCount = concertArtists.length;
+  const links = concertArtists.map((concertArtist) => {
+    const nameText =
+      artistsCount > 1
+        ? `${concertArtist.artist.name} (${concertArtist.instrument})`
+        : concertArtist.artist.name;
+    const link = (
+      <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
+        <div className="cursor-pointer">{nameText} </div>
+      </Link>
+    );
+
+    return (
+      <>
+        {isMain ? (
+          <div className="mb-4 text-4xl">{link}</div>
+        ) : (
+          <>
+            <div className="mt-1 text-2xl">{link}</div>
+          </>
+        )}
+      </>
+    );
+  });
+
+  return <div className="text-center text-primary font-bold">{links}</div>;
+};
+
 const ConcertView = (props: ConcertViewProps) => {
   const viewDetails = useFragment(concertViewDetails, props.concert);
   const details = useFragment(concertDetails, viewDetails);
   const concert = useFragment(newConcertDetails, details);
-
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
-  const mainArtistsCount = concert.mainArtists.length;
-  const mainArtists = concert.mainArtists.map((mainx) => {
-    const main = useFragment(concertArtistInfo, mainx);
-    const nameText =
-      mainArtistsCount > 1 ? `${main.artist.name} (${main.instrument})` : main.artist.name;
-    return (
-      <Link href={`/artists/${main.artist.id}`} key={main.artist.id}>
-        <div className="cursor-pointer">{nameText} </div>
-      </Link>
-    );
-  });
-  const accompanyArtists = concert.accompanyingArtists.map((accompanyx) => {
-    const accompany = useFragment(concertArtistInfo, accompanyx);
-    const nameText = `${accompany.artist.name} (${accompany.instrument})`;
-    return (
-      <Link href={`/artists/${accompany.artist.id}`} key={accompany.artist.id}>
-        <div className="cursor-pointer">{nameText} </div>
-      </Link>
-    );
-  });
 
   return (
     <>
       <div className="mb-4 text-3xl text-center text-primary font-bold">{concert.title}</div>
-      <div className="mb-4 text-4xl text-center text-primary font-bold">{mainArtists}</div>
+      <ArtistLink
+        key={"main"}
+        isMain={true}
+        concertArtists={useFragment(concertArtistInfo, concert.mainArtists)}
+      />
       <div className="flex justify-center">
         <Image src={imageSrc} width={600} height={450} alt="Concert photo" />
       </div>
-      {accompanyArtists.length > 0 && (
-        <>
-          <div className="mt-8 text-lg text-center color-primary">Accompanied by</div>
-          <div className="mt-1 text-2xl text-center color-primary font-bold">
-            {accompanyArtists}
-          </div>
-        </>
-      )}
-      <div className="flex mt-4 mb-4">
+      <div className="mt-8 text-lg text-center color-primary">Accompanied by</div>
+      <ArtistLink
+        key={"accompany"}
+        isMain={false}
+        concertArtists={useFragment(concertArtistInfo, concert.accompanyingArtists)}
+      />
+      <div className="flex mt-4 mb-4 p-4 text-lg">
         <Markdown>{concert.description}</Markdown>
       </div>
       <ConcertLogistics
