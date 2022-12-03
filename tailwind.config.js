@@ -8,7 +8,14 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'primary': '#800011',
+        'primary-dark': '#760010',
+        'secondary': '#ffc051',
+        'secondary-dark': '#ffb32d',
+      },
+    },
     container: {
       center: true,
     },
