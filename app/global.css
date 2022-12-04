@@ -27,11 +27,11 @@
   }
 
   .main-container {
-    @apply bordered-container mt-24 lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm;
+    @apply bordered-container mt-20 lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm;
   }
 
   .bordered-container {
-    @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto bg-gray-50 border-gray-200;
+    @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto bg-gray-50 border border-solid border-gray-200;
   }
 
   .menu-horizontal li {
