@@ -58,9 +58,7 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
             </ul>
           </div>
         </div>
-        <main>
-          <div className="main-container">{children}</div>
-        </main>
+        <main>{children}</main>
       </div>
       <div className="drawer-side">
         <label htmlFor="sidebar" className="drawer-overlay"></label>

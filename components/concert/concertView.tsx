@@ -37,15 +37,12 @@ const ArtistLink = ({
     );
 
     return (
-      <>
-        {isMain ? (
-          <div className="mb-4 text-4xl">{link}</div>
-        ) : (
-          <>
-            <div className="mt-1 text-2xl">{link}</div>
-          </>
-        )}
-      </>
+      <div
+        key={isMain ? "main-artists" : "accompany-artists"}
+        className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
+      >
+        {link}
+      </div>
     );
   });
 
@@ -61,20 +58,26 @@ const ConcertView = (props: ConcertViewProps) => {
   return (
     <>
       <div className="mb-4 text-3xl text-center text-primary font-bold">{concert.title}</div>
-      <ArtistLink
-        key={"main"}
-        isMain={true}
-        concertArtists={useFragment(concertArtistInfo, concert.mainArtists)}
-      />
+      {concert.mainArtists.length > 0 && (
+        <ArtistLink
+          key={"main"}
+          isMain={true}
+          concertArtists={useFragment(concertArtistInfo, concert.mainArtists)}
+        />
+      )}
       <div className="flex justify-center">
         <Image src={imageSrc} width={600} height={450} alt="Concert photo" />
       </div>
-      <div className="mt-8 text-lg text-center color-primary">Accompanied by</div>
-      <ArtistLink
-        key={"accompany"}
-        isMain={false}
-        concertArtists={useFragment(concertArtistInfo, concert.accompanyingArtists)}
-      />
+      {concert.accompanyingArtists.length > 0 && (
+        <>
+          <div className="mt-8 text-lg text-center color-primary">Accompanied by</div>
+          <ArtistLink
+            key={"accompany"}
+            isMain={false}
+            concertArtists={useFragment(concertArtistInfo, concert.accompanyingArtists)}
+          />
+        </>
+      )}
       <div className="flex mt-4 mb-4 p-4 text-lg">
         <Markdown>{concert.description}</Markdown>
       </div>

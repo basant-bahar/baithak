@@ -3,11 +3,11 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   schema: "http://localhost:9876/graphql",
   documents: [
-    "app/**/*.tsx",
+    "app/**/*.{ts,tsx}",
     "!app/gql/**/*",
-    "graphql/**/*.tsx",
+    "graphql/**/*.{ts,tsx}",
     "!graphql/gql/**/*",
-    "components/**/*.tsx",
+    "components/**/*.{ts,tsx}",
     "!components/gql/**/*",
   ],
   generates: {
