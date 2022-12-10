@@ -100,4 +100,18 @@
   .nav-item {
     @apply px-3 rounded-md text-sm font-medium flex items-center;
   }
+
+  .simple-input {
+    @apply border-b-2 bg-transparent focus:outline-none w-80 p-2;
+  }
+  .simple-input:disabled {
+    @apply opacity-50;
+  }
+  .simple-input:invalid {
+    @apply bg-red-100;
+  }
+
+  button {
+    @apply rounded-md text-center disabled:opacity-50 p-3 pt-1 pb-1;
+  }
 }
