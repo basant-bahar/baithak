@@ -6,8 +6,11 @@ import Link from "next/link";
 import { Logo } from "./logo";
 import { Memberships } from "./membershipsMenu";
 import { About } from "./aboutMenu";
+import { LoginMenu } from "./loginMenu";
+import { AuthUser, useAuth } from "../auth/authProvider";
 
 const NavBar = ({ children }: { children: React.ReactNode }) => {
+  const [user, _login, logout] = useAuth();
   const container = useRef(null);
   const drawerInput = useRef<HTMLInputElement | null>(null);
 
@@ -54,7 +57,7 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div className="flex-none hidden lg:block">
             <ul className="menu menu-horizontal">
-              <MenuElements isDrawer={false} />
+              <MenuElements isDrawer={false} user={user} logout={logout} />
             </ul>
           </div>
         </div>
@@ -66,7 +69,7 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
           <div className="block lg:hidden w-auto p-2">
             <Logo />
           </div>
-          <MenuElements isDrawer={true} />
+          <MenuElements isDrawer={true} user={user} logout={logout} />
         </ul>
       </div>
     </div>
@@ -75,8 +78,10 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
 
 interface MenuElementsProps {
   isDrawer: boolean;
+  user: AuthUser | undefined;
+  logout: () => void;
 }
-const MenuElements: FC<MenuElementsProps> = ({ isDrawer }: MenuElementsProps) => {
+const MenuElements: FC<MenuElementsProps> = ({ isDrawer, user, logout }: MenuElementsProps) => {
   return (
     <>
       <li>
@@ -94,6 +99,18 @@ const MenuElements: FC<MenuElementsProps> = ({ isDrawer }: MenuElementsProps) =>
       <li>
         <About isDrawer={isDrawer} />
       </li>
+      {!user && (
+        <li>
+          <Link href="/login" className="nav-link nav-item" aria-current="page">
+            Login
+          </Link>
+        </li>
+      )}
+      {user && (
+        <li>
+          <LoginMenu user={user} logout={logout} isDrawer={isDrawer} />
+        </li>
+      )}
     </>
   );
 };

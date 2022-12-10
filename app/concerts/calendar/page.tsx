@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 const Calendar: FC = () => {
-  return <div>TODO: Concert calendar</div>;
+  return <div className="main-container">TODO: Concert calendar</div>;
 };
 
 export default Calendar;

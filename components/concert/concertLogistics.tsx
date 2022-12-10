@@ -107,14 +107,19 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         <div className="mt-4">
           <div className="flex justify-center align-center">
             {dateStr}
-            <a className="link-icon ml-1 w-5" href={googleEventDateLink()} target="_blank">
+            <a
+              className="link-icon ml-1 w-5"
+              href={googleEventDateLink()}
+              target="_blank"
+              rel="noreferrer"
+            >
               <CalendarIcon />
             </a>
           </div>
           <div className="flex justify-center align-center">
             {venue.name} {showAddress && <>, {venueAddress}</>}
             {showAddress && (
-              <a className="link-icon ml-1 w-5" href={venueLink} target="_blank">
+              <a className="link-icon ml-1 w-5" href={venueLink} target="_blank" rel="noreferrer">
                 <MapPinIcon />
               </a>
             )}
