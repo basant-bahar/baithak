@@ -18,6 +18,7 @@ export function useDropdown<T extends HTMLElement>(): [
   const close = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
+    const actionRefElement = actionRef.current;
     const handleGlobalMouseDown = (e: MouseEvent) => {
       if (!ref.current || ref.current.contains(e.target as Node)) {
         return;
@@ -32,12 +33,12 @@ export function useDropdown<T extends HTMLElement>(): [
       onEscapeKeyPress(close);
     };
 
-    if (actionRef.current) actionRef.current.addEventListener("mousedown", handleToggle);
+    if (actionRefElement) actionRefElement.addEventListener("mousedown", handleToggle);
     document.addEventListener("mousedown", handleGlobalMouseDown);
     document.addEventListener("keydown", handleGlobalKeydown);
 
     return () => {
-      if (actionRef.current) actionRef.current.removeEventListener("mousedown", handleToggle);
+      if (actionRefElement) actionRefElement.removeEventListener("mousedown", handleToggle);
       document.removeEventListener("mousedown", handleGlobalMouseDown);
       document.removeEventListener("keydown", handleGlobalKeydown);
     };

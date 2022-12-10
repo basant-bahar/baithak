@@ -9,7 +9,6 @@ import {
 } from "../../graphql/concert";
 import { imageUrl } from "../../utils";
 import { FragmentType, useFragment } from "../../__generated__";
-import { ConcertArtistInfoFragment } from "../../__generated__/graphql";
 import { ConcertLogistics } from "./concertLogistics";
 import Markdown from "./markdown";
 
@@ -19,11 +18,12 @@ type ConcertViewProps = {
 
 const ArtistLink = ({
   isMain,
-  concertArtists,
+  concertArtistsData,
 }: {
   isMain: boolean;
-  concertArtists: readonly ConcertArtistInfoFragment[];
+  concertArtistsData: FragmentType<typeof concertArtistInfo>[];
 }) => {
+  const concertArtists = useFragment(concertArtistInfo, concertArtistsData);
   const artistsCount = concertArtists.length;
   const links = concertArtists.map((concertArtist) => {
     const nameText =
@@ -59,11 +59,7 @@ const ConcertView = (props: ConcertViewProps) => {
     <>
       <div className="mb-4 text-3xl text-center text-primary font-bold">{concert.title}</div>
       {concert.mainArtists.length > 0 && (
-        <ArtistLink
-          key={"main"}
-          isMain={true}
-          concertArtists={useFragment(concertArtistInfo, concert.mainArtists)}
-        />
+        <ArtistLink key={"main"} isMain={true} concertArtistsData={concert.mainArtists} />
       )}
       <div className="flex justify-center">
         <Image src={imageSrc} width={600} height={450} alt="Concert photo" />
@@ -74,7 +70,7 @@ const ConcertView = (props: ConcertViewProps) => {
           <ArtistLink
             key={"accompany"}
             isMain={false}
-            concertArtists={useFragment(concertArtistInfo, concert.accompanyingArtists)}
+            concertArtistsData={concert.accompanyingArtists}
           />
         </>
       )}

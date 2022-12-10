@@ -1,5 +1,8 @@
 "use client";
 
+import { AuthProvider } from "../components/auth/authProvider";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { client } from "./apollo-client";
 import NavBar from "../components/navbar/navbar";
 import "./global.css";
 
@@ -12,7 +15,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <NavBar children={children} />
+        <AuthProvider>
+          <ApolloProvider client={client}>
+            <NavBar children={children} />
+          </ApolloProvider>
+        </AuthProvider>
       </body>
     </html>
   );
