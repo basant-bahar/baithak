@@ -16,40 +16,7 @@ type ConcertViewProps = {
   concert: FragmentType<typeof concertViewDetails>;
 };
 
-const ArtistLink = ({
-  isMain,
-  concertArtistsData,
-}: {
-  isMain: boolean;
-  concertArtistsData: FragmentType<typeof concertArtistInfo>[];
-}) => {
-  const concertArtists = useFragment(concertArtistInfo, concertArtistsData);
-  const artistsCount = concertArtists.length;
-  const links = concertArtists.map((concertArtist) => {
-    const nameText =
-      artistsCount > 1
-        ? `${concertArtist.artist.name} (${concertArtist.instrument})`
-        : concertArtist.artist.name;
-    const link = (
-      <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
-        <div className="cursor-pointer">{nameText} </div>
-      </Link>
-    );
-
-    return (
-      <div
-        key={isMain ? "main-artists" : "accompany-artists"}
-        className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
-      >
-        {link}
-      </div>
-    );
-  });
-
-  return <div className="text-center text-primary font-bold">{links}</div>;
-};
-
-const ConcertView = (props: ConcertViewProps) => {
+export default function ConcertView(props: ConcertViewProps) {
   const viewDetails = useFragment(concertViewDetails, props.concert);
   const details = useFragment(concertDetails, viewDetails);
   const concert = useFragment(newConcertDetails, details);
@@ -87,6 +54,37 @@ const ConcertView = (props: ConcertViewProps) => {
       />
     </>
   );
-};
+}
 
-export default ConcertView;
+const ArtistLink = ({
+  isMain,
+  concertArtistsData,
+}: {
+  isMain: boolean;
+  concertArtistsData: FragmentType<typeof concertArtistInfo>[];
+}) => {
+  const concertArtists = useFragment(concertArtistInfo, concertArtistsData);
+  const artistsCount = concertArtists.length;
+  const links = concertArtists.map((concertArtist) => {
+    const nameText =
+      artistsCount > 1
+        ? `${concertArtist.artist.name} (${concertArtist.instrument})`
+        : concertArtist.artist.name;
+    const link = (
+      <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
+        <div className="cursor-pointer">{nameText} </div>
+      </Link>
+    );
+
+    return (
+      <div
+        key={isMain ? "main-artists" : "accompany-artists"}
+        className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
+      >
+        {link}
+      </div>
+    );
+  });
+
+  return <div className="text-center text-primary font-bold">{links}</div>;
+};
