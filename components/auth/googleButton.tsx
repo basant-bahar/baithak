@@ -40,7 +40,7 @@ export const GoogleButton: FunctionComponent<GoogleButtonParams> = React.memo(
         (window as any).google.accounts.id.renderButton(divRef.current, {
           logo_alignment: "left",
           theme: "outline",
-          size: "medium",
+          size: "large",
           width: divRef.current.clientWidth,
         });
       }

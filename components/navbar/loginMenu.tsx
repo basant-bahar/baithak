@@ -45,10 +45,10 @@ export const LoginMenu: FC<LoginMenuProps> = ({ user, logout, isDrawer }: LoginM
     <>
       {isDrawer && subNav}
       {!isDrawer && (
-        <div className="nav-sub-wrapper" ref={containerRef as RefObject<HTMLDivElement>}>
+        <div className="nav-sub-wrapper py-0" ref={containerRef as RefObject<HTMLDivElement>}>
           <button
             type="button"
-            className="user-button"
+            className="flex text-sm rounded-full focus:outline-none hover:bg-primary-dark p-0"
             id="user-menu-button"
             aria-expanded="false"
             aria-haspopup="true"
