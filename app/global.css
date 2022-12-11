@@ -35,7 +35,7 @@
   }
 
   .menu-horizontal li {
-    @apply mx-1 items-center;
+    @apply mx-1 items-center hover:bg-primary-dark;
   }
   .menu-horizontal .navbar-sub.login,
   .menu-horizontal .navbar-sub.admin {

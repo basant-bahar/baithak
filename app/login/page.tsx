@@ -55,18 +55,17 @@ const Login = ({}: LoginMenuProps) => {
   };
 
   return (
-    <div className="main-container">
-      <div className="flex flex-column gap-x-4 items-center justify-around p-2 pt-6">
-        <div className="w-2/5 text-center">
+    <div className="main-container p-16">
+      <div className="flex gap-x-20 items-center p-2">
+        <div className="w-2/4 text-center">
           For existing members with a Google or Facebook account as well as new members
         </div>
-
         <div>
           <GoogleButton onCredentialResponse={googleSignInCallback} />
         </div>
       </div>
-      <div className="flex flex-column gap-x-4 items-center justify-around p-2 pt-12">
-        <div className="w-2/5 text-center">
+      <div className="flex gap-x-16 items-center p-2 pt-12">
+        <div className="w-2/4 text-center">
           Only for existing members without a Google or Facebook account. If you have any questions,
           please&nbsp;
           <Link href={"about/contact-us/email"} className="text-blue-500">
@@ -76,20 +75,23 @@ const Login = ({}: LoginMenuProps) => {
         </div>
         <div className="flex flex-col">
           <input
-            className="w-full mt-2 mb-2 simple-input"
+            className="mt-2 mb-2 simple-input w-full"
             type="text"
             placeholder="Email"
             onChange={changeUsername}
           />
           <input
-            className="w-full mt-2 mb-2 simple-input"
+            className="mt-2 mb-2 simple-input w-full"
             type="password"
             placeholder="Password"
             onChange={changePassword}
           />
           {error && <div className="text-red-500 pt-2">{error}</div>}
           <div className="flex items-center">
-            <button className="btn-blue py-1 px-4 mt-4 mr-3" onClick={normalSignInCallback}>
+            <button
+              className="bg-blue-400 hover:bg-blue-500 py-1 px-4 mt-4 mr-3"
+              onClick={normalSignInCallback}
+            >
               Sign In
             </button>
             <Link href={"login/reset/request"} className="mt-4 text-blue-500">
