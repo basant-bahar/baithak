@@ -65,25 +65,30 @@ const ArtistLink = ({
 }) => {
   const concertArtists = useFragment(concertArtistInfo, concertArtistsData);
   const artistsCount = concertArtists.length;
+  if (artistsCount === 0) {
+    return null;
+  }
   const links = concertArtists.map((concertArtist) => {
-    const nameText =
-      artistsCount > 1
-        ? `${concertArtist.artist.name} (${concertArtist.instrument})`
-        : concertArtist.artist.name;
-    const link = (
-      <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
-        <div className="cursor-pointer">{nameText} </div>
-      </Link>
-    );
+    if (concertArtist.artist) {
+      const nameText =
+        artistsCount > 1
+          ? `${concertArtist.artist.name} (${concertArtist.instrument})`
+          : concertArtist.artist.name;
+      const link = (
+        <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
+          <div className="cursor-pointer">{nameText} </div>
+        </Link>
+      );
 
-    return (
-      <div
-        key={isMain ? "main-artists" : "accompany-artists"}
-        className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
-      >
-        {link}
-      </div>
-    );
+      return (
+        <div
+          key={isMain ? "main-artists" : "accompany-artists"}
+          className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
+        >
+          {link}
+        </div>
+      );
+    }
   });
 
   return <div className="text-center text-primary font-bold">{links}</div>;
