@@ -9,7 +9,7 @@ export const concertArtistInfo = graphql(
         title
         name
       }
-      role
+      isMain
       rank
       instrument
     }
@@ -28,11 +28,11 @@ export const newConcertDetails = graphql(
       startTime
       endTime
       publish
-      mainArtists: concertArtists(where: { role: { eq: "Main" } }, orderBy: { rank: ASC }) {
+      mainArtists: concertArtists(where: { isMain: { eq: true } }, orderBy: { rank: ASC }) {
         ...ConcertArtistInfo
       }
       accompanyingArtists: concertArtists(
-        where: { role: { eq: "Accompany" } }
+        where: { isMain: { eq: false } }
         orderBy: { rank: ASC }
       ) {
         ...ConcertArtistInfo

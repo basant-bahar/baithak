@@ -1,7 +1,7 @@
 import Advisory from "../components/advisory";
 import { ConcertRsvp } from "../components/concert/concertRsvp";
 import ConcertView from "../components/concert/concertView";
-import { concertDetails, concertViewDetails, newConcertDetails } from "../graphql/concert";
+import { concertDetails, concertViewDetails } from "../graphql/concert";
 import { graphql, useFragment } from "../__generated__";
 import { ssrApolloClient } from "./apollo-client";
 
