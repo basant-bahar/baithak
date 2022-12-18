@@ -1,5 +1,7 @@
 import { endOfYear, startOfYear } from "date-fns";
-import React, { FC } from "react";
+import React from "react";
+import PageHeader from "../../../components/common/pageHeader";
+import { CalendarConcertCard } from "../../../components/concert/calendarConcertCard";
 import ConcertCarousel, {
   concertCalendarDetail,
 } from "../../../components/concert/concertCarousel";
@@ -20,9 +22,19 @@ export default async function Calendar() {
   if (!calendarConcerts) return null;
 
   return (
-    <div className="main-container">
-      <ConcertCarousel concerts={calendarConcerts} />
-    </div>
+    <>
+      <div className="main-container">
+        <PageHeader title={"Concert calendar"} />
+        <ConcertCarousel concerts={calendarConcerts} />
+      </div>
+      <div className="main-container mt-5 mb-2 grid grid-cols-2 gap-4">
+        {calendarConcerts.map((concert) => (
+          <div key={"v-" + concert.id} className="mb-2">
+            <CalendarConcertCard concertData={concert} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 

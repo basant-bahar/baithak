@@ -25,7 +25,7 @@ export default function ConcertCarouselSlide(props: ConcertCarouselSlideProps) {
       className={`carousel-item relative float-left w-full ${props.index === 0 ? "active" : ""}`}
     >
       <img className="block w-full" src={imageSrc} alt="Concert photo" />
-      <div className="carousel-caption hidden md:block absolute text-center">
+      <div className="carousel-caption md:block absolute text-center text-primary ">
         <h5 className="text-xl">{mainArtists}</h5>
         <p>{`${month} ${date}`}</p>
       </div>

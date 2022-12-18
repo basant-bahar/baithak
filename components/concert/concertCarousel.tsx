@@ -2,8 +2,6 @@
 
 import Script from "next/script";
 import React from "react";
-import { concertArtistInfo } from "../../graphql/concert";
-import { imageUrl } from "../../utils";
 import { FragmentType, graphql, useFragment } from "../../__generated__";
 import ConcertCarouselSlide from "./concertCarouselSlide";
 
@@ -29,7 +27,7 @@ const ConcertCarousel = (props: ConcertCarouselProps) => {
               type="button"
               data-bs-target="#concertCalendar"
               data-bs-slide-to={i}
-              className={i === 0 ? "active" : ""}
+              className={`!bg-primary ${i === 0 ? "active" : ""}`}
               aria-current="true"
               aria-label={`${concert.title}`}
             ></button>
