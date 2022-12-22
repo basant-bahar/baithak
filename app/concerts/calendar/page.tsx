@@ -27,9 +27,9 @@ export default async function Calendar() {
         <PageHeader title={"Concert calendar"} />
         <ConcertCarousel concerts={calendarConcerts} />
       </div>
-      <div className="main-container mt-5 mb-2 grid grid-cols-2 gap-4">
+      <div className="main-container p-2 mt-5 mb-2 grid grid-cols-2 gap-4">
         {calendarConcerts.map((concert) => (
-          <div key={"v-" + concert.id} className="mb-2">
+          <div key={"v-" + concert.id}>
             <CalendarConcertCard concertData={concert} />
           </div>
         ))}
