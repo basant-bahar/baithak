@@ -24,20 +24,24 @@ export const CalendarConcertCard = ({ concertData }: CalendarConcertCardProps) =
 
   return (
     <Link href={`/concerts/${concert.id}`}>
-      <div className="card lg:card-side border p-2 shadow-lg cursor-pointer">
-        <div className="bordered max-w-3/4 min-w-3/4 sm:min-w-1/3">
-          <div className="md:max-w-30 text-center rounded-2xl border-2 flex-grow-0 p-0">
-            <h2 className="bg-blue-500 text-white p-2 rounded-t-2xl">{dateDetails.month}</h2>
-            <div className="text-2xl text-blue-500 font-bold pt-3 pb-3">{dateDetails.date}</div>
-            <div className="text-blue-500">{dateDetails.weekday}</div>
-            <div className="text-blue-500">{dateDetails.time}</div>
-          </div>
+      <div className="card lg:card-side border p-2 shadow-lg cursor-pointer items-center lg:justify-around">
+        <div className="w-48 md:min-w-1/3 text-center rounded-md border-sky-600 border flex-grow-0 p-0">
+          <h2 className="bg-sky-600 text-white p-2 rounded-t-md">{dateDetails.month}</h2>
+          <div className="text-2xl text-sky-600 font-bold pt-3 pb-3">{dateDetails.date}</div>
+          <div className="text-sky-600">{dateDetails.weekday}</div>
+          <div className="text-sky-600">{dateDetails.time}</div>
         </div>
-        <div className="md:min-w-70 md:mt-2 text-center">
+        <div className="max-lg:mt-2 text-center">
           <div className="flex justify-center">
-            <Image src={imageSrc} width={180} height={135} alt="Artist photo" />
+            <Image
+              className="rounded-md"
+              src={imageSrc}
+              width="180"
+              height="135"
+              alt="Artist photo"
+            />
           </div>
-          <h2 className="pl-2 pr-2 pt-2 m-0 truncate">{concertArtists}</h2>
+          <div className="pl-2 pr-2 pt-2 m-0 text-sm truncate text-primary">{concertArtists}</div>
         </div>
       </div>
     </Link>
