@@ -1,11 +1,11 @@
 import React, { FC, use, useEffect, useState } from "react";
 import { ssrApolloClient } from "../../app/apollo-client";
-import { graphql, useFragment } from "../../__generated__";
+import { graphql, getFragmentData } from "../../__generated__";
 import Markdown from "../concert/markdown";
 
 export default function Advisory() {
   const advisoriesData = use(getAdvisory());
-  const advisory = useFragment(advisoryDetails, advisoriesData);
+  const advisory = getFragmentData(advisoryDetails, advisoriesData);
 
   if (!advisory) {
     return <>Loading...</>;

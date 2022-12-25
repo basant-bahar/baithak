@@ -2,15 +2,13 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { getSeparatedDateDetails, imageUrl } from "../../utils";
-import { FragmentType, useFragment } from "../../__generated__";
-import { concertCalendarDetail } from "./concertCarousel";
+import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 
 type CalendarConcertCardProps = {
-  concertData: FragmentType<typeof concertCalendarDetail>;
+  concert: ConcertCalendarDetailFragment;
 };
 
-export const CalendarConcertCard = ({ concertData }: CalendarConcertCardProps) => {
-  const concert = useFragment(concertCalendarDetail, concertData);
+export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
   const localDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();

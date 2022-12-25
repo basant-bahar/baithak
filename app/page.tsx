@@ -2,13 +2,13 @@ import Advisory from "../components/advisory";
 import { ConcertRsvp } from "../components/concert/concertRsvp";
 import ConcertView from "../components/concert/concertView";
 import { concertDetails, concertViewDetails } from "../graphql/concert";
-import { graphql, useFragment } from "../__generated__";
+import { graphql, getFragmentData } from "../__generated__";
 import { ssrApolloClient } from "./apollo-client";
 
 export default async function Home() {
   const concertData = await getFrontPageConcert();
-  const viewDetails = useFragment(concertViewDetails, concertData);
-  const details = useFragment(concertDetails, viewDetails);
+  const viewDetails = getFragmentData(concertViewDetails, concertData);
+  const details = getFragmentData(concertDetails, viewDetails);
 
   if (!concertData || !details) return null;
 

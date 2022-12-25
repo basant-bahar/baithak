@@ -46,6 +46,8 @@ interface AboutSubMenuProps {
   hideAbout: (e: React.MouseEvent) => void;
 }
 const AboutSubMenu: FC<AboutSubMenuProps> = ({ hideAbout }: AboutSubMenuProps) => {
+  const lastYear = new Date().getFullYear() - 1;
+
   return (
     <>
       <Link
@@ -59,7 +61,7 @@ const AboutSubMenu: FC<AboutSubMenuProps> = ({ hideAbout }: AboutSubMenuProps) =
         History
       </Link>
       <Link
-        href="/about/featured-artists"
+        href="/about/featured-artists/ab"
         onClick={hideAbout}
         className="nav-link nav-item nav-sub-link"
         role="menuitem"
@@ -69,7 +71,7 @@ const AboutSubMenu: FC<AboutSubMenuProps> = ({ hideAbout }: AboutSubMenuProps) =
         Featured Artists
       </Link>
       <Link
-        href="/about/past-concerts"
+        href={`/about/past-concerts/${lastYear}`}
         onClick={hideAbout}
         className="nav-link nav-item nav-sub-link"
         role="menuitem"

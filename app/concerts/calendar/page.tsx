@@ -5,34 +5,27 @@ import { CalendarConcertCard } from "../../../components/concert/calendarConcert
 import ConcertCarousel, {
   concertCalendarDetail,
 } from "../../../components/concert/concertCarousel";
-import { graphql, useFragment } from "../../../__generated__";
+import { FragmentType, graphql, getFragmentData } from "../../../__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import { getSimpleDateTime } from "../../page";
 
 export default async function Calendar() {
   const calendarConcertsData = await getConcertCalendarData();
-  // TODO: fix type error properly. There seems to be an issue with passing arrays.
-  // @ts-ignore: ignore next line
-  const calendarConcerts: FragmentType<typeof concertCalendarDetail>[] = useFragment(
-    concertCalendarDetail,
-    // @ts-ignore: ignore next line
-    calendarConcertsData
-  );
-
-  if (!calendarConcerts) return null;
+  if (!calendarConcertsData) return null;
 
   return (
     <>
       <div className="main-container">
         <PageHeader title={"Concert calendar"} />
-        <ConcertCarousel concerts={calendarConcerts} />
+        <ConcertCarousel
+          concerts={calendarConcertsData as FragmentType<typeof concertCalendarDetail>[]}
+        />
       </div>
       <div className="main-container p-2 mt-5 mb-2 grid grid-cols-2 gap-4">
-        {calendarConcerts.map((concert) => (
-          <div key={"v-" + concert.id}>
-            <CalendarConcertCard concertData={concert} />
-          </div>
-        ))}
+        {calendarConcertsData.map((calendarConcertData) => {
+          const concert = getFragmentData(concertCalendarDetail, calendarConcertData);
+          return concert && <CalendarConcertCard key={"v-" + concert.id} concert={concert} />;
+        })}
       </div>
     </>
   );
@@ -48,7 +41,7 @@ async function getConcertCalendarData() {
       end: getSimpleDateTime(endOfYear(today)),
     },
   });
-  return data.concerts;
+  return data && data.concerts;
 }
 
 const concertsForCalendar = graphql(`

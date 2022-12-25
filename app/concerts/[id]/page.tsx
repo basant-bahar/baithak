@@ -1,7 +1,6 @@
 import React from "react";
 import ConcertView from "../../../components/concert/concertView";
-import { concertViewDetails } from "../../../graphql/concert";
-import { graphql, useFragment } from "../../../__generated__";
+import { graphql } from "../../../__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 
 interface ViewConcertProps {
