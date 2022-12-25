@@ -3,7 +3,7 @@ import React from "react";
 import { MapPinIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import format from "date-fns/format";
 import { venueDetails } from "../../graphql/concert";
-import { FragmentType, useFragment } from "../../__generated__";
+import { FragmentType, getFragmentData } from "../../__generated__";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -15,7 +15,7 @@ type ConcertLogisticsProps = {
 };
 
 export const ConcertLogistics = (props: ConcertLogisticsProps) => {
-  const venue = useFragment(venueDetails, props.venue);
+  const venue = getFragmentData(venueDetails, props.venue);
 
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",

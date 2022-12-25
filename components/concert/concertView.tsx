@@ -8,7 +8,7 @@ import {
   newConcertDetails,
 } from "../../graphql/concert";
 import { imageUrl } from "../../utils";
-import { FragmentType, useFragment } from "../../__generated__";
+import { FragmentType, getFragmentData } from "../../__generated__";
 import { ConcertLogistics } from "./concertLogistics";
 import Markdown from "./markdown";
 
@@ -17,9 +17,9 @@ type ConcertViewProps = {
 };
 
 export default function ConcertView(props: ConcertViewProps) {
-  const viewDetails = useFragment(concertViewDetails, props.concert);
-  const details = useFragment(concertDetails, viewDetails);
-  const concert = useFragment(newConcertDetails, details);
+  const viewDetails = getFragmentData(concertViewDetails, props.concert);
+  const details = getFragmentData(concertDetails, viewDetails);
+  const concert = getFragmentData(newConcertDetails, details);
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
   return (
@@ -63,7 +63,7 @@ const ArtistLink = ({
   isMain: boolean;
   concertArtistsData: FragmentType<typeof concertArtistInfo>[];
 }) => {
-  const concertArtists = useFragment(concertArtistInfo, concertArtistsData);
+  const concertArtists = getFragmentData(concertArtistInfo, concertArtistsData);
   const artistsCount = concertArtists.length;
   if (artistsCount === 0) {
     return null;

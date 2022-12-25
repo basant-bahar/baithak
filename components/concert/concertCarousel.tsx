@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import React from "react";
-import { FragmentType, graphql, useFragment } from "../../__generated__";
+import { FragmentType, graphql, getFragmentData } from "../../__generated__";
 import ConcertCarouselSlide from "./concertCarouselSlide";
 
 interface ConcertCarouselProps {
@@ -10,7 +10,8 @@ interface ConcertCarouselProps {
 }
 
 const ConcertCarousel = (props: ConcertCarouselProps) => {
-  const concerts = useFragment(concertCalendarDetail, props.concerts);
+  if (!props.concerts) return null;
+  const concerts = getFragmentData(concertCalendarDetail, props.concerts);
 
   return (
     <>

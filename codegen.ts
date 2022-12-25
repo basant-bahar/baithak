@@ -16,6 +16,7 @@ const config: CodegenConfig = {
       presetConfig: {
         extension: ".generated.tsx",
         baseTypesPath: "types.ts",
+        fragmentMasking: { unmaskFunctionName: "getFragmentData" },
       },
       plugins: [],
     },
