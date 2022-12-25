@@ -69,27 +69,21 @@ const ArtistLink = ({
     return null;
   }
   const links = concertArtists.map((concertArtist) => {
-    if (concertArtist.artist) {
+    const artist = concertArtist.artist;
+    if (artist) {
       const nameText =
-        artistsCount > 1
-          ? `${concertArtist.artist.name} (${concertArtist.instrument})`
-          : concertArtist.artist.name;
-      const link = (
-        <Link href={`/artists/${concertArtist.artist.id}`} key={concertArtist.artist.id}>
-          <div className="cursor-pointer">{nameText} </div>
-        </Link>
-      );
-
+        artistsCount > 1 ? `${artist.name} (${concertArtist.instrument})` : artist.name;
       return (
-        <div
-          key={isMain ? "main-artists" : "accompany-artists"}
+        <Link
+          href={`/artists/${artist.id}`}
+          key={artist.id}
           className={isMain ? "mb-4 text-4xl" : "mt-1 text-2xl"}
         >
-          {link}
-        </div>
+          <div className="cursor-pointer">{nameText} </div>
+        </Link>
       );
     }
   });
 
-  return <div className="text-center text-primary font-bold">{links}</div>;
+  return <div className="text-center text-primary font-bold mb-4">{links}</div>;
 };

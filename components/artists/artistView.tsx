@@ -19,10 +19,8 @@ export default function ArtistView(props: ArtistViewProps) {
   return (
     <div>
       <PageHeader title={`${artist.title ? artist.title : ""} ${artist.name}`} />
-      <div className="text-center">
-        <Image src={imageSrc} width={600} height={450} alt="Artist photo" />
-      </div>
-      <div className="mt-4 mb-4">{artist.bio && <Markdown>{artist.bio}</Markdown>}</div>
+      <Image src={imageSrc} width={600} height={450} alt="Artist photo" className="mx-auto" />
+      <div className="p-2 mt-4 mb-4">{artist.bio && <Markdown>{artist.bio}</Markdown>}</div>
       <div className="flex mb-4 justify-center">
         {artist.youtubeVideoIds &&
           artist.youtubeVideoIds.map((youtubeVideoId, index) =>
