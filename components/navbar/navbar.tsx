@@ -7,7 +7,8 @@ import { Logo } from "./logo";
 import { Memberships } from "./membershipsMenu";
 import { About } from "./aboutMenu";
 import { LoginMenu } from "./loginMenu";
-import { AuthUser, useAuth } from "../auth/authProvider";
+import { AuthUser, isAdmin, useAuth } from "../auth/authProvider";
+import { Admin } from "./adminMenu";
 
 const NavBar = ({ children }: { children: React.ReactNode }) => {
   const [user, _login, logout] = useAuth();
@@ -99,6 +100,11 @@ const MenuElements: FC<MenuElementsProps> = ({ isDrawer, user, logout }: MenuEle
       <li>
         <About isDrawer={isDrawer} />
       </li>
+      {user && isAdmin(user) && (
+        <li>
+          <Admin isDrawer={isDrawer} />
+        </li>
+      )}
       {!user && (
         <li>
           <Link href="/login" className="nav-link nav-item" aria-current="page">
