@@ -17,9 +17,7 @@ export default async function Calendar() {
     <>
       <div className="main-container">
         <PageHeader title={"Concert calendar"} />
-        <ConcertCarousel
-          concerts={calendarConcertsData as FragmentType<typeof concertCalendarDetail>[]}
-        />
+        <ConcertCarousel concerts={calendarConcertsData} />
       </div>
       <div className="main-container p-2 mt-5 mb-2 grid grid-cols-2 gap-4">
         {calendarConcertsData.map((calendarConcertData) => {
