@@ -1,6 +1,7 @@
-import React, { FC, use, useEffect, useState } from "react";
+import React, { use } from "react";
 import { ssrApolloClient } from "../../app/apollo-client";
-import { graphql, getFragmentData } from "../../__generated__";
+import { advisoryDetails, getAdvisories } from "../../graphql/advisory";
+import { getFragmentData } from "../../__generated__";
 import Markdown from "../concert/markdown";
 
 export default function Advisory() {
@@ -47,19 +48,3 @@ export async function getAdvisory() {
     return null;
   }
 }
-
-export const advisoryDetails = graphql(`
-  fragment AdvisoryDetails on Advisory {
-    id
-    level
-    message
-  }
-`);
-
-const getAdvisories = graphql(`
-  query getAdvisories {
-    advisories {
-      ...AdvisoryDetails
-    }
-  }
-`);
