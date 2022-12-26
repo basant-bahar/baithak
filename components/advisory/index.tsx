@@ -30,7 +30,7 @@ export default function Advisory() {
     <>
       {advisory && (
         <div className={getAdvisoryClass()}>
-          <Markdown>{advisory.message as string}</Markdown>
+          <Markdown>{advisory.message}</Markdown>
         </div>
       )}
     </>

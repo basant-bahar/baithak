@@ -76,15 +76,15 @@ export default function Advisory() {
         },
       });
     } else {
-      createAdvisoryMutation({
+      const result = await createAdvisoryMutation({
         variables: {
           data: advisoryData,
         },
-      }).then((data) => {
-        const currentAdvisory = getFragmentData(
-          advisoryDetails,
-          data?.data?.advisory
-        ) as AdvisoryDetailsFragment;
+      });
+
+      const currentAdvisory = getFragmentData(advisoryDetails, result?.data?.advisory);
+
+      if (currentAdvisory) {
         setAdvisoryData(currentAdvisory);
         setAdvisoryId(currentAdvisory.id);
         client.cache.modify({
@@ -98,7 +98,7 @@ export default function Advisory() {
             },
           },
         });
-      });
+      }
     }
   }
 
