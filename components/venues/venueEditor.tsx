@@ -59,11 +59,11 @@ export default function VenueEditor(props: VenueEditorProps) {
     <>
       <div className="main-container">
         <PageHeader title={"Venue"} />
-        <div className="flex-auto p-6 max-lg:p-2">
+        <div className="flex-auto p-4 max-lg:p-0">
           <div className={rowClassName}>
             <label className={labelClassName}>Name</label>
             <input
-              className="simple-input"
+              className="simple-input max-lg:w-60"
               placeholder="Name"
               onChange={changeName}
               value={venueData.name}
@@ -72,7 +72,7 @@ export default function VenueEditor(props: VenueEditorProps) {
           <div className={rowClassName}>
             <label className={labelClassName}>Address</label>
             <input
-              className="simple-input"
+              className="simple-input max-lg:w-60"
               placeholder="Street"
               onChange={changeStreet}
               value={venueData.street}
@@ -80,21 +80,21 @@ export default function VenueEditor(props: VenueEditorProps) {
           </div>
           <div className={rowClassName}>
             <label className={labelClassName}>City, State and Zip</label>
-            <div className="flex max-lg:flex-wrap">
+            <div className="flex max-lg:flex-wrap max-lg:col-start-2 max-lg:col-end-5">
               <input
-                className="simple-input mr-2"
+                className="simple-input mr-2 max-lg:w-60"
                 placeholder="City"
                 onChange={changeCity}
                 value={venueData.city}
               />
               <input
-                className="simple-input mr-2"
+                className="simple-input mr-2 max-lg:w-60"
                 placeholder="State"
                 onChange={changeState}
                 value={venueData.state}
               />
               <input
-                className="simple-input"
+                className="simple-input max-lg:w-60"
                 placeholder="Zip"
                 onChange={changeZip}
                 value={venueData.zip}

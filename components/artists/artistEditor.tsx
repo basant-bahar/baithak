@@ -73,7 +73,7 @@ export default function ArtistEditor(props: ArtistEditorProps) {
     <>
       <div className="main-container">
         <PageHeader title={"Artist"} />
-        <div className="flex-auto p-6 max-lg:p-2">
+        <div className="flex-auto p-4 max-lg:p-0">
           <div className={rowClassName}>
             <label className={labelClassName}>Title and Name</label>
             <select
@@ -88,7 +88,7 @@ export default function ArtistEditor(props: ArtistEditorProps) {
               ))}
             </select>
             <input
-              className="simple-input"
+              className="simple-input max-lg:w-44"
               name="name"
               placeholder="Name"
               onChange={changeName}
@@ -122,10 +122,10 @@ export default function ArtistEditor(props: ArtistEditorProps) {
             )}
             <input
               type="file"
-              className="col-start-2 mt-1"
+              className="col-start-2 mt-1 max-lg:col-end-5"
               accept=".png, .jpg, .jpeg"
               onChange={handlePhotoChange}
-              placeholder="Upload photo"
+              // placeholder="Upload photo"
             />
           </div>
           <div className={rowClassName}>

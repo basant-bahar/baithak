@@ -44,7 +44,7 @@ export default function TagInput({ existingTags = [], onChange }: TagInputProps)
     <div className="col-span-2">
       <div className="flex gap-2">{tagElements}</div>
       <input
-        className="simple-input mt-1"
+        className="simple-input mt-1 max-lg:w-48"
         value={tag}
         onChange={handleTagChange}
         onKeyDown={handleEnter}
