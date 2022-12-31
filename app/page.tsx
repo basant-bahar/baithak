@@ -1,16 +1,14 @@
 import Advisory from "../components/advisory";
 import { ConcertRsvp } from "../components/concert/concertRsvp";
 import ConcertView from "../components/concert/concertView";
-import { concertDetails, concertViewDetails } from "../graphql/concert";
+import { concertDetails } from "../graphql/concert";
 import { graphql, getFragmentData } from "../__generated__";
 import { ssrApolloClient } from "./apollo-client";
 
 export default async function Home() {
   const concertData = await getFrontPageConcert();
-  const viewDetails = getFragmentData(concertViewDetails, concertData);
-  const details = getFragmentData(concertDetails, viewDetails);
 
-  if (!concertData || !details) return null;
+  if (!concertData) return null;
 
   return (
     <>
@@ -18,7 +16,7 @@ export default async function Home() {
       <div className="main-container">
         <ConcertView concert={concertData} />
       </div>
-      <ConcertRsvp concertId={details?.id} />
+      <ConcertRsvp concertId={concertData?.id} />
     </>
   );
 }
@@ -49,7 +47,8 @@ export async function getFrontPageConcert() {
 const getUpcomingConcert = graphql(`
   query getUpcomingConcert($today: LocalDateTime) {
     concerts(where: { startTime: { gte: $today } }, orderBy: { startTime: ASC }) {
-      ...ConcertViewDetails
+      id
+      ...ConcertDetails
     }
   }
 `);
@@ -57,7 +56,8 @@ const getUpcomingConcert = graphql(`
 const getLastConcert = graphql(`
   query getLastConcert($today: LocalDateTime) {
     concerts(where: { startTime: { lte: $today } }, orderBy: { startTime: DESC }) {
-      ...ConcertViewDetails
+      id
+      ...ConcertDetails
     }
   }
 `);

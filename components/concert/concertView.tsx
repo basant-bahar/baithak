@@ -1,25 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import {
-  concertArtistInfo,
-  concertDetails,
-  concertViewDetails,
-  newConcertDetails,
-} from "../../graphql/concert";
+import { concertArtistInfo, concertDetails } from "../../graphql/concert";
 import { imageUrl } from "../../utils";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import { ConcertLogistics } from "./concertLogistics";
 import Markdown from "./markdown";
 
 type ConcertViewProps = {
-  concert: FragmentType<typeof concertViewDetails>;
+  concert: FragmentType<typeof concertDetails>;
 };
 
 export default function ConcertView(props: ConcertViewProps) {
-  const viewDetails = getFragmentData(concertViewDetails, props.concert);
-  const details = getFragmentData(concertDetails, viewDetails);
-  const concert = getFragmentData(newConcertDetails, details);
+  const concert = getFragmentData(concertDetails, props.concert);
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
   return (
@@ -50,7 +43,7 @@ export default function ConcertView(props: ConcertViewProps) {
         nonMemberPrice={concert.nonMemberPrice}
         startTime={concert.startTime}
         endTime={concert.endTime}
-        venue={viewDetails.venue}
+        venue={concert.venue}
       />
     </>
   );
