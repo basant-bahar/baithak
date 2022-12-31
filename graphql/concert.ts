@@ -53,20 +53,6 @@ export const concertDetails = graphql(
   `
 );
 
-export const venueDetails = graphql(
-  `
-    fragment VenueDetails on Venue {
-      id
-      name
-      street
-      city
-      state
-      zip
-      publish
-    }
-  `
-);
-
 export const concertViewDetails = graphql(
   `
     fragment ConcertViewDetails on Concert {

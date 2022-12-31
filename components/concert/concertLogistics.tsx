@@ -1,9 +1,10 @@
 import Link from "next/link";
 import React from "react";
-import { MapPinIcon, CalendarIcon } from "@heroicons/react/20/solid";
+import { CalendarIcon } from "@heroicons/react/20/solid";
 import format from "date-fns/format";
-import { venueDetails } from "../../graphql/concert";
+import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
+import VenueView from "../venues/venueView";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -116,14 +117,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
               <CalendarIcon />
             </a>
           </div>
-          <div className="flex justify-center align-center">
-            {venue.name} {showAddress && <>, {venueAddress}</>}
-            {showAddress && (
-              <a className="link-icon ml-1 w-5" href={venueLink} target="_blank" rel="noreferrer">
-                <MapPinIcon />
-              </a>
-            )}
-          </div>
+          <VenueView venueData={props.venue} />
         </div>
       </div>
     </div>

@@ -11,6 +11,14 @@ export const venueDetails = graphql(`
   }
 `);
 
+export const venueBasicInfo = graphql(`
+  fragment VenueBasicInfo on Venue {
+    id
+    name
+    publish
+  }
+`);
+
 export const searchVenues = graphql(`
   query searchVenues($search: String) {
     venues(where: { name: { ilike: $search } }, orderBy: { name: ASC }) {
