@@ -112,6 +112,6 @@
   }
 
   button {
-    @apply rounded-md text-center disabled:opacity-50 p-3 pt-1 pb-1;
+    @apply rounded-md text-center disabled:opacity-50 p-3 pt-1 pb-1 h-8;
   }
 }
