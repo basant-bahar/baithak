@@ -3,8 +3,8 @@ import Image from "next/image";
 import { imageUrl } from "../../utils";
 import Markdown from "../concert/markdown";
 import PageHeader from "../common/pageHeader";
-import { artistDetails } from "../../app/artists/[id]/page";
 import { FragmentType, getFragmentData } from "../../__generated__";
+import { artistDetails } from "../../graphql/artists";
 
 interface ArtistViewProps {
   artistData: FragmentType<typeof artistDetails>;

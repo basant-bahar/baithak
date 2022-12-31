@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { graphql } from "../../../__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import ArtistView from "../../../components/artists/artistView";
+import { getArtist } from "../../../graphql/artists";
 
 interface ViewArtistProps {
   params: { id: string };
@@ -19,27 +20,6 @@ export default async function ViewArtist(props: ViewArtistProps) {
     </div>
   );
 }
-
-export const artistDetails = graphql(`
-  fragment ArtistDetails on Artist {
-    id
-    title
-    name
-    bio
-    photoUrl
-    youtubeVideoIds
-    instruments
-    publish
-  }
-`);
-
-const getArtist = graphql(`
-  query getArtist($id: Int!) {
-    artist(id: $id) {
-      ...ArtistDetails
-    }
-  }
-`);
 
 async function getArtistFor(id: number) {
   const { data } = await ssrApolloClient.query({
