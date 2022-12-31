@@ -31,7 +31,8 @@ async function getConcertFor(id: number) {
 const getConcertView = graphql(`
   query getConcertView($id: Int!) {
     concert(id: $id) {
-      ...ConcertViewDetails
+      id
+      ...ConcertDetails
     }
   }
 `);
