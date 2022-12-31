@@ -16,7 +16,7 @@ type EntityListProps<D> = {
 export class EntityInfo<D> {
   singularName: string;
   pluralName: string;
-  resourcePath: string; // path name for UI and name of the data in the list query
+  resourcePath: string; // an overloaded cpncept tp represent the path name for UI and name of the data in the list query (TODO: Separate them)
   searchQueryDocument: DocumentNode;
   deleteMutationDocument: DocumentNode;
   preDelete?: (id: number) => void;
@@ -61,7 +61,6 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   const entities = extractEntities(data);
 
   const [deleteMutation] = useMutation(deleteMutationDocument, {
-    refetchQueries: [{ query: searchQueryDocument, variables: { search: "%%" } }],
     onCompleted: () => {
       setSearchStr("");
       client.cache.evict({
