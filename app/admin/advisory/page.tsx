@@ -5,7 +5,6 @@ import { useQuery, useMutation } from "@apollo/client";
 import { getFragmentData, graphql } from "../../../__generated__";
 import PageHeader from "../../../components/common/pageHeader";
 import Protected from "../../../components/auth/protected";
-import { AdvisoryDetailsFragment } from "../../../__generated__/graphql";
 import { advisoryDetails, getAdvisories } from "../../../graphql/advisory";
 import { client } from "../../apollo-client";
 
