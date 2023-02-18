@@ -134,10 +134,15 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           </div>
           <div className={rowClassName}>
             <div className={labelClassName}>
-              <input type="checkbox" checked={artistData.publish} onChange={changePublish} />
+              <input
+                type="checkbox"
+                className="w-4 h-4"
+                checked={artistData.publish}
+                onChange={changePublish}
+              />
             </div>
             <div className="flex justify-start items-center">
-              <label className="pl-1">Publish</label>
+              <label>Publish</label>
             </div>
           </div>
         </div>
@@ -150,7 +155,7 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           </button>
         </div>
       </div>
-      <PreviewContainer>
+      <PreviewContainer className="mt-6">
         <div className="bordered-container">
           <ArtistView artistData={makeFragmentData(artistData, artistDetails)} />
         </div>

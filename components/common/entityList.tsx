@@ -19,7 +19,7 @@ export class EntityInfo<D> {
   resourcePath: string; // an overloaded cpncept tp represent the path name for UI and name of the data in the list query (TODO: Separate them)
   searchQueryDocument: DocumentNode;
   deleteMutationDocument: DocumentNode;
-  preDelete?: (id: number) => void;
+  preDelete?: (id: number) => Promise<void>;
   additionalButtons?: JSX.Element;
 
   constructor(
@@ -28,7 +28,7 @@ export class EntityInfo<D> {
     resourcePath: string,
     searchQueryDocument: DocumentNode,
     deleteMutationDocument: DocumentNode,
-    preDelete?: (id: number) => void,
+    preDelete?: (id: number) => Promise<void>,
     additionalButtons?: JSX.Element
   ) {
     this.singularName = singularName;
@@ -66,7 +66,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
       client.cache.evict({
         id: "ROOT_QUERY",
         fieldName: resourcePath,
-        broadcast: false,
+        broadcast: true,
       });
     },
   });
@@ -76,7 +76,8 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   }
 
   async function deleteEntity(id: number) {
-    preDelete && preDelete(id);
+    preDelete && (await preDelete(id));
+
     await deleteMutation({ variables: { id } });
   }
 

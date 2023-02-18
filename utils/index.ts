@@ -30,6 +30,38 @@ export function getSeparatedDateDetails(localDate: Date): DateDetails {
   };
 }
 
+const dateOptions: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+};
+
+export function getDateStr(rawDate?: string | Date): string {
+  let localDate;
+  if (rawDate && rawDate instanceof Date) {
+    localDate = rawDate ? rawDate : new Date();
+  } else {
+    localDate = rawDate ? new Date(new Date(rawDate + "Z")) : new Date();
+  }
+  let localDateStr = localDate.toLocaleDateString("en-US", dateOptions);
+  const arr = localDateStr.split("/");
+  localDateStr = arr[2] + "-" + arr[0] + "-" + arr[1];
+  return localDateStr;
+}
+
+export function getDateTimeStr(rawDate?: string): string {
+  const time24Options: Intl.DateTimeFormatOptions = {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  const localDate = rawDate ? new Date(new Date(rawDate + "Z")) : new Date();
+  let localDateStr = getDateStr(rawDate);
+
+  const localTimeStr = localDate.toLocaleTimeString([], time24Options);
+  return localDateStr + "T" + localTimeStr;
+}
+
 export async function handleFileUpload(file: File): Promise<string | null> {
   if (!process.env.NEXT_PUBLIC_UPLOAD_URL) return "";
 
