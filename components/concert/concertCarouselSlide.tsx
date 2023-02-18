@@ -13,7 +13,7 @@ export default function ConcertCarouselSlide(props: ConcertCarouselSlideProps) {
   const concert = props.concertData;
 
   const mainArtists = concert.mainArtists
-    .map((m) => (m.artist.title ? m.artist.title + " " + m.artist.name : m.artist.name))
+    .map((m) => (m.artist?.title ? m.artist.title + " " + m.artist.name : m.artist?.name))
     .join(" and ");
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
   const localDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
@@ -25,7 +25,7 @@ export default function ConcertCarouselSlide(props: ConcertCarouselSlideProps) {
       className={`carousel-item relative float-left w-full ${props.index === 0 ? "active" : ""}`}
     >
       <img className="block w-full" src={imageSrc} alt="Concert photo" />
-      <div className="carousel-caption md:block absolute text-center text-primary ">
+      <div className="carousel-caption md:block absolute text-center text-primary white-transparent">
         <h5 className="text-xl">{mainArtists}</h5>
         <p>{`${month} ${date}`}</p>
       </div>

@@ -16,6 +16,16 @@ export const concertArtistInfo = graphql(
   `
 );
 
+export const artistBasicInfo = graphql(`
+  fragment ArtistBasicInfo on Artist {
+    id
+    title
+    name
+    photoUrl
+    instruments
+  }
+`);
+
 export const concertDetails = graphql(`
   fragment ConcertDetails on Concert {
     title
@@ -34,6 +44,7 @@ export const concertDetails = graphql(`
       ...ConcertArtistInfo
     }
     venue {
+      id
       ...VenueDetails
     }
   }
@@ -41,7 +52,7 @@ export const concertDetails = graphql(`
 
 export const searchConcert = graphql(`
   query searchConcert($search: String) {
-    concerts(where: { title: { like: $search } }, orderBy: { startTime: DESC }) {
+    concerts(where: { title: { ilike: $search } }, orderBy: { startTime: DESC }) {
       id
       ...ConcertDetails
     }

@@ -15,8 +15,8 @@ export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
   const dateDetails = getSeparatedDateDetails(localDate);
   let concertArtists = concert.mainArtists
     .map((concertArtist) => {
-      const title = concertArtist.artist.title ? concertArtist.artist.title + " " : "";
-      return title + concertArtist.artist.name;
+      const title = concertArtist.artist?.title ? concertArtist.artist.title + " " : "";
+      return title + concertArtist.artist?.name;
     })
     .join(", ");
 
