@@ -46,9 +46,6 @@ const newConcert = {
   endTime: getSimpleDateTime(new Date()),
 };
 
-const rowClassName = "grid mb-4 grid-cols-4 gap-1";
-const labelClassName = "flex justify-end items-center pr-3";
-
 export default function ConcertEditor(props: ConcertEditorProps) {
   const concert = getFragmentData(concertDetails, props.concertData);
   const artists = getFragmentData(artistBasicInfo, props.artists);
@@ -236,8 +233,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
             concertArtists={concertArtists}
             updateConcertArtists={setConcertArtists}
           />
-          <div className={rowClassName}>
-            <label className={labelClassName}>Title</label>
+          <div className="form-row">
+            <label className="form-label">Title</label>
             <input
               className="simple-input w-auto col-span-2"
               placeholder="Title"
@@ -245,8 +242,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.title}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Description</label>
+          <div className="form-row">
+            <label className="form-label">Description</label>
             <textarea
               className="border col-span-3 p-2"
               rows={5}
@@ -255,8 +252,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.description}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Venue</label>
+          <div className="form-row">
+            <label className="form-label">Venue</label>
             <select className="simple-input" onChange={changeVenue} value={concertData.venue.id}>
               {venues.map((venue) => (
                 <option key={venue.id} value={venue.id}>
@@ -265,8 +262,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               ))}
             </select>
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Start date</label>
+          <div className="form-row">
+            <label className="form-label">Start date</label>
             <input
               className="simple-input"
               type="datetime-local"
@@ -275,8 +272,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               onChange={(date) => changeStartDateTime(date)}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>End date</label>
+          <div className="form-row">
+            <label className="form-label">End date</label>
             <input
               className="simple-input"
               type="datetime-local"
@@ -285,8 +282,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               onChange={(date) => changeEndDateTime(date)}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Member price</label>
+          <div className="form-row">
+            <label className="form-label">Member price</label>
             <input
               className="simple-input"
               placeholder="Member price"
@@ -294,8 +291,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.memberPrice || 0}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Non member price</label>
+          <div className="form-row">
+            <label className="form-label">Non member price</label>
             <input
               className="simple-input"
               placeholder="non-member price"
@@ -303,8 +300,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.nonMemberPrice || 0}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Ticket link</label>
+          <div className="form-row">
+            <label className="form-label">Ticket link</label>
             <input
               className="simple-input"
               placeholder="Ticket link"
@@ -312,8 +309,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.ticketLink || ""}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Photo</label>
+          <div className="form-row">
+            <label className="form-label">Photo</label>
             {concertData.photoUrl && (
               <Image
                 src={imageUrl(concertData.photoUrl)}
@@ -330,8 +327,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               placeholder="Upload photo"
             />
           </div>
-          <div className={rowClassName}>
-            <div className={labelClassName}>
+          <div className="form-row">
+            <div className="form-label">
               <input
                 type="checkbox"
                 className="w-4 h-4"

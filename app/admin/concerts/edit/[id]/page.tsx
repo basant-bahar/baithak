@@ -50,22 +50,13 @@ function UpdateConcert({ id }: UpdateConcertProps) {
   }
 
   return (
-    <>
-      {data &&
-        data.concert &&
-        venuesData &&
-        venuesData.venues &&
-        artistsData &&
-        artistsData.artists && (
-          <ConcertEditor
-            concertId={id}
-            concertData={data.concert}
-            venues={venuesData.venues}
-            artists={artistsData.artists}
-            done={saveConcert}
-          />
-        )}
-    </>
+    <ConcertEditor
+      concertId={id}
+      concertData={data.concert}
+      venues={venuesData.venues}
+      artists={artistsData.artists}
+      done={saveConcert}
+    />
   );
 }
 
@@ -93,10 +84,7 @@ function CreateConcert() {
   }
 
   return (
-    venuesData?.venues &&
-    artistsData?.artists && (
-      <ConcertEditor venues={venuesData.venues} artists={artistsData.artists} done={saveConcert} />
-    )
+    <ConcertEditor venues={venuesData.venues} artists={artistsData.artists} done={saveConcert} />
   );
 }
 

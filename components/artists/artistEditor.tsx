@@ -24,9 +24,6 @@ const newArtist: ArtistDetailsFragment = {
   publish: true,
 };
 
-const rowClassName = "grid mb-4 grid-cols-4 gap-1";
-const labelClassName = "flex justify-end items-center pr-3";
-
 export default function ArtistEditor(props: ArtistEditorProps) {
   const artist = getFragmentData(artistDetails, props.artistData);
   const [artistData, setArtistData] = useState(artist ? artist : newArtist);
@@ -74,8 +71,8 @@ export default function ArtistEditor(props: ArtistEditorProps) {
       <div className="main-container">
         <PageHeader title={"Artist"} />
         <div className="flex-auto p-4 max-lg:p-0">
-          <div className={rowClassName}>
-            <label className={labelClassName}>Title and Name</label>
+          <div className="form-row">
+            <label className="form-label">Title and Name</label>
             <select
               className="mr-2 border-b p-2"
               onChange={changeTitle}
@@ -95,12 +92,12 @@ export default function ArtistEditor(props: ArtistEditorProps) {
               value={artistData.name}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Instruments</label>
+          <div className="form-row">
+            <label className="form-label">Instruments</label>
             <TagInput existingTags={artistData.instruments} onChange={updateInstrument} />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Bio</label>
+          <div className="form-row">
+            <label className="form-label">Bio</label>
             <textarea
               className="border p-2 col-span-3"
               rows={5}
@@ -109,8 +106,8 @@ export default function ArtistEditor(props: ArtistEditorProps) {
               value={artistData.bio || ""}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Photo</label>
+          <div className="form-row">
+            <label className="form-label">Photo</label>
             {artistData.photoUrl && (
               <Image
                 className="col-span-3"
@@ -128,12 +125,12 @@ export default function ArtistEditor(props: ArtistEditorProps) {
               // placeholder="Upload photo"
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Youtube</label>
+          <div className="form-row">
+            <label className="form-label">Youtube</label>
             <TagInput existingTags={youtubeVideoIds} onChange={updateYoutubeIds} />
           </div>
-          <div className={rowClassName}>
-            <div className={labelClassName}>
+          <div className="form-row">
+            <div className="form-label">
               <input
                 type="checkbox"
                 className="w-4 h-4"

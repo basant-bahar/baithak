@@ -9,8 +9,6 @@ interface ConcertArtistEditorProps {
   updateConcertArtist: (concertArtist: ConcertArtistEditInfo) => void;
 }
 
-const rowClassName = "grid mb-4 grid-cols-5 gap-1";
-
 export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
   const [instruments, setInstruments] = useState<string[]>([]);
   const roles = ["Main", "Accompany"];
@@ -63,7 +61,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
   };
 
   return (
-    <div className={rowClassName} key={props.concertArtist.id}>
+    <div className="form-row grid-cols-5" key={props.concertArtist.id}>
       <select
         className="mr-2 border-b col-start-2 col-end-4"
         onChange={changeArtist}
@@ -75,7 +73,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
         </option>
         {props.artists.map((artist) => (
           <option key={artist.name} value={artist.id}>
-            {artist.title + " " + artist.name}
+            {artist.title || "" + " " + artist.name}
           </option>
         ))}
       </select>
