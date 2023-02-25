@@ -102,7 +102,7 @@
   }
 
   .simple-input {
-    @apply border-b-2 bg-transparent focus:outline-none w-80 p-2 max-lg:w-48;
+    @apply border-b-2 bg-transparent focus:outline-none;
   }
   .simple-input:disabled {
     @apply opacity-50;
@@ -117,5 +117,13 @@
 
   .white-transparent {
     background-color: rgba(255,255,255,0.2);
+  }
+
+  .form-row {
+    @apply grid mb-4 grid-cols-4 gap-1;
+  }
+
+  .form-label {
+    @apply flex justify-end items-center pr-3;
   }
 }
