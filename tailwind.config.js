@@ -16,6 +16,9 @@ module.exports = {
         'secondary': '#ffc051',
         'secondary-dark': '#ffb32d',
       },
+      flexGrow: {
+        2: '2'
+      }
     },
     container: {
       center: true,

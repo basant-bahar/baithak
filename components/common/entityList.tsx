@@ -21,6 +21,7 @@ export class EntityInfo<D> {
   deleteMutationDocument: DocumentNode;
   preDelete?: (id: number) => Promise<void>;
   additionalButtons?: JSX.Element;
+  cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[];
 
   constructor(
     singularName: string,
@@ -29,7 +30,8 @@ export class EntityInfo<D> {
     searchQueryDocument: DocumentNode,
     deleteMutationDocument: DocumentNode,
     preDelete?: (id: number) => Promise<void>,
-    additionalButtons?: JSX.Element
+    additionalButtons?: JSX.Element,
+    cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[]
   ) {
     this.singularName = singularName;
     this.pluralName = pluralName;
@@ -38,6 +40,7 @@ export class EntityInfo<D> {
     this.deleteMutationDocument = deleteMutationDocument;
     this.preDelete = preDelete;
     this.additionalButtons = additionalButtons;
+    this.cleanupEntitiesData = cleanupEntitiesData;
   }
 }
 
@@ -51,6 +54,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     deleteMutationDocument,
     preDelete,
     additionalButtons,
+    cleanupEntitiesData,
   } = entityInfo;
   const [searchStr, setSearchStr] = useState("");
 
@@ -58,7 +62,8 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     variables: { search: "%" + searchStr + "%" },
   });
 
-  const entities = extractEntities(data);
+  const extractedEntities = extractEntities(data);
+  const entities = cleanupEntitiesData ? cleanupEntitiesData(extractedEntities) : extractedEntities;
 
   const [deleteMutation] = useMutation(deleteMutationDocument, {
     onCompleted: () => {
