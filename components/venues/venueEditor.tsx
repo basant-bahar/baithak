@@ -20,9 +20,6 @@ const newVenue: VenueDetailsFragment = {
   publish: false,
 };
 
-const rowClassName = "grid mb-4 grid-cols-4 gap-1";
-const labelClassName = "flex justify-end items-center pr-3";
-
 export default function VenueEditor(props: VenueEditorProps) {
   const venue = getFragmentData(venueDetails, props.venueData);
   const [venueData, setVenueData] = useState(venue ? venue : newVenue);
@@ -60,8 +57,8 @@ export default function VenueEditor(props: VenueEditorProps) {
       <div className="main-container">
         <PageHeader title={"Venue"} />
         <div className="flex-auto p-4 max-lg:p-0">
-          <div className={rowClassName}>
-            <label className={labelClassName}>Name</label>
+          <div className="form-row">
+            <label className="form-label">Name</label>
             <input
               className="simple-input max-lg:w-60"
               placeholder="Name"
@@ -69,8 +66,8 @@ export default function VenueEditor(props: VenueEditorProps) {
               value={venueData.name}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>Address</label>
+          <div className="form-row">
+            <label className="form-label">Address</label>
             <input
               className="simple-input max-lg:w-60"
               placeholder="Street"
@@ -78,8 +75,8 @@ export default function VenueEditor(props: VenueEditorProps) {
               value={venueData.street}
             />
           </div>
-          <div className={rowClassName}>
-            <label className={labelClassName}>City, State and Zip</label>
+          <div className="form-row">
+            <label className="form-label">City, State and Zip</label>
             <div className="flex max-lg:flex-wrap max-lg:col-start-2 max-lg:col-end-5">
               <input
                 className="simple-input mr-2 max-lg:w-60"
@@ -101,8 +98,8 @@ export default function VenueEditor(props: VenueEditorProps) {
               />
             </div>
           </div>
-          <div className={rowClassName}>
-            <div className={labelClassName}>
+          <div className="form-row">
+            <div className="form-label">
               <input type="checkbox" checked={venueData.publish} onChange={changePublish} />
             </div>
             <div className="flex justify-start items-center">
