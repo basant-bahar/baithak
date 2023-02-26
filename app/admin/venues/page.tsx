@@ -15,7 +15,15 @@ export default function VenueList() {
   return (
     <Protected>
       <EntityList
-        entityInfo={new EntityInfo("Venue", "Venues", "venues", searchVenues, deleteVenue)}
+        entityInfo={
+          new EntityInfo<VenueDetailsFragment>(
+            "Venue",
+            "Venues",
+            "venues",
+            searchVenues,
+            deleteVenue
+          )
+        }
         descFn={descFn}
       />
     </Protected>

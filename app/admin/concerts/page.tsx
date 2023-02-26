@@ -45,7 +45,14 @@ export default function ConcertList() {
     <Protected>
       <EntityList
         entityInfo={
-          new EntityInfo("Concert", "Concerts", "concerts", searchConcert, deleteConcert, preDelete)
+          new EntityInfo<ConcertDetailsFragment>(
+            "Concert",
+            "Concerts",
+            "concerts",
+            searchConcert,
+            deleteConcert,
+            preDelete
+          )
         }
         descFn={descFn}
       />

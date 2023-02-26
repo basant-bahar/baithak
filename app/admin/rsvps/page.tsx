@@ -20,7 +20,7 @@ export default function Rsvps() {
   const { data, loading } = useQuery(concertRsvps);
 
   if (!data || !data.concerts || loading) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
 
   const concertsData = data.concerts;

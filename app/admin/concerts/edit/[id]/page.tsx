@@ -46,7 +46,7 @@ function UpdateConcert({ id }: UpdateConcertProps) {
   };
 
   if (!data || !venuesData || !artistsData || !data.concert) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
 
   return (
@@ -80,7 +80,7 @@ function CreateConcert() {
   };
 
   if (!venuesData?.venues || !artistsData?.artists) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
 
   return (

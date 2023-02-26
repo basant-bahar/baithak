@@ -57,7 +57,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   };
 
   if (loading || concertsLoading || !data || !concertsData) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
 
   return (
@@ -94,7 +94,7 @@ function CreateNotification() {
   };
 
   if (concertsLoading || !concertsData || !concertsData.concerts) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
 
   return <NotificationEditor concerts={concertsData.concerts} done={saveNotification} />;

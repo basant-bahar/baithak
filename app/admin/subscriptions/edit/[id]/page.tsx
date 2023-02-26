@@ -46,7 +46,7 @@ function UpdateSubscription({ id }: UpdateSubscriptionProps) {
   };
 
   if (!data || !data.subscription || loading) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
   const subscription = getFragmentData(subscriptionDetails, data?.subscription);
 

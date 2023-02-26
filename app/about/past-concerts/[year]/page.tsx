@@ -89,7 +89,7 @@ const firstAndLastConcertDate = graphql(`
   }
 `);
 
-export const pastConcertDetail = graphql(`
+const pastConcertDetail = graphql(`
   fragment PastConcertDetail on Concert {
     id
     title
