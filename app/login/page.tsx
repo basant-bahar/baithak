@@ -23,26 +23,30 @@ const Login = ({}: LoginMenuProps) => {
     useLazyQuery(LoginNormalDocument);
 
   useEffect(() => {
-    if (socialLoginData) {
-      login(socialLoginData.loginSocial);
-    } else if (normalLoginData) {
-      login(normalLoginData.loginNormal);
-    }
-  }, [login, socialLoginData, normalLoginData]);
-
-  useEffect(() => {
     if (errorNormal) setError(errorNormal.message);
   }, [errorNormal]);
 
   const googleSignInCallback = useCallback(
-    (info: GoogleCredentialResponse) => {
-      loginSocial({ variables: { provider: "google", code: info.credential } });
+    async (info: GoogleCredentialResponse) => {
+      const { data } = await loginSocial({
+        variables: { provider: "google", code: info.credential },
+      });
+      if (data) {
+        login(data.loginSocial);
+      } else {
+        console.log("Failed to login");
+      }
     },
     [loginSocial]
   );
 
-  const normalSignInCallback = () => {
-    loginNormal({ variables: { email: username, password: password } });
+  const normalSignInCallback = async () => {
+    const { data } = await loginNormal({ variables: { email: username, password: password } });
+    if (data) {
+      login(data.loginNormal);
+    } else {
+      console.log("Failed to login");
+    }
   };
 
   const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
