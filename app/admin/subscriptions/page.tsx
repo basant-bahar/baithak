@@ -16,7 +16,7 @@ export default function Subscriptions() {
     <Protected>
       <EntityList
         entityInfo={
-          new EntityInfo(
+          new EntityInfo<SubscriptionDetailsFragment>(
             "Subscription",
             "Subscriptions",
             "subscriptions",

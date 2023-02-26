@@ -28,7 +28,7 @@ const Login = ({}: LoginMenuProps) => {
     } else if (normalLoginData) {
       login(normalLoginData.loginNormal);
     }
-  }, [socialLoginData, normalLoginData]);
+  }, [login, socialLoginData, normalLoginData]);
 
   useEffect(() => {
     if (errorNormal) setError(errorNormal.message);

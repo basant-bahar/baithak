@@ -28,6 +28,7 @@ export default async function FeaturedArtists(props: FeaturedArtistsProps) {
       const linkHref = `/about/featured-artists/${linkId}`;
       return (
         <Link
+          key={linkId}
           href={linkHref}
           className={`color-primary tab tab-bordered ml-2 ${
             isActive
@@ -55,7 +56,7 @@ export default async function FeaturedArtists(props: FeaturedArtistsProps) {
   );
 }
 
-export const artistBasicInfo = graphql(`
+const artistBasicInfo = graphql(`
   fragment ArtistBasicInfo on Artist {
     id
     title

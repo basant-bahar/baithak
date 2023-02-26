@@ -20,8 +20,8 @@ export default function ResetPassword() {
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const [resetPasswordMutation] = useMutation(ResetPasswordDocument);
   const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-  const code = searchParams.get("code");
+  const email = searchParams?.get("email");
+  const code = searchParams?.get("code");
 
   const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -79,7 +79,7 @@ export default function ResetPassword() {
           />
           {passwordMismatch && (
             <div className="text-center text-red-500 pt-2">
-              Password and confirm password doesn't match
+              Password and confirm password doesn&apos;t match
             </div>
           )}
           <button className="btn-blue py-1 px-4 mt-4" onClick={resetPassword}>

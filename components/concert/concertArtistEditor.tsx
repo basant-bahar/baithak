@@ -20,7 +20,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
       })[0];
       setInstruments(artist.instruments);
     }
-  }, []);
+  }, [props.artists, props.concertArtist]);
 
   if (!props.artists) return null;
 

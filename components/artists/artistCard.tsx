@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { imageUrl } from "../../utils";
-import { FragmentType, getFragmentData } from "../../__generated__";
-import { artistBasicInfo } from "../../app/about/featured-artists/[names]/page";
 import { ArtistBasicInfoFragment } from "../../__generated__/graphql";
 
 type ArtistCardProps = {

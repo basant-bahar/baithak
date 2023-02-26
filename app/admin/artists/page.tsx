@@ -16,7 +16,15 @@ export default function ArtistList() {
   return (
     <Protected>
       <EntityList
-        entityInfo={new EntityInfo("Artist", "Artists", "artists", searchArtists, deleteArtist)}
+        entityInfo={
+          new EntityInfo<ArtistDetailsFragment>(
+            "Artist",
+            "Artists",
+            "artists",
+            searchArtists,
+            deleteArtist
+          )
+        }
         descFn={descFn}
       />
     </Protected>

@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <AuthProvider>
           <ApolloProvider client={client}>
-            <NavBar children={children} />
+            <NavBar>{children}</NavBar>
           </ApolloProvider>
         </AuthProvider>
       </body>
