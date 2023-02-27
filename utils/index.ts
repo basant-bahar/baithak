@@ -62,6 +62,19 @@ export function getDateTimeStr(rawDate?: string): string {
   return localDateStr + "T" + localTimeStr;
 }
 
+export function getSimpleDate(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
+export function parseDateYYYYMMDD(dateStr: string) {
+  const [year, month, day] = dateStr.split("-");
+  const startDate = new Date();
+  startDate.setFullYear(parseInt(year));
+  startDate.setMonth(parseInt(month) - 1);
+  startDate.setDate(parseInt(day));
+  return startDate;
+}
+
 export async function handleFileUpload(file: File): Promise<string | null> {
   if (!process.env.NEXT_PUBLIC_UPLOAD_URL) return "";
 
