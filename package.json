@@ -10,7 +10,7 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.9",
+    "@apollo/client": "3.7.3",
     "@apollo/react-hooks": "4.0.0",
     "@heroicons/react": "^2.0.16",
     "daisyui": "^2.51.1",
