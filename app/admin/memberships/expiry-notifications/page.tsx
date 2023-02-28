@@ -61,7 +61,7 @@ export default function MembershipExpiryNotifications() {
   return (
     <Protected>
       <div className="main-container">
-        <h1>Send membership expiry notifications</h1>
+        <h1 className="row">Send membership expiry notifications</h1>
         <div className="row">
           <input
             className="simple-input w-40 mr-4"
@@ -75,13 +75,16 @@ export default function MembershipExpiryNotifications() {
             value={getDateStr(endDate)}
             onChange={(date) => changeEndDate(date)}
           />
-          <button className="btn-green ml-8" onClick={sendExpiryNotification}>
+          <button
+            className="text-white bg-green-600 hover:bg-green-700 sm:ml-8 max-xs:mt-2"
+            onClick={sendExpiryNotification}
+          >
             Send
           </button>
           {error && <div className="text-red-500 p-2">Could not send email</div>}
         </div>
 
-        <div className="grid grid-cols-2 font-bold border-b pb-1">
+        <div className="grid grid-cols-2 font-bold border-b mt-4 pb-1">
           <div className="pl-1">Member Name</div>
           <div className="pl-1">Expiration date</div>
         </div>
