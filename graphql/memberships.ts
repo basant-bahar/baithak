@@ -35,6 +35,7 @@ export const searchMembership = graphql(`
         or: [
           { authUser: { firstName: { ilike: $search } } }
           { authUser: { lastName: { ilike: $search } } }
+          { authUser: { email: { ilike: $search } } }
           { spouseFirstName: { ilike: $search } }
           { spouseLastName: { ilike: $search } }
         ]
@@ -43,6 +44,15 @@ export const searchMembership = graphql(`
     ) {
       id
       ...MembershipDetails
+    }
+  }
+`);
+
+export const updateMembership = graphql(`
+  mutation updateMembership($id: Int!, $data: MembershipUpdateInput!) {
+    updateMembership(id: $id, data: $data) {
+      id
+      ...MembershipOnlyDetails
     }
   }
 `);

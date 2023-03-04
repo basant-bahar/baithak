@@ -94,6 +94,6 @@ export function useAuth(): [AuthUser | undefined, (token: string) => void, () =>
   return [context.getUser(), context.login, context.logout];
 }
 
-export function isAdmin(user: AuthUser | null) {
+export function isAdmin(user: AuthUser | null | undefined) {
   return user?.role === "ADMIN";
 }
