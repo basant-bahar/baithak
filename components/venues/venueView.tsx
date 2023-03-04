@@ -1,5 +1,6 @@
 import { MapPinIcon } from "@heroicons/react/20/solid";
 import { venueDetails } from "../../graphql/venues";
+import { getVenueAddress } from "../../utils";
 import { FragmentType, getFragmentData } from "../../__generated__";
 
 interface VenueViewProps {
@@ -9,18 +10,14 @@ interface VenueViewProps {
 export default function VenueView({ venueData }: VenueViewProps) {
   const venue = getFragmentData(venueDetails, venueData);
 
-  const showAddress = venue.name !== "" && venue.name !== "Online" && venue.name !== "TBD";
-  const venueAddress = showAddress
-    ? venue.street + ", " + venue.city + " " + venue.state + " " + venue.zip
-    : "";
+  const venueAddress = getVenueAddress(venue);
 
-  const venueLink = "https://maps.google.com/?q=" + venueAddress;
+  const venueLink = `https://maps.google.com/?q=${venueAddress}`;
 
   return (
     <div className="flex justify-center align-center">
-      {venue.name}
-      {showAddress && <>, {venueAddress}</>}
-      {showAddress && (
+      {`${venue.name}, ${venueAddress}`}
+      {venueAddress && (
         <a className="link-icon w-5 ml-1" href={venueLink} target="_blank" rel="noreferrer">
           <MapPinIcon />
         </a>

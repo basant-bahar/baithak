@@ -1,3 +1,5 @@
+export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
+
 export function imageUrl(path: string): string {
   if (!path.startsWith("/")) path = `/${path}`;
   return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${path}`;
@@ -135,4 +137,15 @@ function resizeImage(file: File, destWidth: number, destHeight: number): Promise
     };
     image.onerror = reject;
   });
+}
+
+export function getVenueAddress(venue: {
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+}) {
+  const showAddress = venue.name !== "Online" && venue.name !== "TBD";
+  return showAddress ? `${venue.street}, ${venue.city} ${venue.state} ${venue.zip}` : "";
 }

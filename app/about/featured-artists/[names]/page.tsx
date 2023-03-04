@@ -4,6 +4,7 @@ import { graphql, getFragmentData } from "../../../../__generated__";
 import { ssrApolloClient } from "../../../apollo-client";
 import PageHeader from "../../../../components/common/pageHeader";
 import { ArtistCard } from "../../../../components/artists/artistCard";
+import { ORGANIZATION_NAME } from "../../../../utils";
 
 interface FeaturedArtistsProps {
   params: { names: string };
@@ -44,7 +45,7 @@ export default async function FeaturedArtists(props: FeaturedArtistsProps) {
 
   return (
     <div className="main-container">
-      <PageHeader title="Artists that have graced Basant Bahar's stage" />
+      <PageHeader title={`Artists that have graced ${ORGANIZATION_NAME}'s stage`} />
       <div className="flex justify-center tabs text-center mb-12">{renderTabs()}</div>
       <div className="grid grid-cols-3 gap-4">
         {artistsData.map((artistData) => {
