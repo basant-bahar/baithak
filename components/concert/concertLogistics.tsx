@@ -5,6 +5,7 @@ import format from "date-fns/format";
 import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import VenueView from "../venues/venueView";
+import { getVenueAddress, ORGANIZATION_NAME } from "../../utils";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -37,42 +38,21 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
 
   const localStartTimeStr = localDate.toLocaleTimeString([], timeOptions);
   const localEndTimeStr = localEndDate.toLocaleTimeString([], timeOptions);
-  const dateStr = localDateStr + " " + localStartTimeStr + " - " + localEndTimeStr;
+  const dateStr = `${localDateStr} ${localStartTimeStr} -  ${localEndTimeStr}`;
 
-  const showAddress = venue.name !== "Online" && venue.name !== "TBD";
-  const venueAddress = showAddress
-    ? venue.street + ", " + venue.city + " " + venue.state + " " + venue.zip
-    : "";
-
-  const venueLink = "https://maps.google.com/?q=" + venueAddress;
+  const venueAddress = getVenueAddress(venue);
 
   function googleEventDateLink() {
-    let venueString = "";
-    if (venue) {
-      if (venue.name === "TBD") {
-        venueString = venue.name;
-      } else {
-        venueString = venue.name + ", " + venueAddress;
-      }
-    }
-
+    const venueString = `${venue.name}, ${venueAddress}`;
     const googleDate = (date: Date) => {
       return format(date, "yyyyMMdd'T'HHmmssX");
     };
+    const text = `text=${props.title}`;
+    const dates = `dates=${googleDate(localDate)}/${googleDate(localEndDate)}`;
+    const details = `details=${process.env.NEXT_PUBLIC_ORGANIZATION_URL}`;
+    const location = `location=${venueString}`;
 
-    return (
-      "http://www.google.com/calendar/event?action=TEMPLATE&text=" +
-      props.title +
-      "&" +
-      "dates=" +
-      googleDate(localDate) +
-      "/" +
-      googleDate(localEndDate) +
-      "&" +
-      "details=http://basantbahar.org&location=" +
-      venueString +
-      "&trp=false&sprop=Basant%20Bahar&sprop=name:basantbahar.org"
-    );
+    return `http://www.google.com/calendar/event?action=TEMPLATE&${text}&${dates}&${details}&${location}`;
   }
 
   return (
@@ -91,11 +71,15 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         <div className="flex flex-wrap justify-center mb-4">
           <span>Tickets: {props.nonMemberPrice} (available at the gate)</span>
           <span className="xs:block hidden mr-1">,</span>
-          <span>Basant Bahar Members: {isFree ? "Free" : props.memberPrice}</span>
+          <span>
+            &nbsp;{`${ORGANIZATION_NAME}`} Members: {isFree ? "Free" : props.memberPrice}
+          </span>
         </div>
         <div className="mb-4">
           {isFree && (
-            <span>Become a Basant Bahar member and attend all concerts free for one year.</span>
+            <span>
+              Become a {`${ORGANIZATION_NAME}`} member and attend all concerts free for one year.
+            </span>
           )}
           <div>
             <span>For details, please visit our </span>
