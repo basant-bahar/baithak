@@ -4,7 +4,7 @@ The name Baithak literally means "seat" or "sitting down", which is how the arti
 
 ## Getting Started
 
-Install the dependencies:
+### Install the dependencies
 
 ```bash
 npm install
@@ -12,7 +12,20 @@ npm install
 yarn
 ```
 
-Run the development server:
+### Customize environment variable
+
+Copy .env.local.template file to .env.local and follow instrucions in it to customize.
+```bash
+cp .env.local.template .env.local
+```
+
+### Generate GraphQL types
+
+```bash
+npm run generate
+```
+
+### Run the development server:
 
 ```bash
 npm run dev
