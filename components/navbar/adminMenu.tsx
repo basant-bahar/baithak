@@ -84,6 +84,16 @@ const AdminSubMenu: FC<AdminSubMenuProps> = ({
       </Link>
       {!isDrawer && <hr className="nav-hr" />}
       <Link
+        href="/admin/authUsers"
+        onClick={hideAdmin}
+        className="nav-sub-link"
+        role="menuitem"
+        tabIndex={-1}
+        id="user-menu-item-3"
+      >
+        Users
+      </Link>
+      <Link
         href="/admin/memberships"
         onClick={hideAdmin}
         className="nav-sub-link"
