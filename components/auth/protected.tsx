@@ -10,15 +10,11 @@ export enum AccessResult {
 }
 
 interface ProtectedProps {
-  checkAccess?: (user: AuthUser | undefined) => AccessResult;
+  checkAccess: (user: AuthUser | undefined) => AccessResult;
   children: React.ReactNode;
 }
 
-function checkAuthUser(user: AuthUser | undefined): AccessResult {
-  return user === undefined ? AccessResult.AuthNeeded : AccessResult.Allowed;
-}
-
-export default function Protected({ checkAccess = checkAuthUser, children }: ProtectedProps) {
+export default function Protected({ checkAccess, children }: ProtectedProps) {
   const [user] = useAuth();
   const router = useRouter();
   const pathname = usePathname();
