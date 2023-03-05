@@ -105,10 +105,10 @@
     @apply border-b-2 bg-transparent focus:outline-none;
   }
   .simple-input:disabled {
-    @apply opacity-50;
+    @apply opacity-50 border-none;
   }
   .simple-input:invalid {
-    @apply bg-red-100;
+    @apply bg-red-200;
   }
 
   button {
