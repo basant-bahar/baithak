@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { getFragmentData, graphql } from "../../../../../__generated__";
@@ -156,41 +156,92 @@ function CreateMembership() {
   const [authUserByNameQuery] = useLazyQuery(getAuthUserByFirstLastName);
   const [createAuthUserMutation] = useMutation(createAuthUser);
 
+  const addAuthUser = useCallback(
+    async (email: string | null, firstName: string, lastName: string) => {
+      const result = await createAuthUserMutation({
+        variables: {
+          data: {
+            email,
+            firstName,
+            lastName,
+            verified: true,
+          },
+        },
+      });
+      if (result.data?.createAuthUser.id && email) {
+        setAuthUser({
+          id: result?.data?.createAuthUser.id,
+          firstName,
+          lastName,
+          email,
+        });
+        setUserInfoState({
+          __typename: "WithInfo",
+          id: result?.data?.createAuthUser.id,
+          email,
+          firstName,
+          lastName,
+        });
+      }
+    },
+    [createAuthUserMutation]
+  );
+
+  const findAuthUser = useCallback(
+    async (email: string) => {
+      const result = await authUserQuery({ variables: { email } });
+      if (result?.data?.authUsers && result.data.authUsers.length > 0) {
+        const authUser = result.data.authUsers[0];
+        if (authUser.email) {
+          setUserInfoState({
+            __typename: "WithInfo",
+            id: authUser.id,
+            firstName: authUser.firstName,
+            lastName: authUser.lastName,
+            email: authUser.email,
+          });
+          setAuthUser({
+            id: authUser.id,
+            firstName: authUser.firstName,
+            lastName: authUser.lastName,
+            email: authUser.email,
+          });
+        }
+      } else if (userInfoState.__typename === "WithEmail") {
+        addAuthUser(userInfoState.email, "", "");
+      }
+    },
+    [userInfoState, addAuthUser, authUserQuery]
+  );
+
+  const findAuthUserByName = useCallback(
+    async (firstName: string, lastName: string) => {
+      const result = await authUserByNameQuery({ variables: { firstName, lastName } });
+      if (result?.data?.authUsers && result.data.authUsers.length > 0) {
+        const authUser = result.data.authUsers[0];
+        if (authUser.email) {
+          setUserInfoState({
+            __typename: "WithInfo",
+            id: authUser.id,
+            firstName,
+            lastName,
+            email: authUser.email,
+          });
+        }
+      } else if (userInfoState.__typename === "WithNoEmailInfo") {
+        addAuthUser(null, userInfoState.firstName, userInfoState.lastName);
+      }
+    },
+    [userInfoState, addAuthUser, authUserByNameQuery]
+  );
+
   useEffect(() => {
     if (userInfoState.__typename === "WithEmail") {
       findAuthUser(userInfoState.email);
     } else if (userInfoState.__typename === "WithNoEmailInfo") {
       findAuthUserByName(userInfoState.firstName, userInfoState.lastName);
     }
-  }, [userInfoState]);
-
-  async function addAuthUser(email: string | null, firstName: string, lastName: string) {
-    const result = await createAuthUserMutation({
-      variables: {
-        data: {
-          email,
-          firstName,
-          lastName,
-          verified: true,
-        },
-      },
-    });
-    if (result.data?.createAuthUser.id && email) {
-      setAuthUser({
-        id: result?.data?.createAuthUser.id,
-        firstName,
-        lastName,
-        email,
-      });
-      setUserInfoState({
-        __typename: "WithInfo",
-        id: result?.data?.createAuthUser.id,
-        email,
-        firstName,
-        lastName,
-      });
-    }
-  }
+  }, [userInfoState, findAuthUser, findAuthUserByName]);
 
   const membershipDoesNotExists = async (membership: MembershipDetailsFragment) => {
     if (membership.authUser.email) {
@@ -214,48 +265,6 @@ function CreateMembership() {
       },
     });
     router.back();
-  };
-
-  const findAuthUser = async (email: string) => {
-    const result = await authUserQuery({ variables: { email } });
-    if (result?.data?.authUsers && result.data.authUsers.length > 0) {
-      const authUser = result.data.authUsers[0];
-      if (authUser.email) {
-        setUserInfoState({
-          __typename: "WithInfo",
-          id: authUser.id,
-          firstName: authUser.firstName,
-          lastName: authUser.lastName,
-          email: authUser.email,
-        });
-        setAuthUser({
-          id: authUser.id,
-          firstName: authUser.firstName,
-          lastName: authUser.lastName,
-          email: authUser.email,
-        });
-      }
-    } else if (userInfoState.__typename === "WithEmail") {
-      addAuthUser(userInfoState.email, "", "");
-    }
-  };
-
-  const findAuthUserByName = async (firstName: string, lastName: string) => {
-    const result = await authUserByNameQuery({ variables: { firstName, lastName } });
-    if (result?.data?.authUsers && result.data.authUsers.length > 0) {
-      const authUser = result.data.authUsers[0];
-      if (authUser.email) {
-        setUserInfoState({
-          __typename: "WithInfo",
-          id: authUser.id,
-          firstName,
-          lastName,
-          email: authUser.email,
-        });
-      }
-    } else if (userInfoState.__typename === "WithNoEmailInfo") {
-      addAuthUser(null, userInfoState.firstName, userInfoState.lastName);
-    }
   };
 
   const getInnerComponent = () => {
@@ -299,7 +308,7 @@ interface UserComponentProps {
 function NewUserComponent({ changeUserInfo }: UserComponentProps) {
   return (
     <div className="flex justify-center items-center mb-8">
-      <label className="pl-4">Do you have new member's email?</label>
+      <label className="pl-4">{"Do you have new member's email?"}</label>
       <div>
         <button
           className="text-white bg-green-600 hover:bg-green-700 ml-4"

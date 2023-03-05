@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import MembershipEditor, { MemberAuthInfo } from "../../../components/memberships/membershipEditor";
 import { useAuth } from "../../../components/auth/authProvider";
@@ -13,16 +13,16 @@ import PageHeader from "../../../components/common/pageHeader";
 import { membershipOnlyDetails, updateMembership } from "../../../graphql/memberships";
 import { getFragmentData, graphql } from "../../../__generated__";
 
-export default function ManageMembership() {
-  const newMembership = {
-    phone: "",
-    spouseFirstName: "",
-    spouseLastName: "",
-    spouseEmail: "",
-    type: "",
-    expiry: null,
-  };
+const newMembership = {
+  phone: "",
+  spouseFirstName: "",
+  spouseLastName: "",
+  spouseEmail: "",
+  type: "",
+  expiry: null,
+};
 
+export default function ManageMembership() {
   const [user] = useAuth();
   const [membership, setMembership] = useState<MembershipOnlyDetailsFragment | undefined>();
   const [membershipId, setMembershipId] = useState<number | undefined>();
@@ -37,7 +37,7 @@ export default function ManageMembership() {
       setMemberAuthInfo({ firstName: user.firstName, lastName: user.lastName, email: user.email });
       getMembership({ variables: { authId: user.sub } });
     }
-  }, [user]);
+  }, [user, getMembership]);
 
   useEffect(() => {
     if (!loading && data) {

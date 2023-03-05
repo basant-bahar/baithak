@@ -40,7 +40,7 @@ export default function Login({ searchParams: { reason, redirectUrl } }: LoginPr
         console.log("Failed to login");
       }
     },
-    [loginSocial]
+    [loginSocial, login, redirectUrl]
   );
 
   const normalSignInCallback = async () => {

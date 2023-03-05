@@ -26,7 +26,7 @@ export default function Protected({ checkAccess, children }: ProtectedProps) {
       if (!haveAccess) router.push(`/login?reason=${accessFailureCode}&redirectUrl=${pathname}`);
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [router]);
+  }, [router, haveAccess, accessFailureCode, pathname]);
 
   return <>{haveAccess && <>{children}</>}</>;
 }

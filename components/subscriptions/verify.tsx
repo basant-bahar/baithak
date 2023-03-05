@@ -28,7 +28,7 @@ export default function Verify(props: VerifyProps) {
       }
     };
     email && code && verify();
-  }, [email, code]);
+  }, [email, code, verifyMutation, setErrorMessage]);
 
   return <>{verified && <div className="text-center">{`Your have been ${action}d!`}</div>}</>;
 }
