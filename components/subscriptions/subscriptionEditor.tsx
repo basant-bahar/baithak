@@ -49,8 +49,8 @@ export default function SubscriptionEditor(props: SubscriptionEditorProps) {
           <label className="form-label">Group</label>
           <select className="mr-2 border-b" value={group} onChange={groupChange}>
             <option value="">--Select group--</option>
-            <option key="test">Test</option>
-            <option key="all">All</option>
+            <option value="test">Test</option>
+            <option value="all">All</option>
           </select>
         </div>
         <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
