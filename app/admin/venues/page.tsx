@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Protected from "../../../components/auth/protected";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
 import { searchVenues } from "../../../graphql/venues";
 import { graphql } from "../../../__generated__";
@@ -13,20 +12,12 @@ export default function VenueList() {
   };
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo<VenueDetailsFragment>(
-            "Venue",
-            "Venues",
-            "venues",
-            searchVenues,
-            deleteVenue
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo<VenueDetailsFragment>("Venue", "Venues", "venues", searchVenues, deleteVenue)
+      }
+      descFn={descFn}
+    />
   );
 }
 

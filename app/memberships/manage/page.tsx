@@ -9,10 +9,10 @@ import {
   MembershipOnlyDetailsFragment,
   MembershipOnlyDetailsFragmentDoc,
 } from "../../../__generated__/graphql";
-import Protected from "../../../components/auth/protected";
 import PageHeader from "../../../components/common/pageHeader";
 import { membershipOnlyDetails, updateMembership } from "../../../graphql/memberships";
 import { getFragmentData, graphql } from "../../../__generated__";
+import Protected from "../../../components/auth/protected";
 
 export default function ManageMembership() {
   const newMembership = {
@@ -23,17 +23,16 @@ export default function ManageMembership() {
     type: "",
     expiry: null,
   };
-  console.log("ManageMembership ");
 
   const [user] = useAuth();
   const [membership, setMembership] = useState<MembershipOnlyDetailsFragment | undefined>();
   const [membershipId, setMembershipId] = useState<number | undefined>();
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo | undefined>();
 
-  let [getMembership, { loading, error, data }] = useLazyQuery(getMembershipByAuthId);
+  const [getMembership, { loading, error, data }] = useLazyQuery(getMembershipByAuthId);
   const [updateMembershipMutation] = useMutation(updateMembership);
   const [createMembershipMutation] = useMutation(createMembership);
-  console.log("user ", user);
+
   useEffect(() => {
     if (user) {
       setMemberAuthInfo({ firstName: user.firstName, lastName: user.lastName, email: user.email });
@@ -101,19 +100,17 @@ export default function ManageMembership() {
   if (loading || !membership || !memberAuthInfo) return <div>Loading...</div>;
 
   return (
-    <Protected>
-      <div className="main-container">
-        <PageHeader title={membershipId ? "Manage Membership" : "Create Membership"} />
-        <MembershipEditor
-          membershipId={membershipId}
-          membership={membership}
-          authId={user ? user.sub : undefined}
-          authUser={memberAuthInfo}
-          done={saveMembership}
-          manage={true}
-        />
-      </div>
-    </Protected>
+    <div className="main-container">
+      <PageHeader title={membershipId ? "Manage Membership" : "Create Membership"} />
+      <MembershipEditor
+        membershipId={membershipId}
+        membership={membership}
+        authId={user ? user.sub : undefined}
+        authUser={memberAuthInfo}
+        done={saveMembership}
+        manage={true}
+      />
+    </div>
   );
 }
 

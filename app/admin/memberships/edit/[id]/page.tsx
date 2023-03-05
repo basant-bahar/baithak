@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { getFragmentData, graphql } from "../../../../../__generated__";
 import PageHeader from "../../../../../components/common/pageHeader";
 import {
@@ -28,9 +27,7 @@ export default function Membership(props: MembershipProps) {
   const router = useRouter();
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return (
-    <Protected>{id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />}</Protected>
-  );
+  return <>{id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />}</>;
 }
 
 interface UpdateMembershipProps {

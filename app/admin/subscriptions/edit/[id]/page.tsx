@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { getFragmentData, graphql } from "../../../../../__generated__";
 import {
   SearchSubscriptionDocument,
@@ -18,9 +17,7 @@ interface EditSubscriptionProps {
 export default function EditSubscription(props: EditSubscriptionProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return (
-    <Protected>{id === "new" ? <CreateSubscription /> : <UpdateSubscription id={id} />}</Protected>
-  );
+  return <>{id === "new" ? <CreateSubscription /> : <UpdateSubscription id={id} />}</>;
 }
 
 interface UpdateSubscriptionProps {

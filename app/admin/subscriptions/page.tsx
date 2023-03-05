@@ -2,7 +2,6 @@
 
 import React from "react";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
-import Protected from "../../../components/auth/protected";
 import { graphql } from "../../../__generated__";
 import { SubscriptionDetailsFragment } from "../../../__generated__/graphql";
 
@@ -13,20 +12,18 @@ export default function Subscriptions() {
   };
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo<SubscriptionDetailsFragment>(
-            "Subscription",
-            "Subscriptions",
-            "subscriptions",
-            searchSubscription,
-            deleteSubscription
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo<SubscriptionDetailsFragment>(
+          "Subscription",
+          "Subscriptions",
+          "subscriptions",
+          searchSubscription,
+          deleteSubscription
+        )
+      }
+      descFn={descFn}
+    />
   );
 }
 

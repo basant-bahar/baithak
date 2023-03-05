@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { graphql } from "../../../../../__generated__";
 import { createAuthUser, searchAuthUsers } from "../../../../../graphql/users";
 import { AuthUserDetailsFragment } from "../../../../../__generated__/graphql";
@@ -16,7 +15,7 @@ interface EditUserProps {
 export default function EditUser(props: EditUserProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return <Protected>{id === "new" ? <CreateUser /> : <UpdateUser id={id} />}</Protected>;
+  return <>{id === "new" ? <CreateUser /> : <UpdateUser id={id} />}</>;
 }
 
 interface UpdateUserProps {

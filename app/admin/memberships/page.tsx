@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
-import Protected from "../../../components/auth/protected";
 import { useLazyQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import { graphql, getFragmentData } from "../../../__generated__";
@@ -20,22 +19,20 @@ export default function MembershipList() {
   };
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo<MembershipDetailsFragment>(
-            "Membership",
-            "Memberships",
-            "memberships",
-            searchMembership,
-            deleteMembership,
-            undefined,
-            <AdditionalButtons />
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo<MembershipDetailsFragment>(
+          "Membership",
+          "Memberships",
+          "memberships",
+          searchMembership,
+          deleteMembership,
+          undefined,
+          <AdditionalButtons />
+        )
+      }
+      descFn={descFn}
+    />
   );
 }
 

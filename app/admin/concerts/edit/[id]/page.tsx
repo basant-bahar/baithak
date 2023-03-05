@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { graphql } from "../../../../../__generated__";
 import ConcertEditor from "../../../../../components/concert/concertEditor";
 import { searchConcert } from "../../../../../graphql/concert";
@@ -17,7 +16,7 @@ interface EditConcertProps {
 export default function EditConcert(props: EditConcertProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return <Protected>{id === "new" ? <CreateConcert /> : <UpdateConcert id={id} />}</Protected>;
+  return <>{id === "new" ? <CreateConcert /> : <UpdateConcert id={id} />}</>;
 }
 
 interface UpdateConcertProps {

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Protected from "../../../components/auth/protected";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
 import { searchArtists } from "../../../graphql/artists";
 import { graphql } from "../../../__generated__";
@@ -14,20 +13,18 @@ export default function ArtistList() {
   }
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo<ArtistDetailsFragment>(
-            "Artist",
-            "Artists",
-            "artists",
-            searchArtists,
-            deleteArtist
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo<ArtistDetailsFragment>(
+          "Artist",
+          "Artists",
+          "artists",
+          searchArtists,
+          deleteArtist
+        )
+      }
+      descFn={descFn}
+    />
   );
 }
 
