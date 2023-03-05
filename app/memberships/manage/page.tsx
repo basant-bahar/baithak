@@ -12,7 +12,6 @@ import {
 import PageHeader from "../../../components/common/pageHeader";
 import { membershipOnlyDetails, updateMembership } from "../../../graphql/memberships";
 import { getFragmentData, graphql } from "../../../__generated__";
-import Protected from "../../../components/auth/protected";
 
 export default function ManageMembership() {
   const newMembership = {
