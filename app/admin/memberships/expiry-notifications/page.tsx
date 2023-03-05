@@ -3,7 +3,6 @@
 import { useLazyQuery, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Protected from "../../../../components/auth/protected";
 import { getDateStr, parseDateYYYYMMDD } from "../../../../utils";
 import { FragmentType, getFragmentData, graphql } from "../../../../__generated__";
 
@@ -59,47 +58,45 @@ export default function MembershipExpiryNotifications() {
   }
 
   return (
-    <Protected>
-      <div className="main-container">
-        <h1 className="row">Send membership expiry notifications</h1>
-        <div className="row">
-          <input
-            className="simple-input w-40 mr-4"
-            type="date"
-            value={getDateStr(startDate)}
-            onChange={(date) => changeStartDate(date)}
-          />
-          <input
-            className="simple-input w-40"
-            type="date"
-            value={getDateStr(endDate)}
-            onChange={(date) => changeEndDate(date)}
-          />
-          <button
-            className="text-white bg-green-600 hover:bg-green-700 sm:ml-8 max-xs:mt-2"
-            onClick={sendExpiryNotification}
-          >
-            Send
-          </button>
-          {error && <div className="text-red-500 p-2">Could not send email</div>}
-        </div>
-
-        <div className="grid grid-cols-2 font-bold border-b mt-4 pb-1">
-          <div className="pl-1">Member Name</div>
-          <div className="pl-1">Expiration date</div>
-        </div>
-        {memberships &&
-          memberships.map((m) => {
-            const membership = getFragmentData(membershipExpiryDetails, m);
-            return (
-              <div className="grid grid-cols-2 border-b pt-1 pb-1" key={membership.id}>
-                <div className="pl-1">{`${membership.authUser.firstName} ${membership.authUser.lastName}`}</div>
-                <div className="pl-1">{membership.expiry}</div>
-              </div>
-            );
-          })}
+    <div className="main-container">
+      <h1 className="row">Send membership expiry notifications</h1>
+      <div className="row">
+        <input
+          className="simple-input w-40 mr-4"
+          type="date"
+          value={getDateStr(startDate)}
+          onChange={(date) => changeStartDate(date)}
+        />
+        <input
+          className="simple-input w-40"
+          type="date"
+          value={getDateStr(endDate)}
+          onChange={(date) => changeEndDate(date)}
+        />
+        <button
+          className="text-white bg-green-600 hover:bg-green-700 sm:ml-8 max-xs:mt-2"
+          onClick={sendExpiryNotification}
+        >
+          Send
+        </button>
+        {error && <div className="text-red-500 p-2">Could not send email</div>}
       </div>
-    </Protected>
+
+      <div className="grid grid-cols-2 font-bold border-b mt-4 pb-1">
+        <div className="pl-1">Member Name</div>
+        <div className="pl-1">Expiration date</div>
+      </div>
+      {memberships &&
+        memberships.map((m) => {
+          const membership = getFragmentData(membershipExpiryDetails, m);
+          return (
+            <div className="grid grid-cols-2 border-b pt-1 pb-1" key={membership.id}>
+              <div className="pl-1">{`${membership.authUser.firstName} ${membership.authUser.lastName}`}</div>
+              <div className="pl-1">{membership.expiry}</div>
+            </div>
+          );
+        })}
+    </div>
   );
 }
 

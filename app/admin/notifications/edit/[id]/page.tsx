@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { graphql } from "../../../../../__generated__";
 import { getNotifications, notificationConcerts } from "../../../../../graphql/notifications";
 import {
@@ -19,9 +18,7 @@ interface NotificationProps {
 export default function Notification(props: NotificationProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return (
-    <Protected>{id === "new" ? <CreateNotification /> : <UpdateNotification id={id} />}</Protected>
-  );
+  return <>{id === "new" ? <CreateNotification /> : <UpdateNotification id={id} />}</>;
 }
 
 interface UpdateNotificationProps {

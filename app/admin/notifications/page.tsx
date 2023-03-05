@@ -2,7 +2,6 @@
 
 import React from "react";
 import { graphql } from "../../../__generated__";
-import Protected from "../../../components/auth/protected";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
 import { getNotifications } from "../../../graphql/notifications";
 import { NotificationShortDetailsFragment } from "../../../__generated__/graphql";
@@ -18,24 +17,22 @@ export default function NotificationList() {
   };
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo(
-            "Notification",
-            "Notifications",
-            "notifications",
-            getNotifications,
-            deleteNotification,
-            undefined,
-            undefined,
-            cleanupNotifications
-            // deleteNotificationCacheUpdate
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo(
+          "Notification",
+          "Notifications",
+          "notifications",
+          getNotifications,
+          deleteNotification,
+          undefined,
+          undefined,
+          cleanupNotifications
+          // deleteNotificationCacheUpdate
+        )
+      }
+      descFn={descFn}
+    />
   );
 }
 

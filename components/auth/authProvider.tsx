@@ -43,12 +43,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const login = useCallback(
-    (token: string, url?: string) => {
+    (token: string, redirectUrl?: string) => {
       const decoded = decodeToken(token);
       if (decoded) {
         setUser(decoded);
         localStorage.setItem("token", token);
-        url && router.replace(url);
+        redirectUrl && router.replace(redirectUrl);
         return decoded;
       }
     },
@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   function logout() {
     setUser(null);
     localStorage.removeItem("token");
+    router.replace("/");
   }
 
   useEffect(() => {
@@ -74,10 +75,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         getUser,
-        login: (token: string) => {
-          login(token, "/");
+        login: (token: string, redirectUrl?: string) => {
+          login(token, redirectUrl || "/");
         },
-        logout: logout,
+        logout,
       }}
     >
       {children}
@@ -85,7 +86,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export function useAuth(): [AuthUser | undefined, (token: string) => void, () => void] {
+export function useAuth(): [
+  AuthUser | undefined,
+  (token: string, redirectUrl?: string) => void,
+  () => void
+] {
   const context = useContext(AuthContext);
 
   if (context === undefined) {

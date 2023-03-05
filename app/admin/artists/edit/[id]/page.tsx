@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import { graphql } from "../../../../../__generated__";
 import ArtistEditor from "../../../../../components/artists/artistEditor";
 import { ArtistDetailsFragment } from "../../../../../__generated__/graphql";
@@ -16,7 +15,7 @@ interface EditArtistProps {
 export default function EditArtist(props: EditArtistProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return <Protected>{id === "new" ? <CreateArtist /> : <UpdateArtist id={id} />}</Protected>;
+  return <>{id === "new" ? <CreateArtist /> : <UpdateArtist id={id} />}</>;
 }
 
 interface UpdateArtistProps {

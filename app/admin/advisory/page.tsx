@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { getFragmentData, graphql } from "../../../__generated__";
 import PageHeader from "../../../components/common/pageHeader";
-import Protected from "../../../components/auth/protected";
 import { advisoryDetails, getAdvisories } from "../../../graphql/advisory";
 import { client } from "../../apollo-client";
 
@@ -102,51 +101,49 @@ export default function Advisory() {
   }
 
   return (
-    <Protected>
-      <div className="main-container">
-        <PageHeader title="Advisory" />
-        <div className="flex-auto p-6">
-          <div className="grid mb-4 grid-cols-4 gap-1">
-            <label className="flex justify-end items-center pr-3">Level</label>
-            <select
-              className="mr-2 border-b col-start-2 col-span-3 p-2"
-              onChange={selectLevel}
-              value={advisoryData ? advisoryData.level : levels[2]}
-            >
-              {levels.map((level) => (
-                <option key={level} value={level}>
-                  {level}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="grid mb-4 grid-cols-4 gap-1">
-            <label className="flex justify-end items-start pr-3 pt-2">Message</label>
-            <textarea
-              className="border p-2 col-start-2 col-span-3"
-              rows={5}
-              placeholder="Bio"
-              onChange={changeMessage}
-              value={advisoryData.message}
-            />
-          </div>
-          <div className="grid mb-4 grid-cols-4 gap-1 lg:grid-cols-8">
-            <button
-              className="text-white bg-green-600 hover:bg-green-700 mr-2 lg:col-start-3 col-start-2"
-              onClick={() => saveAdvisory()}
-            >
-              Save
-            </button>
-            <button
-              className="text-white bg-red-400 hover:bg-red-500"
-              onClick={() => handleAdvisoryDeletion(advisoryId)}
-            >
-              Delete
-            </button>
-          </div>
+    <div className="main-container">
+      <PageHeader title="Advisory" />
+      <div className="flex-auto p-6">
+        <div className="grid mb-4 grid-cols-4 gap-1">
+          <label className="flex justify-end items-center pr-3">Level</label>
+          <select
+            className="mr-2 border-b col-start-2 col-span-3 p-2"
+            onChange={selectLevel}
+            value={advisoryData ? advisoryData.level : levels[2]}
+          >
+            {levels.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="grid mb-4 grid-cols-4 gap-1">
+          <label className="flex justify-end items-start pr-3 pt-2">Message</label>
+          <textarea
+            className="border p-2 col-start-2 col-span-3"
+            rows={5}
+            placeholder="Bio"
+            onChange={changeMessage}
+            value={advisoryData.message}
+          />
+        </div>
+        <div className="grid mb-4 grid-cols-4 gap-1 lg:grid-cols-8">
+          <button
+            className="text-white bg-green-600 hover:bg-green-700 mr-2 lg:col-start-3 col-start-2"
+            onClick={() => saveAdvisory()}
+          >
+            Save
+          </button>
+          <button
+            className="text-white bg-red-400 hover:bg-red-500"
+            onClick={() => handleAdvisoryDeletion(advisoryId)}
+          >
+            Delete
+          </button>
         </div>
       </div>
-    </Protected>
+    </div>
   );
 }
 

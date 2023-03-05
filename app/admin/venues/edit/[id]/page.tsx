@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import Protected from "../../../../../components/auth/protected";
 import VenueEditor from "../../../../../components/venues/venueEditor";
 import { graphql } from "../../../../../__generated__";
 import { searchVenues } from "../../../../../graphql/venues";
@@ -16,7 +15,7 @@ interface EditVenueProps {
 export default function EditVenue(props: EditVenueProps) {
   const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
 
-  return <Protected>{id === "new" ? <CreateVenue /> : <UpdateVenue id={id} />}</Protected>;
+  return <>{id === "new" ? <CreateVenue /> : <UpdateVenue id={id} />}</>;
 }
 
 interface UpdateVenueProps {

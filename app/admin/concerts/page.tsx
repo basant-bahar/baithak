@@ -4,7 +4,6 @@ import React from "react";
 import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { getSeparatedDateDetails } from "../../../utils";
 import { ConcertDetailsFragment } from "../../../__generated__/graphql";
-import Protected from "../../../components/auth/protected";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
 import { concertArtistInfo, searchConcert } from "../../../graphql/concert";
 import { getFragmentData, graphql } from "../../../__generated__";
@@ -42,21 +41,19 @@ export default function ConcertList() {
   }
 
   return (
-    <Protected>
-      <EntityList
-        entityInfo={
-          new EntityInfo<ConcertDetailsFragment>(
-            "Concert",
-            "Concerts",
-            "concerts",
-            searchConcert,
-            deleteConcert,
-            preDelete
-          )
-        }
-        descFn={descFn}
-      />
-    </Protected>
+    <EntityList
+      entityInfo={
+        new EntityInfo<ConcertDetailsFragment>(
+          "Concert",
+          "Concerts",
+          "concerts",
+          searchConcert,
+          deleteConcert,
+          preDelete
+        )
+      }
+      descFn={descFn}
+    />
   );
 }
 

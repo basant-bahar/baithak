@@ -7,10 +7,13 @@ import { useAuth } from "../../components/auth/authProvider";
 import Link from "next/link";
 import { graphql } from "../../__generated__";
 import { LoginNormalDocument, LoginSocialDocument } from "../../__generated__/graphql";
+import { AccessResult } from "../../components/auth/protected";
 
-type LoginMenuProps = {};
+type LoginProps = {
+  searchParams: { reason?: AccessResult; redirectUrl?: string };
+};
 
-const Login = ({}: LoginMenuProps) => {
+export default function Login({ searchParams: { reason, redirectUrl } }: LoginProps) {
   const [user, login, logout] = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +35,7 @@ const Login = ({}: LoginMenuProps) => {
         variables: { provider: "google", code: info.credential },
       });
       if (data) {
-        login(data.loginSocial);
+        login(data.loginSocial, redirectUrl);
       } else {
         console.log("Failed to login");
       }
@@ -43,7 +46,7 @@ const Login = ({}: LoginMenuProps) => {
   const normalSignInCallback = async () => {
     const { data } = await loginNormal({ variables: { email: username, password: password } });
     if (data) {
-      login(data.loginNormal);
+      login(data.loginNormal, redirectUrl);
     } else {
       console.log("Failed to login");
     }
@@ -58,8 +61,21 @@ const Login = ({}: LoginMenuProps) => {
     setError(undefined);
   };
 
+  const insufficientMessage =
+    "You do not have authorization to access the page you requested. Please login with appropriate credentials.";
+  const authMessage = "Please login to access the page you requested.";
+  const loginReason =
+    reason === AccessResult.InsufficientPrivileges
+      ? insufficientMessage
+      : reason === AccessResult.AuthNeeded
+      ? authMessage
+      : undefined;
+
   return (
     <div className="main-container p-16">
+      {loginReason && (
+        <div className="border-b-2 pb-6 mb-8 text-center text-red-400">{loginReason}</div>
+      )}
       <div className="flex gap-x-20 items-center p-2">
         <div className="w-2/4 text-center">
           For existing members with a Google or Facebook account as well as new members
@@ -106,9 +122,7 @@ const Login = ({}: LoginMenuProps) => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}
 
 const loginSocial = graphql(`
   query loginSocial($provider: String!, $code: String!) {
