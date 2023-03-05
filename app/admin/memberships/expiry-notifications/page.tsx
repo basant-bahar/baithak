@@ -43,7 +43,7 @@ export default function MembershipExpiryNotifications() {
     return () => {
       fetchActive = false;
     };
-  }, [startDate, endDate]);
+  }, [startDate, endDate, expiryNotifications]);
 
   function sendExpiryNotification(e: React.MouseEvent<HTMLButtonElement>) {
     sendExpiryNotificationEmail({ variables: { fromDate: startDate, toDate: endDate } })

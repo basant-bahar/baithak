@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
+import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/navigation";
 import { graphql } from "../../../../../__generated__";
 import { getDateStr, getSimpleDate } from "../../../../../utils";
@@ -37,7 +37,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
     return () => {
       fetchActive = false;
     };
-  }, [membershipId]);
+  }, [membershipId, getPayments]);
 
   const existingPayments =
     payments &&
