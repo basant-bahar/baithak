@@ -245,7 +245,7 @@ export default function ConcertEditor(props: ConcertEditorProps) {
           <div className="form-row">
             <label className="form-label">Description</label>
             <textarea
-              className="border col-span-3 p-2"
+              className="border col-span-2 p-2"
               rows={5}
               placeholder="Concert description"
               onChange={changeDescription}
@@ -309,7 +309,7 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               value={concertData.ticketLink || ""}
             />
           </div>
-          <div className="form-row">
+          <div className="form-row max-xs:grid-cols-[1fr]">
             <label className="form-label">Photo</label>
             {concertData.photoUrl && (
               <Image
