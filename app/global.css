@@ -27,7 +27,7 @@
   }
 
   .main-container {
-    @apply bordered-container mt-20 lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm;
+    @apply bordered-container mt-20 lg:max-w-screen-lg sm:max-w-[90%];
   }
 
   .bordered-container {
@@ -102,7 +102,7 @@
   }
 
   .simple-input {
-    @apply border-b-2 bg-transparent focus:outline-none;
+    @apply border-b-2 bg-transparent focus:outline-none min-w-[10rem];
   }
   .simple-input:disabled {
     @apply opacity-50 border-none;
@@ -120,10 +120,14 @@
   }
 
   .form-row {
-    @apply grid mb-4 grid-cols-4 gap-1;
+    @apply grid mb-4 md:grid-cols-[1fr_minmax(_min-content,_2fr)_2fr] xs:grid-cols-3 xs:gap-1 gap-2 grid-cols-1;
+  }
+
+  .form-row-4 {
+    @apply grid mb-4 xs:grid-cols-4 xs:gap-1 gap-2 grid-cols-[1fr];
   }
 
   .form-label {
-    @apply flex justify-end items-center pr-3;
+    @apply flex grow xs:justify-end xs:font-medium justify-start font-semibold items-center pr-3;
   }
 }
