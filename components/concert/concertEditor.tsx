@@ -327,8 +327,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
               placeholder="Upload photo"
             />
           </div>
-          <div className="form-row">
-            <div className="form-label">
+          <div className="form-row max-xs:flex max-xs:gap-0">
+            <div className="form-label max-xs:gap-0">
               <input
                 type="checkbox"
                 className="w-4 h-4"
@@ -341,9 +341,9 @@ export default function ConcertEditor(props: ConcertEditorProps) {
             </div>
           </div>
         </div>
-        <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
+        <div className="form-row p-4 max-lg:p-0 max-xs:flex">
           <button
-            className="text-white bg-green-600 hover:bg-green-700 col-start-3 max-lg:col-start-2 lg:ml-2"
+            className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-w-[10rem]"
             disabled={!enableSave}
             onClick={() => saveConcert()}
           >

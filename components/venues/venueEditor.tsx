@@ -75,7 +75,7 @@ export default function VenueEditor(props: VenueEditorProps) {
               value={venueData.street}
             />
           </div>
-          <div className="form-row">
+          <div className="xs:grid mb-4 md:grid-cols-[1fr_minmax(_min-content,_4fr)] xs:grid-cols-[1fr_minmax(_min-content,_2fr)] xs:gap-1 gap-2 flex flex-col">
             <label className="form-label">City, State and Zip</label>
             <div className="flex max-lg:flex-wrap max-lg:col-start-2 max-lg:col-end-5">
               <input
@@ -99,7 +99,7 @@ export default function VenueEditor(props: VenueEditorProps) {
             </div>
           </div>
           <div className="form-row">
-            <div className="form-label">
+            <div className="form-label grid-cols-2">
               <input type="checkbox" checked={venueData.publish} onChange={changePublish} />
             </div>
             <div className="flex justify-start items-center">

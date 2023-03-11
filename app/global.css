@@ -123,11 +123,7 @@
     @apply grid mb-4 md:grid-cols-[1fr_minmax(_min-content,_2fr)_2fr] xs:grid-cols-3 xs:gap-1 gap-2 grid-cols-1;
   }
 
-  .form-row-4 {
-    @apply grid mb-4 xs:grid-cols-4 xs:gap-1 gap-2 grid-cols-[1fr];
-  }
-
   .form-label {
-    @apply flex grow xs:justify-end xs:font-medium justify-start font-semibold items-center pr-3;
+    @apply flex xs:justify-end xs:font-medium justify-start font-semibold items-center pr-3;
   }
 }

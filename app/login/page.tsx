@@ -72,20 +72,20 @@ export default function Login({ searchParams: { reason, redirectUrl } }: LoginPr
       : undefined;
 
   return (
-    <div className="main-container p-16">
+    <div className="main-container p-16 max-xs:p-4">
       {loginReason && (
         <div className="border-b-2 pb-6 mb-8 text-center text-red-400">{loginReason}</div>
       )}
-      <div className="flex gap-x-20 items-center p-2">
-        <div className="w-2/4 text-center">
+      <div className="flex gap-x-16 items-center p-2 max-xs:flex-col">
+        <div className="w-2/4 max-xs:w-full text-center">
           For existing members with a Google or Facebook account as well as new members
         </div>
-        <div>
+        <div className="max-xs:w-3/4 max-xs:mt-4">
           <GoogleButton onCredentialResponse={googleSignInCallback} />
         </div>
       </div>
-      <div className="flex gap-x-16 items-center p-2 pt-12">
-        <div className="w-2/4 text-center">
+      <div className="flex gap-x-16 items-center p-2 pt-12 max-xs:flex-col">
+        <div className="w-2/4 max-xs:w-full text-center">
           Only for existing members without a Google or Facebook account. If you have any questions,
           please&nbsp;
           <Link href={"about/contact-us/email"} className="text-blue-500">
@@ -93,7 +93,7 @@ export default function Login({ searchParams: { reason, redirectUrl } }: LoginPr
           </Link>
           .
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col max-xs:mt-4">
           <input
             className="mt-2 mb-2 simple-input w-full"
             type="text"

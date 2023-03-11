@@ -61,9 +61,9 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
   };
 
   return (
-    <div className="form-row grid-cols-5" key={props.concertArtist.id}>
+    <div className="form-row grid-cols-5 xs:grid-cols-4" key={props.concertArtist.id}>
       <select
-        className="mr-2 border-b col-start-2 col-end-4"
+        className="mr-2 border-b col-start-2 col-end-4 lg:col-start-1 lg:col-end-3"
         onChange={changeArtist}
         value={props.concertArtist.artist?.id ? props.concertArtist.artist?.id : ""}
         disabled={props.artistReadonly}
@@ -78,7 +78,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
         ))}
       </select>
       <select
-        className="mr-2 border-b col-start-4 col-end-5"
+        className="mr-2 border-b col-start-4 col-end-5 lg:col-start-3 lg:col-end-4"
         onChange={changeInstrument}
         value={props.concertArtist.instrument ? props.concertArtist.instrument : ""}
       >
@@ -107,7 +107,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
           ))}
         </select>
         <input
-          className="border-b mr-2 w-12 text-center"
+          className="border-b mr-2 text-center"
           type="number"
           name="rank"
           min="1"
