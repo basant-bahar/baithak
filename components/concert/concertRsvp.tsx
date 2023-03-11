@@ -41,13 +41,14 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
       {!rsvpDone && (
         <>
           <input
-            className="simple-input mr-2"
+            className="simple-input mr-2 w-60"
             placeholder="Your email"
             onChange={changeEmail}
             value={rsvp.email}
           />
           <input
-            className="simple-input mr-2 w-20"
+            className="simple-input mr-2 w-14 min-w-0"
+            id="rank"
             placeholder="Rsvps"
             type="number"
             name="rank"
@@ -57,7 +58,7 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
             onChange={changeRsvps}
           />
           <button
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-green-600 hover:bg-green-700 max-xs:mt-2"
             onClick={() => save()}
             disabled={disabledRSVP}
           >
