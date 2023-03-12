@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { getSeparatedDateDetails } from "../../../utils";
 import { ConcertDetailsFragment } from "../../../__generated__/graphql";
 import EntityList, { EntityInfo } from "../../../components/common/entityList";
@@ -9,26 +8,6 @@ import { concertArtistInfo, searchConcert } from "../../../graphql/concert";
 import { getFragmentData, graphql } from "../../../__generated__";
 
 export default function ConcertList() {
-  const [concertArtistDelete] = useMutation(deleteConcertArtist);
-  const [concertArtistsForConcert] = useLazyQuery(concertArtistIdsForConcert);
-
-  const preDelete = async (idToRemove: number) => {
-    const result = await concertArtistsForConcert({
-      variables: {
-        id: idToRemove,
-      },
-    });
-    if (result) {
-      result.data?.concert.concertArtists.forEach((element) => {
-        concertArtistDelete({
-          variables: {
-            id: element.id,
-          },
-        });
-      });
-    }
-  };
-
   function descFn(concert: ConcertDetailsFragment) {
     const artistStr = concert.mainArtists
       .map((mainArtist) => {
@@ -48,8 +27,7 @@ export default function ConcertList() {
           "Concerts",
           "concerts",
           searchConcert,
-          deleteConcert,
-          preDelete
+          deleteConcert
         )
       }
       descFn={descFn}
@@ -59,25 +37,10 @@ export default function ConcertList() {
 
 const deleteConcert = graphql(`
   mutation deleteConcert($id: Int!) {
-    deleteConcert(id: $id) {
+    deleteConcertArtists(where: { concert: { id: { eq: $id } } }) {
       id
     }
-  }
-`);
-
-const concertArtistIdsForConcert = graphql(`
-  query concertArtistIdsForConcert($id: Int!) {
-    concert(id: $id) {
-      concertArtists {
-        id
-      }
-    }
-  }
-`);
-
-const deleteConcertArtist = graphql(`
-  mutation deleteConcertArtist($id: Int!) {
-    deleteConcertArtist(id: $id) {
+    deleteConcert(id: $id) {
       id
     }
   }
