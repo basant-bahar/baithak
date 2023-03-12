@@ -19,7 +19,6 @@ export class EntityInfo<D> {
   resourcePath: string; // an overloaded cpncept tp represent the path name for UI and name of the data in the list query (TODO: Separate them)
   searchQueryDocument: DocumentNode;
   deleteMutationDocument: DocumentNode;
-  preDelete?: (id: number) => Promise<void>;
   additionalButtons?: JSX.Element;
   cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[];
 
@@ -29,7 +28,6 @@ export class EntityInfo<D> {
     resourcePath: string,
     searchQueryDocument: DocumentNode,
     deleteMutationDocument: DocumentNode,
-    preDelete?: (id: number) => Promise<void>,
     additionalButtons?: JSX.Element,
     cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[]
   ) {
@@ -38,7 +36,6 @@ export class EntityInfo<D> {
     this.resourcePath = resourcePath;
     this.searchQueryDocument = searchQueryDocument;
     this.deleteMutationDocument = deleteMutationDocument;
-    this.preDelete = preDelete;
     this.additionalButtons = additionalButtons;
     this.cleanupEntitiesData = cleanupEntitiesData;
   }
@@ -52,7 +49,6 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     resourcePath,
     searchQueryDocument,
     deleteMutationDocument,
-    preDelete,
     additionalButtons,
     cleanupEntitiesData,
   } = entityInfo;
@@ -81,8 +77,6 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   }
 
   async function deleteEntity(id: number) {
-    preDelete && (await preDelete(id));
-
     await deleteMutation({ variables: { id } });
   }
 
