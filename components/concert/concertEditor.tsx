@@ -313,6 +313,7 @@ export default function ConcertEditor(props: ConcertEditorProps) {
             <label className="form-label">Photo</label>
             {concertData.photoUrl && (
               <Image
+                className="col-start-2 col-span-3"
                 src={imageUrl(concertData.photoUrl)}
                 width={80}
                 height={60}

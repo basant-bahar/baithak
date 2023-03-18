@@ -61,9 +61,9 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
   };
 
   return (
-    <div className="form-row grid-cols-5 xs:grid-cols-4" key={props.concertArtist.id}>
+    <>
       <select
-        className="mr-2 border-b col-start-2 col-end-4 lg:col-start-1 lg:col-end-3"
+        className="mr-2 border-b col-start-1 col-end-2 md:col-start-2 md:col-end-4 bg-transparent focus:outline-none disabled:opacity-50"
         onChange={changeArtist}
         value={props.concertArtist.artist?.id ? props.concertArtist.artist?.id : ""}
         disabled={props.artistReadonly}
@@ -78,7 +78,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
         ))}
       </select>
       <select
-        className="mr-2 border-b col-start-4 col-end-5 lg:col-start-3 lg:col-end-4"
+        className="mr-2 border-b col-start-4 col-end-5 lg:col-start-4 lg:col-end-5 bg-transparent focus:outline-none disabled:opacity-50"
         onChange={changeInstrument}
         value={props.concertArtist.instrument ? props.concertArtist.instrument : ""}
       >
@@ -93,7 +93,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
       </select>
       <div className="flex">
         <select
-          className="mr-2 border-b flex-grow"
+          className="mr-2 border-b flex-grow bg-transparent focus:outline-none disabled:opacity-50"
           onChange={changeRole}
           value={props.concertArtist.isMain ? "Main" : "Accompany"}
         >
@@ -116,6 +116,6 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
           onChange={changeRank}
         />
       </div>
-    </div>
+    </>
   );
 }
