@@ -37,17 +37,17 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
   };
 
   return (
-    <div className="bordered-container mt-1 mb-1 text-center">
+    <div className="bordered-container mt-1 mb-1 text-center flex justify-center max-xs:gap-0 gap-2">
       {!rsvpDone && (
         <>
           <input
-            className="simple-input mr-2 w-60"
+            className="simple-input mr-2 w-64"
             placeholder="Your email"
             onChange={changeEmail}
             value={rsvp.email}
           />
           <input
-            className="simple-input mr-2 w-14 min-w-0"
+            className="simple-input mr-2 w-16 min-w-0"
             id="rank"
             placeholder="Rsvps"
             type="number"

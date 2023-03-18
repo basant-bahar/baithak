@@ -26,9 +26,7 @@ export default function NotificationList() {
           getNotifications,
           deleteNotification,
           undefined,
-          undefined,
           cleanupNotifications
-          // deleteNotificationCacheUpdate
         )
       }
       descFn={descFn}

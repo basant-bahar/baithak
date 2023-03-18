@@ -102,7 +102,7 @@
   }
 
   .simple-input {
-    @apply border-b-2 bg-transparent focus:outline-none min-w-[10rem];
+    @apply pl-1 border-b-2 bg-transparent focus:outline-none min-w-[10rem];
   }
   .simple-input:disabled {
     @apply opacity-50 border-none;

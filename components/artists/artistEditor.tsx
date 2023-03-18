@@ -74,7 +74,7 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           <div className="form-row">
             <label className="form-label">Title and Name</label>
             <select
-              className="mr-2 border-b p-2"
+              className="mr-2 border-b p-2 bg-transparent focus:outline-none disabled:opacity-50"
               onChange={changeTitle}
               value={artistData.title || ""}
             >
@@ -99,18 +99,18 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           <div className="form-row">
             <label className="form-label">Bio</label>
             <textarea
-              className="border p-2 col-span-3"
+              className="border col-span-2 p-2"
               rows={5}
               placeholder="Bio"
               onChange={changeBio}
               value={artistData.bio || ""}
             />
           </div>
-          <div className="form-row">
+          <div className="form-row max-xs:grid-cols-[1fr]">
             <label className="form-label">Photo</label>
             {artistData.photoUrl && (
               <Image
-                className="col-span-3"
+                className="col-start-2 col-span-3"
                 src={imageUrl(artistData.photoUrl)}
                 width={80}
                 height={60}

@@ -69,7 +69,7 @@ export default function ConcertArtistsEditor(props: ConcertArtistsEditorProps) {
     const artistId = concertArtist.artist?.id;
 
     return (
-      <div className="flex mb-4" key={artistId}>
+      <div className="mb-4 form-row grid grid-cols-[1fr] md:grid-cols-6" key={artistId}>
         <ConcertArtistEditor
           artists={props.artists}
           concertArtist={concertArtist}
@@ -92,7 +92,7 @@ export default function ConcertArtistsEditor(props: ConcertArtistsEditorProps) {
   return (
     <>
       <div className="mb-4">{concertArtistsElems}</div>
-      <div className="flex mb-4" key="newArtist">
+      <div className="mb-4 form-row grid grid-cols-[1fr] md:grid-cols-6" key="newArtist">
         <ConcertArtistEditor
           artists={props.artists}
           concertArtist={currentConcertArtist}

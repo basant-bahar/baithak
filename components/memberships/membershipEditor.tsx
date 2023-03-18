@@ -132,7 +132,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
         <div className="form-row">
           <label className="form-label">Membership Type</label>
           <select
-            className="bb-select"
+            className="bg-transparent border-b focus:outline-none disabled:opacity-50"
             onChange={changeType}
             value={membership.type}
             disabled={!allowAdminEdit && !allowUserCreate}
@@ -230,8 +230,8 @@ export default function MembershipEditor(props: MembershipEditorProps) {
       </div>
       {props.manage && (
         <>
-          <div className="form-row">
-            <div className="pl-3 col-span-3 justify-self-end">
+          <div className="p-6 form-row">
+            <div className="pl-3 col-span-3 justify-self-center">
               By signing up for the membership you are agreeing to our{" "}
               <a className="cursor-pointer underline" onClick={handleShowTerms}>
                 Terms and Conditions
@@ -239,7 +239,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             </div>
           </div>
           {showTerms && (
-            <div className="form-row pt-2 pb-4">
+            <div className="form-row p-6 pt-2 pb-4">
               <div className="pl-3 col-span-3 justify-self-center">
                 <TermsAndConditions />
               </div>
