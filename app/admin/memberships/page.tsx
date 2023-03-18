@@ -27,7 +27,6 @@ export default function MembershipList() {
           "memberships",
           searchMembership,
           deleteMembership,
-          undefined,
           <AdditionalButtons />
         )
       }
