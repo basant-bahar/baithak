@@ -1,74 +1,114 @@
 "use client";
 
-import Script from "next/script";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FragmentType, graphql, getFragmentData } from "../../__generated__";
+import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 import ConcertCarouselSlide from "./concertCarouselSlide";
 
 interface ConcertCarouselProps {
   concerts: FragmentType<typeof concertCalendarDetail>[];
 }
 
-const ConcertCarousel = (props: ConcertCarouselProps) => {
-  if (!props.concerts) return null;
+export default function ConcertCarousel(props: ConcertCarouselProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carousel = useRef<HTMLDivElement>(null);
   const concerts = getFragmentData(concertCalendarDetail, props.concerts);
+
+  if (concerts?.length === 0) return null;
+
+  const onChangeSlide = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+      e.preventDefault();
+      changeSlide(index);
+    },
+    [carousel]
+  );
+
+  const changeSlide = useCallback(
+    (index: number) => {
+      const behavior = index === 0 ? "instant" : "smooth";
+      setCurrentSlide(index % concerts.length);
+      const carouselWidth = carousel.current?.clientWidth || 1;
+      const targetXPixel = carouselWidth * index;
+      // Scroll to the current slide. There is an open bug to fix TypeScript type for behavior.
+      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1195
+      // TODO: Remove following line once the bug is fixed.
+      // @ts-expect-error
+      carousel.current?.scrollTo({ top: 0, left: targetXPixel, behavior: behavior });
+    },
+    [carousel, concerts]
+  );
 
   return (
     <>
-      <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></Script>
-      <div
-        id="concertCalendar"
-        className="carousel slide relative mx-auto w-9/12"
-        data-bs-ride="carousel"
-      >
-        <div className="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4">
-          {concerts.map((concert, i) => (
-            <button
-              key={`button-${concert.id}`}
-              type="button"
-              data-bs-target="#concertCalendar"
-              data-bs-slide-to={i}
-              className={`!bg-primary ${i === 0 ? "active" : ""}`}
-              aria-current="true"
-              aria-label={`${concert.title}`}
-            ></button>
-          ))}
-        </div>
-        <div className="carousel-inner relative w-full overflow-hidden">
-          {concerts.map((concert, i) => {
-            return <ConcertCarouselSlide key={concert.id} concertData={concert} index={i} />;
-          })}
-        </div>
-        <button
-          className="carousel-control-prev absolute h-full top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
-          type="button"
-          data-bs-target="#concertCalendar"
-          data-bs-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon inline-block bg-no-repeat"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next absolute h-full top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
-          type="button"
-          data-bs-target="#concertCalendar"
-          data-bs-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon inline-block bg-no-repeat"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Next</span>
-        </button>
+      <div className="carousel w-9/12 mx-auto" ref={carousel}>
+        <ConcertCarouselSlides
+          currentSlide={currentSlide}
+          concerts={concerts}
+          onChangeSlide={onChangeSlide}
+          changeSlide={changeSlide}
+          carousel={carousel}
+        />
+      </div>
+      <div className="flex justify-center w-full py-2 gap-2">
+        {concerts.map((concert, i) => {
+          const bgClass =
+            currentSlide === i
+              ? "bg-primary hover:bg-primary-light"
+              : "bg-slate-300 hover:bg-slate-200";
+          return (
+            <a
+              key={concert.id.toString()}
+              className={`btn min-h-0 p-0 h-1 w-[30px] border-0 border-solid border-transparent ${bgClass}`}
+              onClick={(e) => onChangeSlide(e, i)}
+            ></a>
+          );
+        })}
       </div>
     </>
   );
-};
+}
 
-export default ConcertCarousel;
+interface ConcertCarouselSlidesProps {
+  currentSlide: number;
+  concerts: readonly ConcertCalendarDetailFragment[];
+  onChangeSlide: (e: React.MouseEvent<HTMLAnchorElement>, index: number) => void;
+  changeSlide: (index: number) => void;
+  carousel: React.RefObject<HTMLDivElement>;
+}
+
+function ConcertCarouselSlides({
+  currentSlide,
+  concerts,
+  onChangeSlide,
+  changeSlide,
+  carousel,
+}: ConcertCarouselSlidesProps) {
+  const totalConcerts = concerts.length;
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      const next = (currentSlide + 1) % totalConcerts;
+      changeSlide(next);
+    }, 5000);
+    () => clearTimeout(handle);
+  }, [carousel, changeSlide, currentSlide, totalConcerts]);
+
+  return (
+    <>
+      {concerts.map((concert, index) => (
+        <ConcertCarouselSlide
+          key={concert.id}
+          index={index}
+          currentSlide={currentSlide}
+          totalSlides={totalConcerts}
+          onChangeSlide={onChangeSlide}
+          concert={concert}
+        />
+      ))}
+    </>
+  );
+}
 
 export const concertCalendarDetail = graphql(`
   fragment ConcertCalendarDetail on Concert {
