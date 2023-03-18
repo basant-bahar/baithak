@@ -19,7 +19,7 @@ export default async function Calendar() {
         <PageHeader title={"Concert calendar"} />
         <ConcertCarousel concerts={calendarConcertsData} />
       </div>
-      <div className="main-container p-2 mt-5 mb-2 grid grid-cols-2 gap-4">
+      <div className="main-container p-2 mt-5 mb-2 grid grid-cols-2 gap-4 max-sm:grid-cols-1">
         {calendarConcertsData.map((calendarConcertData) => {
           const concert = getFragmentData(concertCalendarDetail, calendarConcertData);
           return concert && <CalendarConcertCard key={"v-" + concert.id} concert={concert} />;
