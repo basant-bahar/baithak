@@ -3,7 +3,6 @@ import { getSeparatedDateDetails, imageUrl } from "../../utils";
 import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 
 interface ConcertCarouselSlideProps {
-  index: number;
   currentSlide: number;
   totalSlides: number;
   onChangeSlide: (e: React.MouseEvent<HTMLAnchorElement>, index: number) => void;
@@ -11,7 +10,6 @@ interface ConcertCarouselSlideProps {
 }
 
 export default function ConcertCarouselSlide({
-  index,
   currentSlide,
   totalSlides,
   onChangeSlide,
@@ -43,12 +41,10 @@ export default function ConcertCarouselSlide({
           ❯
         </a>
       </div>
-      {currentSlide === index && (
-        <div className="absolute w-full bottom-0 py-5 text-center text-primary white-transparent">
-          <h5 className="text-xl">{mainArtists}</h5>
-          <p>{`${month} ${date}`}</p>
-        </div>
-      )}
+      <div className="absolute w-full bottom-0 py-3 max-xs:py-1 text-center text-primary white-transparent">
+        <h5 className="text-xl">{mainArtists}</h5>
+        <p>{`${month} ${date}`}</p>
+      </div>
     </div>
   );
 }
