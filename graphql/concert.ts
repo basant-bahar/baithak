@@ -52,7 +52,15 @@ export const concertDetails = graphql(`
 
 export const searchConcert = graphql(`
   query searchConcert($search: String) {
-    concerts(where: { title: { ilike: $search } }, orderBy: { startTime: DESC }) {
+    concerts(
+      where: {
+        or: [
+          { title: { ilike: $search } }
+          { concertArtists: { artist: { name: { ilike: $search } } } }
+        ]
+      }
+      orderBy: { startTime: DESC }
+    ) {
       id
       ...ConcertDetails
     }
