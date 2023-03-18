@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FragmentType, graphql, getFragmentData } from "../../__generated__";
-import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 import ConcertCarouselSlide from "./concertCarouselSlide";
 
 interface ConcertCarouselProps {
@@ -10,19 +9,11 @@ interface ConcertCarouselProps {
 }
 
 export default function ConcertCarousel(props: ConcertCarouselProps) {
+  const [isHovered, setHovered] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const carousel = useRef<HTMLDivElement>(null);
   const concerts = getFragmentData(concertCalendarDetail, props.concerts);
-
-  if (concerts?.length === 0) return null;
-
-  const onChangeSlide = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
-      e.preventDefault();
-      changeSlide(index);
-    },
-    [carousel]
-  );
+  const totalConcerts = concerts.length;
 
   const changeSlide = useCallback(
     (index: number) => {
@@ -39,17 +30,47 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
     [carousel, concerts]
   );
 
+  const onChangeSlide = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+      e.preventDefault();
+      changeSlide(index);
+    },
+    [carousel, changeSlide]
+  );
+
+  useEffect(() => {
+    let handle: ReturnType<typeof setTimeout>;
+
+    if (!isHovered && totalConcerts > 0) {
+      handle = setTimeout(() => {
+        const next = (currentSlide + 1) % totalConcerts;
+        changeSlide(next);
+      }, 5000);
+    }
+    return () => {
+      clearTimeout(handle);
+    };
+  }, [changeSlide, currentSlide, totalConcerts, isHovered]);
+
   return (
     <>
-      <div className="carousel w-9/12 mx-auto" ref={carousel}>
-        <ConcertCarouselSlides
-          currentSlide={currentSlide}
-          concerts={concerts}
-          onChangeSlide={onChangeSlide}
-          changeSlide={changeSlide}
-          carousel={carousel}
-        />
+      <div
+        className="carousel w-9/12 mx-auto"
+        ref={carousel}
+        onMouseOver={() => setHovered(true)}
+        onMouseOut={() => setHovered(false)}
+      >
+        {concerts.map((concert) => (
+          <ConcertCarouselSlide
+            key={concert.id}
+            currentSlide={currentSlide}
+            totalSlides={totalConcerts}
+            onChangeSlide={onChangeSlide}
+            concert={concert}
+          />
+        ))}
       </div>
+      {/* Render tabs for the slides */}
       <div className="flex justify-center w-full py-2 gap-2">
         {concerts.map((concert, i) => {
           const bgClass =
@@ -65,47 +86,6 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
           );
         })}
       </div>
-    </>
-  );
-}
-
-interface ConcertCarouselSlidesProps {
-  currentSlide: number;
-  concerts: readonly ConcertCalendarDetailFragment[];
-  onChangeSlide: (e: React.MouseEvent<HTMLAnchorElement>, index: number) => void;
-  changeSlide: (index: number) => void;
-  carousel: React.RefObject<HTMLDivElement>;
-}
-
-function ConcertCarouselSlides({
-  currentSlide,
-  concerts,
-  onChangeSlide,
-  changeSlide,
-  carousel,
-}: ConcertCarouselSlidesProps) {
-  const totalConcerts = concerts.length;
-
-  useEffect(() => {
-    const handle = setTimeout(() => {
-      const next = (currentSlide + 1) % totalConcerts;
-      changeSlide(next);
-    }, 5000);
-    () => clearTimeout(handle);
-  }, [carousel, changeSlide, currentSlide, totalConcerts]);
-
-  return (
-    <>
-      {concerts.map((concert, index) => (
-        <ConcertCarouselSlide
-          key={concert.id}
-          index={index}
-          currentSlide={currentSlide}
-          totalSlides={totalConcerts}
-          onChangeSlide={onChangeSlide}
-          concert={concert}
-        />
-      ))}
     </>
   );
 }
