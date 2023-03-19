@@ -11,7 +11,7 @@ export default function VenueView({ venueData }: VenueViewProps) {
   const venue = getFragmentData(venueDetails, venueData);
   const venueAddress = getVenueAddress(venue);
   const venueLink = `https://maps.google.com/?q=${venueAddress}`;
-  const venueDetailsStr = `${venue.name}${venueAddress ? ", ${venueAddress}" : ""}`;
+  const venueDetailsStr = `${venue.name}${venueAddress ? `, ${venueAddress}` : ""}`;
 
   return (
     <div className="flex justify-center items-start max-xs:flex-col max-xs:items-center">

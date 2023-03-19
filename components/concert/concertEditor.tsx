@@ -342,14 +342,16 @@ export default function ConcertEditor(props: ConcertEditorProps) {
             </div>
           </div>
         </div>
-        <div className="form-row p-4 max-lg:p-0 max-xs:flex">
-          <button
-            className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-w-[10rem]"
-            disabled={!enableSave}
-            onClick={() => saveConcert()}
-          >
-            Save
-          </button>
+        <div className="form-row mb-4 pl-4 max-xs:pl-0">
+          <div className="flex gap-2 col-start-2 max-xs:col-start-1">
+            <button
+              className="text-white bg-green-600 hover:bg-green-700"
+              disabled={!enableSave}
+              onClick={() => saveConcert()}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
       <PreviewContainer className="mt-6">

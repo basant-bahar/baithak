@@ -107,13 +107,15 @@ export default function VenueEditor(props: VenueEditorProps) {
             </div>
           </div>
         </div>
-        <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
-          <button
-            className="text-white bg-green-600 hover:bg-green-700 col-start-3 max-lg:col-start-2 lg:ml-4"
-            onClick={() => saveVenue()}
-          >
-            Save
-          </button>
+        <div className="form-row mb-4 pl-4 max-xs:pl-0">
+          <div className="flex gap-2 col-start-2 max-xs:col-start-1">
+            <button
+              className="text-white bg-green-600 hover:bg-green-700"
+              onClick={() => saveVenue()}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
       <PreviewContainer className="main-container mt-2">
