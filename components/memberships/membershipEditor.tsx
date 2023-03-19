@@ -23,7 +23,6 @@ interface MembershipEditorProps {
 }
 
 const newMembership: MembershipOnlyDetailsFragment = {
-  phone: "",
   spouseFirstName: "",
   spouseLastName: "",
   spouseEmail: "",
@@ -43,7 +42,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
     props.membership
       ? {
           type: props.membership.type,
-          phone: props.membership.phone,
           spouseFirstName: props.membership.spouseFirstName,
           spouseLastName: props.membership.spouseLastName,
           spouseEmail: props.membership.spouseEmail,
@@ -79,10 +77,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
 
   function changeEmail(e: React.ChangeEvent<HTMLInputElement>) {
     setMemberAuthInfo({ ...memberAuthInfo, email: e.target.value });
-  }
-
-  function changePhone(e: React.ChangeEvent<HTMLInputElement>) {
-    setMembership({ ...membership, phone: e.currentTarget.value });
   }
 
   function changeSpouseFirstName(e: React.ChangeEvent<HTMLInputElement>) {
@@ -168,19 +162,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             onChange={changeEmail}
             disabled={!allowAdminEdit || !props.allowAuthInfoUpdate}
           />
-        </div>
-        <div className="form-row">
-          <label className="form-label">Phone</label>
-          <div className="flex w-3/4">
-            <input
-              type="tel"
-              className="simple-input mr-1"
-              placeholder="888 888 8888"
-              onChange={changePhone}
-              value={membership.phone}
-              disabled={!allowAdminEdit && !allowUserCreate && !allowUserUpdate}
-            />
-          </div>
         </div>
         {!isIndividual && (
           <>

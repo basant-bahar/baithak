@@ -14,7 +14,6 @@ import { membershipOnlyDetails, updateMembership } from "../../../graphql/member
 import { getFragmentData, graphql } from "../../../__generated__";
 
 const newMembership = {
-  phone: "",
   spouseFirstName: "",
   spouseLastName: "",
   spouseEmail: "",
@@ -73,7 +72,6 @@ export default function ManageMembership() {
         variables: {
           id: membershipId,
           data: {
-            phone: membershipToSave.phone,
             spouseFirstName: membershipToSave.spouseFirstName,
             spouseLastName: membershipToSave.spouseLastName,
             spouseEmail: membershipToSave.spouseEmail,

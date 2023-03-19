@@ -35,7 +35,7 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
       e.preventDefault();
       changeSlide(index);
     },
-    [carousel, changeSlide]
+    [changeSlide]
   );
 
   useEffect(() => {
