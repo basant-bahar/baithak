@@ -90,10 +90,10 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         </div>
         <hr />
         <div className="mt-4">
-          <div className="flex justify-center align-center">
+          <div className="flex justify-center items-center max-xs:flex-col">
             {dateStr}
             <a
-              className="link-icon ml-1 w-5"
+              className="link-icon lg:ml-1 w-5 max-xs:w-7"
               href={googleEventDateLink()}
               target="_blank"
               rel="noreferrer"

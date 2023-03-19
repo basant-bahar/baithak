@@ -88,7 +88,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     <div className="main-container">
       <h2 className="mb-8 text-center">{pluralName}</h2>
       {additionalButtons && additionalButtons}
-      <div className="flex justify-between max-xs:flex-col-reverse p-4 mb-2">
+      <div className="flex justify-between max-xs:flex-col-reverse p-4 mb-2 max-xs:mb-4 max-xs:p-0">
         <input
           className="simple-input max-xs:w-fit"
           type="search"
@@ -99,7 +99,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
         />
         <Link
           href={`/admin/${resourcePath}/edit/new`}
-          className="bg-green-500 hover:bg-green-600 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:w-28 max-xs:mb-4"
+          className="bg-green-500 hover:bg-green-600 mr-2 rounded-md flex justify-center items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
         >
           {`Add ${singularName}`}
         </Link>
@@ -108,7 +108,9 @@ export default function EntityList<D>(props: EntityListProps<D>) {
         <ul className="list-none mb-4 mx-auto p-4 divide-y max-xs:p-0">
           {entities.map((entity) => (
             <li key={"v-" + entity.id} className="pt-2 pb-2 flex gap-4 max-xs:gap-2">
-              <div className="flex flex-grow items-center">{descFn(entity)}</div>
+              <div className="flex flex-grow items-center max-xs:overflow-hidden">
+                {descFn(entity)}
+              </div>
               <div className="flex justify-end items-center max-xs:items-start">
                 <Link
                   href={`/admin/${resourcePath}/edit/${entity.id}`}

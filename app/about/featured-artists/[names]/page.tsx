@@ -47,7 +47,7 @@ export default async function FeaturedArtists(props: FeaturedArtistsProps) {
     <div className="main-container">
       <PageHeader title={`Artists that have graced ${ORGANIZATION_NAME}'s stage`} />
       <div className="flex justify-center tabs text-center mb-12">{renderTabs()}</div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 max-xs:grid-cols-2">
         {artistsData.map((artistData) => {
           const artist = getFragmentData(artistBasicInfo, artistData);
           return artist && <ArtistCard key={artist.id} artist={artist} />;

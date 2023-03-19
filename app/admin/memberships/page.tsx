@@ -124,7 +124,7 @@ const AdditionalButtons = () => {
     <div className="flex justify-between mx-auto mb-2">
       <div>
         <button
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
           onClick={showSummary}
         >
           Membership Summary
@@ -133,13 +133,13 @@ const AdditionalButtons = () => {
       </div>
       <div className="flex">
         <button
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
           onClick={createDeskPrintout}
         >
           Desk Printout
         </button>
         <Link
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
           href={`admin/memberships/expiry-notifications`}
         >
           Send Expiry Notificaions

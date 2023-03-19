@@ -38,7 +38,7 @@ export default function AuthUserEditor(props: AuthUserEditorProps) {
   return (
     <div className="main-container">
       <PageHeader title={"User"} />
-      <div className="form-row">
+      <div className="form-row max-xs:gap-2">
         <label className="form-label">Name</label>
         <input
           className="simple-input mr-1"
@@ -62,9 +62,9 @@ export default function AuthUserEditor(props: AuthUserEditorProps) {
           onChange={changeEmail}
         />
       </div>
-      <div className="grid grid-cols-8 mt-4 mb-4">
+      <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
         <button
-          className="text-white bg-green-600 hover:bg-green-700 col-start-3"
+          className="text-white bg-green-600 hover:bg-green-700 col-start-3 max-lg:col-start-1 lg:ml-4"
           onClick={() => saveUser()}
         >
           Save

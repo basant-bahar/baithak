@@ -74,25 +74,25 @@ export default function Subscriptions(props: SubscriptionProps) {
       )}
       {showEmailInput && (
         <>
-          <div className="form-row">
+          <div className="flex justify-center max-xs:flex-col max-xs:gap-2">
             <label className="form-label">Email address</label>
             <input
-              className="simple-input"
-              placeholder="Email address"
+              className="simple-input min-w-[40%]"
+              placeholder="Enter email address"
               type="email"
               value={email}
               onChange={emailChange}
             />
           </div>
-          <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
+          <div className="flex justify-center gap-2 mt-6 max-xs:justify-start">
             <button
-              className="bg-green-400 hover:bg-green-500 disabled:opacity-50 mr-2 col-start-3 max-lg:col-start-2"
+              className="bg-green-400 hover:bg-green-500 disabled:opacity-50 min-w-[8rem]"
               onClick={subscribe}
             >
               Subscribe
             </button>
             <button
-              className="bg-blue-400 hover:bg-blue-500 disabled:opacity-50"
+              className="bg-blue-400 hover:bg-blue-500 disabled:opacity-50 min-w-[8rem]"
               onClick={unsubscribe}
             >
               Unsubscribe

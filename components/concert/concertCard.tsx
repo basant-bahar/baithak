@@ -18,7 +18,7 @@ export const ConcertCard = ({ concert }: ConcertCardProps) => {
 
   return (
     <Link href={`/concerts/${concert.id}`}>
-      <div className="relative flex flex-col overflow-hidden rounded-2xl border p-4 shadow-lg cursor-pointer">
+      <div className="relative flex flex-col overflow-hidden rounded-2xl border lg:p-4 p-1 shadow-lg cursor-pointer">
         <div className="flex justify-center">
           <img
             className="rounded-md"

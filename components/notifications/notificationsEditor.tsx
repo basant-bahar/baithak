@@ -57,20 +57,20 @@ export default function NotificationEditor(props: NotificationEditorProps) {
   return (
     <div className="main-container">
       <PageHeader title={"Notification"} />
-      <div className="flex-auto p-4 max-lg:p-0">
+      <div className="flex-auto p-4 max-xs:p-0">
         <div className="form-row">
           <label className="form-label">Subject</label>
           <input
-            className="simple-input col-span-2"
+            className="simple-input"
             placeholder="Subject"
             value={notificationData.subject}
             onChange={subjectChange}
           />
         </div>
         <div className="form-row">
-          <label className="form-label">Select Concert</label>
+          <label className="form-label">Concert</label>
           <select
-            className="col-span-2 mr-2 border-b"
+            className="lg:mr-2 border-b bg-transparent focus:outline-none disabled:opacity-50 w-8/12 max-xs:w-full col-span-2"
             value={notificationData.concert ? notificationData.concert.id : ""}
             onChange={concertChange}
           >
@@ -85,7 +85,7 @@ export default function NotificationEditor(props: NotificationEditorProps) {
         <div className="form-row">
           <label className="form-label self-start pt-2">Message</label>
           <textarea
-            className="col-span-3 border p-2"
+            className="border col-span-2 p-2"
             rows={5}
             placeholder="Message"
             onChange={messageChange}
@@ -95,7 +95,7 @@ export default function NotificationEditor(props: NotificationEditorProps) {
         <div className="form-row">
           <label className="form-label self-start pt-2">Post Message</label>
           <textarea
-            className="col-span-3 border p-2"
+            className="border col-span-2 p-22"
             rows={5}
             placeholder="Post message"
             onChange={postMessageChange}

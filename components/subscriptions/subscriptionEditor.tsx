@@ -34,7 +34,7 @@ export default function SubscriptionEditor(props: SubscriptionEditorProps) {
   return (
     <div className="main-container">
       <PageHeader title={"Subscription"} />
-      <div className="flex-auto p-6">
+      <div className="flex-auto lg:p-6">
         <div className="form-row">
           <label className="form-label">Email address</label>
           <input
@@ -55,7 +55,7 @@ export default function SubscriptionEditor(props: SubscriptionEditorProps) {
         </div>
         <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
           <button
-            className="text-white bg-green-600 hover:bg-green-700 col-start-3 max-lg:col-start-2 lg:ml-2"
+            className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-xs:col-start-1 lg:ml-2"
             onClick={saveSubscription}
           >
             Save
