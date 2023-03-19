@@ -44,7 +44,6 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
 
   const saveMembership = async (membership: MembershipDetailsFragment) => {
     const updateMembershipData: MembershipUpdateInput = {
-      phone: membership.phone,
       spouseFirstName: membership.spouseFirstName,
       spouseLastName: membership.spouseLastName,
       spouseEmail: membership.spouseEmail,
@@ -66,7 +65,6 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
   const membership = getFragmentData(membershipDetails, data.membership);
   const membershipData = {
     type: membership.type,
-    phone: membership.phone,
     spouseFirstName: membership.spouseFirstName,
     spouseLastName: membership.spouseLastName,
     spouseEmail: membership.spouseEmail,
@@ -140,7 +138,6 @@ function CreateMembership() {
     email: "",
   });
   const newMembership = {
-    phone: "",
     spouseFirstName: "",
     spouseLastName: "",
     spouseEmail: "",

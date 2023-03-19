@@ -8,7 +8,6 @@ export const membershipDetails = graphql(`
       lastName
       email
     }
-    phone
     spouseFirstName
     spouseLastName
     spouseEmail
@@ -19,7 +18,6 @@ export const membershipDetails = graphql(`
 
 export const membershipOnlyDetails = graphql(`
   fragment MembershipOnlyDetails on Membership {
-    phone
     spouseFirstName
     spouseLastName
     spouseEmail
