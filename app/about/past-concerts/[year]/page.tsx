@@ -63,7 +63,7 @@ export default async function PastConcerts(props: PastConcertsProps) {
     <div className="main-container">
       <PageHeader title="Past Concerts" />
       <div className="flex justify-center artist-tabs tabs text-center mb-12">{renderTabs()}</div>
-      <div className="grid grid-cols-3 gap-4">{renderCards()}</div>
+      <div className="grid grid-cols-3 gap-4 max-xs:grid-cols-2">{renderCards()}</div>
     </div>
   );
 }

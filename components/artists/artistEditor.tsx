@@ -70,11 +70,11 @@ export default function ArtistEditor(props: ArtistEditorProps) {
     <>
       <div className="main-container">
         <PageHeader title={"Artist"} />
-        <div className="flex-auto p-4 max-lg:p-0">
+        <div className="flex-auto p-4 max-xs:p-0">
           <div className="form-row">
             <label className="form-label">Title and Name</label>
             <select
-              className="mr-2 border-b p-2 bg-transparent focus:outline-none disabled:opacity-50"
+              className="lg:mr-2 border-b bg-transparent focus:outline-none disabled:opacity-50"
               onChange={changeTitle}
               value={artistData.title || ""}
             >
@@ -122,15 +122,14 @@ export default function ArtistEditor(props: ArtistEditorProps) {
               className="col-start-2 mt-1 max-lg:col-end-5"
               accept=".png, .jpg, .jpeg"
               onChange={handlePhotoChange}
-              // placeholder="Upload photo"
             />
           </div>
           <div className="form-row">
             <label className="form-label">Youtube</label>
             <TagInput existingTags={youtubeVideoIds} onChange={updateYoutubeIds} />
           </div>
-          <div className="form-row">
-            <div className="form-label">
+          <div className="form-row max-xs:flex max-xs:gap-0">
+            <div className="form-label max-xs:gap-0">
               <input
                 type="checkbox"
                 className="w-4 h-4"

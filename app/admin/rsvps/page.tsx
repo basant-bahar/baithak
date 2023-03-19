@@ -68,16 +68,16 @@ export default function Rsvps() {
     <div className="main-container">
       <PageHeader title="Rsvps" />
       <ul className="list-none mb-4 mx-auto p-4 divide-y max-xs:p-0">
-        <li key="header" className="pt-2 pb-2 grid grid-cols-6 gap-4 max-xs:gap-2">
-          <div className="font-bold col-span-4">Concert</div>
-          <div className="font-bold justify-self-end">RSVP count</div>
+        <li key="header" className="pt-2 pb-2 grid grid-cols-5 gap-4 max-xs:gap-2">
+          <div className="font-bold col-span-3">Concert</div>
+          <div className="font-bold text-center">RSVP count</div>
         </li>
         {concerts.map((concert) => (
           <li key={"v-" + concert?.id} className="pt-2 pb-2 grid grid-cols-5 gap-4 max-xs:gap-2">
             <div className="col-span-3 items-center max-w-lg">
               <div>{descFn(concert)}</div>
             </div>
-            <div className="justify-self-end">{concert?.rsvpsAgg?.numTickets?.sum}</div>
+            <div className="justify-self-center">{concert?.rsvpsAgg?.numTickets?.sum}</div>
             <div className="justify-self-end">
               <button
                 className="w-16 bg-cyan-400 hover:bg-cyan-500 mr-2"

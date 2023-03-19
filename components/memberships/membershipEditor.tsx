@@ -128,7 +128,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
 
   return (
     <div>
-      <div className="flex-auto p-6">
+      <div className="flex-auto p-6 max-xs:p-0">
         <div className="form-row">
           <label className="form-label">Membership Type</label>
           <select
@@ -174,7 +174,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
           <div className="flex w-3/4">
             <input
               type="tel"
-              pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
               className="simple-input mr-1"
               placeholder="888 888 8888"
               onChange={changePhone}
@@ -249,7 +248,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
       )}
       <div className="grid grid-cols-4 lg:grid-cols-8 mt-4 mb-4">
         <button
-          className="text-white bg-green-600 hover:bg-green-700 lg:col-start-3 ml-3"
+          className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-xs:col-start-1"
           onClick={() => save()}
           disabled={!allowAdminEdit && !allowUserUpdate && !allowUserCreate}
         >
@@ -257,7 +256,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
         </button>
         {!props.manage && (
           <button
-            className="col-span-2 text-white bg-blue-500 hover:bg-blue-600 ml-2"
+            className="col-span-2 text-white bg-blue-500 hover:bg-blue-600 max-xs:col-span-2 ml-2"
             onClick={() => handlePaymentAndInfo()}
           >
             Post Payment/Info

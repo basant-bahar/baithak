@@ -50,7 +50,7 @@ function UpdateSubscription({ id }: UpdateSubscriptionProps) {
   return (
     <>
       subscription && (
-      <SubscriptionEditor id={id} subscription={subscription} done={saveSubscription} />)
+      <SubscriptionEditor id={id} subscription={subscription} done={saveSubscription} />
     </>
   );
 }
