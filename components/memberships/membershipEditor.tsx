@@ -225,43 +225,48 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             />
           </div>
         )}
-        {errorMessage && <div className="ml-48 text-red-600">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="form-row text-red-600">
+            <div className="col-start-2">{errorMessage}</div>
+          </div>
+        )}
       </div>
       {props.manage && (
-        <>
-          <div className="p-6 form-row">
-            <div className="pl-3 col-span-3 justify-self-center">
+        <div className="form-row">
+          <div className="flex flex-col pl-4 max-xs:pl-0 gap-2 col-start-2 col-span-2 max-xs:col-start-1">
+            <div className="justify-self-center">
               By signing up for the membership you are agreeing to our{" "}
               <a className="cursor-pointer underline" onClick={handleShowTerms}>
                 Terms and Conditions
-              </a>{" "}
+              </a>
             </div>
-          </div>
-          {showTerms && (
-            <div className="form-row p-6 pt-2 pb-4">
-              <div className="pl-3 col-span-3 justify-self-center">
+            {showTerms && (
+              <div className="col-span-3 justify-self-center pt-2 pb-4">
                 <TermsAndConditions />
               </div>
-            </div>
-          )}
-        </>
+            )}
+          </div>
+        </div>
       )}
-      <div className="grid grid-cols-4 lg:grid-cols-8 mt-4 mb-4">
-        <button
-          className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-xs:col-start-1"
-          onClick={() => save()}
-          disabled={!allowAdminEdit && !allowUserUpdate && !allowUserCreate}
-        >
-          Save
-        </button>
-        {!props.manage && (
+      <div className="form-row mb-4">
+        <div className="flex pl-4 max-xs:pl-0 gap-2 col-start-2 max-xs:col-start-1">
           <button
-            className="col-span-2 text-white bg-blue-500 hover:bg-blue-600 max-xs:col-span-2 ml-2"
-            onClick={() => handlePaymentAndInfo()}
+            className="text-white bg-green-600 hover:bg-green-700 max-w-[10rem]"
+            onClick={() => save()}
+            disabled={!allowAdminEdit && !allowUserUpdate && !allowUserCreate}
           >
-            Post Payment/Info
+            Save
           </button>
-        )}
+          {!props.manage && (
+            <button
+              className="text-white bg-blue-500 hover:bg-blue-600 max-w-[10rem]"
+              onClick={() => handlePaymentAndInfo()}
+              disabled={!props.membershipId}
+            >
+              Post Payment/Info
+            </button>
+          )}
+        </div>
       </div>
       {props.manage && props.membershipId && membership && (
         <div className="flex-auto p-6">

@@ -104,10 +104,10 @@ export default function Advisory() {
     <div className="main-container">
       <PageHeader title="Advisory" />
       <div className="flex-auto p-6">
-        <div className="grid mb-4 grid-cols-4 gap-1">
-          <label className="flex justify-end items-center pr-3">Level</label>
+        <div className="form-row">
+          <label className="form-label">Level</label>
           <select
-            className="mr-2 border-b col-start-2 col-span-3 p-2"
+            className="lg:mr-2 border-b bg-transparent focus:outline-none disabled:opacity-50"
             onChange={selectLevel}
             value={advisoryData ? advisoryData.level : levels[2]}
           >
@@ -118,29 +118,31 @@ export default function Advisory() {
             ))}
           </select>
         </div>
-        <div className="grid mb-4 grid-cols-4 gap-1">
-          <label className="flex justify-end items-start pr-3 pt-2">Message</label>
+        <div className="form-row">
+          <label className="form-label">Message</label>
           <textarea
-            className="border p-2 col-start-2 col-span-3"
+            className="border col-span-2 p-2"
             rows={5}
             placeholder="Bio"
             onChange={changeMessage}
             value={advisoryData.message}
           />
         </div>
-        <div className="grid mb-4 grid-cols-4 gap-1 lg:grid-cols-8">
-          <button
-            className="text-white bg-green-600 hover:bg-green-700 mr-2 lg:col-start-3 col-start-2"
-            onClick={() => saveAdvisory()}
-          >
-            Save
-          </button>
-          <button
-            className="text-white bg-red-400 hover:bg-red-500"
-            onClick={() => handleAdvisoryDeletion(advisoryId)}
-          >
-            Delete
-          </button>
+        <div className="form-row mb-4">
+          <div className="flex gap-2 col-start-2 max-xs:col-start-1">
+            <button
+              className="text-white bg-green-600 hover:bg-green-700"
+              onClick={() => saveAdvisory()}
+            >
+              Save
+            </button>
+            <button
+              className="text-white bg-red-400 hover:bg-red-500"
+              onClick={() => handleAdvisoryDeletion(advisoryId)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

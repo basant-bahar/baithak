@@ -53,13 +53,15 @@ export default function SubscriptionEditor(props: SubscriptionEditorProps) {
             <option value="all">All</option>
           </select>
         </div>
-        <div className="grid mb-4 max-lg:grid-cols-4 lg:grid-cols-8">
-          <button
-            className="text-white bg-green-600 hover:bg-green-700 col-start-2 max-xs:col-start-1 lg:ml-2"
-            onClick={saveSubscription}
-          >
-            Save
-          </button>
+        <div className="form-row mb-4">
+          <div className="flex gap-2 col-start-2 max-xs:col-start-1">
+            <button
+              className="text-white bg-green-600 hover:bg-green-700"
+              onClick={saveSubscription}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>
