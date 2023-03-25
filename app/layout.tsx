@@ -5,6 +5,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { client } from "./apollo-client";
 import NavBar from "../components/navbar/navbar";
 import "./global.css";
+import Drawer from "../components/navbar/drawer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <AuthProvider>
           <ApolloProvider client={client}>
-            <NavBar>{children}</NavBar>
+            <Drawer>
+              <main>{children}</main>
+            </Drawer>
           </ApolloProvider>
         </AuthProvider>
       </body>
