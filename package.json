@@ -25,12 +25,12 @@
     "rehype-raw": "^6.1.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.16.1",
-    "@graphql-codegen/client-preset": "^1.2.3",
-    "@graphql-codegen/near-operation-file-preset": "^2.4.4",
-    "@graphql-codegen/typed-document-node": "^2.3.10",
-    "@graphql-codegen/typescript": "^2.8.5",
-    "@graphql-codegen/typescript-operations": "^2.5.10",
+    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/client-preset": "^2.1.1",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typed-document-node": "^3.0.2",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@types/node": "18.15.9",
     "@types/react": "18.0.29",
