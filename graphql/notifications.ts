@@ -55,3 +55,12 @@ export const notificationConcerts = graphql(`
     }
   }
 `);
+
+export const getNotification = graphql(`
+  query getNotification($id: Int!) {
+    notification(id: $id) {
+      id
+      ...NotificationDetails
+    }
+  }
+`);

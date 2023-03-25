@@ -4,7 +4,11 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { graphql } from "../../../../../__generated__";
-import { getNotifications, notificationConcerts } from "../../../../../graphql/notifications";
+import {
+  getNotification,
+  getNotifications,
+  notificationConcerts,
+} from "../../../../../graphql/notifications";
 import {
   NotificationCreationInput,
   NotificationDetailsFragment,
@@ -34,7 +38,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   const { data: concertsData, loading: concertsLoading } = useQuery(notificationConcerts);
   const [updateNotificationMutation] = useMutation(updateNotification);
 
-  const saveNotification = async (notificationUpdateData: NotificationDetailsFragment) => {
+  async function saveNotification(notificationUpdateData: NotificationDetailsFragment) {
     const updateNotificationData = {
       subject: notificationUpdateData.subject,
       message: notificationUpdateData.message,
@@ -51,7 +55,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
         data: updateNotificationData,
       },
     }).then((_) => router.back());
-  };
+  }
 
   if (loading || concertsLoading || !data || !concertsData) {
     return <>Loading...</>;
@@ -96,15 +100,6 @@ function CreateNotification() {
 
   return <NotificationEditor concerts={concertsData.concerts} done={saveNotification} />;
 }
-
-const getNotification = graphql(`
-  query getNotification($id: Int!) {
-    notification(id: $id) {
-      id
-      ...NotificationDetails
-    }
-  }
-`);
 
 const createNotification = graphql(`
   mutation createNotification($data: NotificationCreationInput!) {
