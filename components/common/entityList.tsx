@@ -20,7 +20,7 @@ export class EntityInfo<D> {
   searchQueryDocument: DocumentNode;
   deleteMutationDocument: DocumentNode;
   additionalButtons?: JSX.Element;
-  cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[];
+  showViewButton?: boolean;
 
   constructor(
     singularName: string,
@@ -29,7 +29,7 @@ export class EntityInfo<D> {
     searchQueryDocument: DocumentNode,
     deleteMutationDocument: DocumentNode,
     additionalButtons?: JSX.Element,
-    cleanupEntitiesData?: (entities: Entity<D>[]) => Entity<D>[]
+    showViewButton?: boolean
   ) {
     this.singularName = singularName;
     this.pluralName = pluralName;
@@ -37,7 +37,7 @@ export class EntityInfo<D> {
     this.searchQueryDocument = searchQueryDocument;
     this.deleteMutationDocument = deleteMutationDocument;
     this.additionalButtons = additionalButtons;
-    this.cleanupEntitiesData = cleanupEntitiesData;
+    this.showViewButton = showViewButton;
   }
 }
 
@@ -50,7 +50,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     searchQueryDocument,
     deleteMutationDocument,
     additionalButtons,
-    cleanupEntitiesData,
+    showViewButton,
   } = entityInfo;
   const [searchStr, setSearchStr] = useState("");
 
@@ -58,8 +58,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     variables: { search: "%" + searchStr + "%" },
   });
 
-  const extractedEntities = extractEntities(data);
-  const entities = cleanupEntitiesData ? cleanupEntitiesData(extractedEntities) : extractedEntities;
+  const entities = extractEntities(data);
 
   const [deleteMutation] = useMutation(deleteMutationDocument, {
     onCompleted: () => {
@@ -118,6 +117,14 @@ export default function EntityList<D>(props: EntityListProps<D>) {
                 >
                   Edit
                 </Link>
+                {showViewButton && (
+                  <Link
+                    href={`/admin/${resourcePath}/view/${entity.id}`}
+                    className="bg-orange-200 hover:bg-orange-300 w-16 h-8 mr-2 rounded-md flex justify-center items-center disabled:opacity-50"
+                  >
+                    View
+                  </Link>
+                )}
                 <button
                   className="bg-red-400 hover:bg-red-500 w-16 disabled:opacity-50"
                   onClick={() => deleteEntity(entity.id)}
