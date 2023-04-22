@@ -43,10 +43,10 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
     payments &&
     payments.map((payment) => {
       return (
-        <>
-          <div key={`date-${payment.id}`}>{payment.date}</div>
-          <div key={`note-${payment.id}`}>{payment.note}</div>
-        </>
+        <div key={payment.id} className="grid grid-cols-2">
+          <div>{payment.date}</div>
+          <div>{payment.note}</div>
+        </div>
       );
     });
 
@@ -80,15 +80,15 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
     <div className="main-container">
       <div className="pt-5">
         <h3 className="font-bold">Past Payments</h3>
-        <div className="grid grid-cols-2 border-b pb-2 mb-4">
-          <div key="date" className="font-bold mb-2">
+        <div className="grid grid-cols-2 border-b w-1/2 max-xs:w-full">
+          <div key="date" className="font-bold">
             Date
           </div>
-          <div key="note" className="font-bold mb-2">
+          <div key="note" className="font-bold">
             Note
           </div>
-          {existingPayments}
         </div>
+        <div className="pt-2 pb-2 mb-4 w-1/2 max-xs:w-full border-b">{existingPayments}</div>
         <div className="mb-4 mt-6">
           <input className="" type="checkbox" checked={isPayment} onChange={handlePaymentCheck} />
           <label className="pl-4">
