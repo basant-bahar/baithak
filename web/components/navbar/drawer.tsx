@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Logo } from "./logo";
+import Logo from "./logo";
 import { useAuth } from "../auth/authProvider";
 import MenuElements from "./MenuElements";
 import NavBar from "./navbar";
