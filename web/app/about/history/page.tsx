@@ -1,7 +1,5 @@
-import React, { FC } from "react";
+import React from "react";
 
-const History: FC = () => {
+export default function History() {
   return <div className="main-container">Your organization history</div>;
-};
-
-export default History;
+}

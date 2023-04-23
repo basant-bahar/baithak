@@ -1,12 +1,10 @@
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-const Markdown: React.FC<{ children: string }> = (props) => {
+export default function Markdown(props: { children: string }) {
   return (
     <ReactMarkdown className="react-markdown" rehypePlugins={[rehypeRaw]}>
       {props.children}
     </ReactMarkdown>
   );
-};
-
-export default Markdown;
+}

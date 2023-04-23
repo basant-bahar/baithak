@@ -1,7 +1,5 @@
-import React, { FC } from "react";
+import React from "react";
 
-const ContactUs: FC = () => {
+export default function ContactUs() {
   return <div className="main-container">TODO: ContactUs email</div>;
-};
-
-export default ContactUs;
+}

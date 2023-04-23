@@ -1,4 +1,4 @@
-import React, { FC, RefObject } from "react";
+import React, { RefObject } from "react";
 import Link from "next/link";
 import SubNavArrow from "./subNavArrow";
 import { useDropdown } from "./useDropdown";
@@ -7,7 +7,7 @@ interface AdminProps {
   isDrawer?: boolean;
 }
 
-export const Admin: FC<AdminProps> = ({ isDrawer }: AdminProps) => {
+export default function Admin({ isDrawer }: AdminProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideAdmin = (e: React.MouseEvent) => {
@@ -40,16 +40,13 @@ export const Admin: FC<AdminProps> = ({ isDrawer }: AdminProps) => {
       )}
     </div>
   );
-};
+}
 
 interface AdminSubMenuProps {
   isDrawer?: boolean;
   hideAdmin: (e: React.MouseEvent) => void;
 }
-const AdminSubMenu: FC<AdminSubMenuProps> = ({
-  isDrawer = false,
-  hideAdmin,
-}: AdminSubMenuProps) => {
+function AdminSubMenu({ isDrawer = false, hideAdmin }: AdminSubMenuProps) {
   return (
     <>
       <Link
@@ -147,4 +144,4 @@ const AdminSubMenu: FC<AdminSubMenuProps> = ({
       </Link>
     </>
   );
-};
+}

@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { NavItem } from "./navItem";
+import NavItem from "./navItem";
 import Link from "next/link";
-import { Memberships } from "./membershipsMenu";
-import { About } from "./aboutMenu";
-import { LoginMenu } from "./loginMenu";
+import Memberships from "./membershipsMenu";
+import About from "./aboutMenu";
+import LoginMenu from "./loginMenu";
 import { AuthUser, isAdmin } from "../auth/authProvider";
-import { Admin } from "./adminMenu";
+import Admin from "./adminMenu";
 
 interface MenuElementsProps {
   isDrawer: boolean;
