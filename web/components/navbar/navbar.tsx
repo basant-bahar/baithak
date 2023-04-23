@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import { Logo } from "./logo";
+import Logo from "./logo";
 import { useAuth } from "../auth/authProvider";
 import MenuElements from "./MenuElements";
 
