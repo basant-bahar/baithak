@@ -1,6 +1,6 @@
-import { FC } from "react";
+import React from "react";
 
-const SubNavArrow: FC = () => {
+export default function SubNavArrow() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,6 +17,4 @@ const SubNavArrow: FC = () => {
       />
     </svg>
   );
-};
-
-export default SubNavArrow;
+}

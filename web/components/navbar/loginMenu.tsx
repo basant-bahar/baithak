@@ -1,4 +1,4 @@
-import React, { FC, RefObject } from "react";
+import React, { RefObject } from "react";
 import { AuthUser } from "../auth/authProvider";
 import { UserIcon } from "@heroicons/react/20/solid";
 import { useDropdown } from "./useDropdown";
@@ -7,14 +7,14 @@ type UserPictureProps = {
   user: AuthUser | undefined;
 };
 
-const UserPicture: FC<UserPictureProps> = ({ user }: UserPictureProps) => {
+function UserPicture({ user }: UserPictureProps) {
   if (user?.picture) {
     const name = `${user.firstName} ${user.lastName}`;
     return <img className="h-8 w-8 rounded-full" src={user.picture} alt={name} />;
   } else {
     return <UserIcon className="h-8 w-8 rounded-full" color="white" />;
   }
-};
+}
 
 type LoginMenuProps = {
   user?: AuthUser;
@@ -22,7 +22,7 @@ type LoginMenuProps = {
   isDrawer?: boolean;
 };
 
-export const LoginMenu: FC<LoginMenuProps> = ({ user, logout, isDrawer }: LoginMenuProps) => {
+export default function LoginMenu({ user, logout, isDrawer }: LoginMenuProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideLogin = (e: React.MouseEvent) => {
@@ -71,4 +71,4 @@ export const LoginMenu: FC<LoginMenuProps> = ({ user, logout, isDrawer }: LoginM
       )}
     </>
   );
-};
+}

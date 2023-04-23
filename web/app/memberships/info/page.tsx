@@ -1,7 +1,5 @@
-import React, { FC } from "react";
+import React from "react";
 
-const Info: FC = () => {
+export default function Info() {
   return <div className="main-container">Your membership info page</div>;
-};
-
-export default Info;
+}

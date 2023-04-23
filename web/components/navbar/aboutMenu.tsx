@@ -1,4 +1,4 @@
-import React, { FC, RefObject } from "react";
+import React, { RefObject } from "react";
 import Link from "next/link";
 import { useDropdown } from "./useDropdown";
 import SubNavArrow from "./subNavArrow";
@@ -7,7 +7,7 @@ interface AboutProps {
   isDrawer?: boolean;
 }
 
-export const About = ({ isDrawer }: AboutProps) => {
+export default function About({ isDrawer }: AboutProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideAbout = (e: React.MouseEvent) => {
@@ -40,12 +40,12 @@ export const About = ({ isDrawer }: AboutProps) => {
       )}
     </div>
   );
-};
+}
 
 interface AboutSubMenuProps {
   hideAbout: (e: React.MouseEvent) => void;
 }
-const AboutSubMenu: FC<AboutSubMenuProps> = ({ hideAbout }: AboutSubMenuProps) => {
+function AboutSubMenu({ hideAbout }: AboutSubMenuProps) {
   const lastYear = new Date().getFullYear() - 1;
 
   return (
@@ -102,4 +102,4 @@ const AboutSubMenu: FC<AboutSubMenuProps> = ({ hideAbout }: AboutSubMenuProps) =
       </Link>
     </>
   );
-};
+}

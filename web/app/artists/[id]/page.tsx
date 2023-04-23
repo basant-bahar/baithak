@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { graphql } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import ArtistView from "components/artists/artistView";

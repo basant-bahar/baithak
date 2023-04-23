@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,7 +13,7 @@ type NavItemProps = {
   isLeaf?: boolean;
 };
 
-export const NavItem: FC<NavItemProps> = ({ href, name, isLeaf }: NavItemProps) => {
+export default function NavItem({ href, name, isLeaf }: NavItemProps) {
   const pathname = usePathname();
   const isActive = isLeaf ? pathname === href : pathname?.startsWith(href);
   const selectedClass = isActive ? "selected" : "";
@@ -23,4 +23,4 @@ export const NavItem: FC<NavItemProps> = ({ href, name, isLeaf }: NavItemProps) 
       {name}
     </Link>
   );
-};
+}

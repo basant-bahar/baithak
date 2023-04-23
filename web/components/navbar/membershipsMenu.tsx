@@ -1,4 +1,4 @@
-import React, { FC, RefObject } from "react";
+import React, { RefObject } from "react";
 import Link from "next/link";
 import { useDropdown } from "./useDropdown";
 import SubNavArrow from "./subNavArrow";
@@ -7,7 +7,7 @@ interface MembershipsProps {
   isDrawer?: boolean;
 }
 
-export const Memberships: FC<MembershipsProps> = ({ isDrawer }: MembershipsProps) => {
+export default function Memberships({ isDrawer }: MembershipsProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideMembership = (e: React.MouseEvent) => {
@@ -61,4 +61,4 @@ export const Memberships: FC<MembershipsProps> = ({ isDrawer }: MembershipsProps
       {isDrawer && <div className="w-full">{subLinks}</div>}
     </div>
   );
-};
+}
