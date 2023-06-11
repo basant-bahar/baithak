@@ -24,7 +24,7 @@ const newMembership = {
 export default function ManageMembership() {
   const [user] = useAuth();
   const [membership, setMembership] = useState<MembershipOnlyDetailsFragment | undefined>();
-  const [membershipId, setMembershipId] = useState<number | undefined>();
+  const [membershipId, setMembershipId] = useState<string | undefined>();
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo | undefined>();
 
   const [getMembership, { loading, error, data }] = useLazyQuery(getMembershipByAuthId);
@@ -121,7 +121,7 @@ const createMembership = graphql(`
 `);
 
 const getMembershipByAuthId = graphql(`
-  query getMembershipByAuthId($authId: Int!) {
+  query getMembershipByAuthId($authId: Uuid!) {
     memberships(where: { authUser: { id: { eq: $authId } } }) {
       id
       ...MembershipOnlyDetails

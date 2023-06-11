@@ -7,7 +7,7 @@ import { ProcessRsvpDocument } from "../../__generated__/graphql";
 import { useAuth } from "../auth/authProvider";
 
 type ConcertRsvpProps = {
-  concertId: number;
+  concertId: string;
 };
 
 export const ConcertRsvp = (props: ConcertRsvpProps) => {
@@ -74,7 +74,7 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
 };
 
 const processRsvp = graphql(`
-  mutation processRsvp($concertId: Int!, $email: String!, $numTickets: Int!) {
+  mutation processRsvp($concertId: Uuid!, $email: String!, $numTickets: Int!) {
     processRsvp(concertId: $concertId, email: $email, numTickets: $numTickets)
   }
 `);

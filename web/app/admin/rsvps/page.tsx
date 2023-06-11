@@ -25,7 +25,7 @@ export default function Rsvps() {
     concertsData
   );
 
-  async function print(concertId: number) {
+  async function print(concertId: string) {
     const result = await concertRsvpsForPrint();
     if (!result || !result.data || !result.data.concerts) return;
     const concertsData = result.data?.concerts;

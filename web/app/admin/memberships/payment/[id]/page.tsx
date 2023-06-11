@@ -12,7 +12,7 @@ interface PaymentInfoProps {
 
 export default function PaymentAndInfo(props: PaymentInfoProps) {
   const router = useRouter();
-  const membershipId = parseInt(props.params.id);
+  const membershipId = props.params.id;
   const [payments, setPayments] = useState<any[]>([]);
   const [payment, setPayment] = useState<any>({ date: new Date(), note: "", infoOnly: false });
   const [getPayments] = useLazyQuery(getPaymentsForMembership);
@@ -137,7 +137,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
 }
 
 const getPaymentsForMembership = graphql(`
-  query getPaymentsForMembership($id: Int!) {
+  query getPaymentsForMembership($id: Uuid!) {
     payments(where: { membership: { id: { eq: $id } } }) {
       id
       date

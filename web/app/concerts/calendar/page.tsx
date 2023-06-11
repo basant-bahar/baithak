@@ -3,7 +3,7 @@ import React from "react";
 import PageHeader from "components/common/pageHeader";
 import { CalendarConcertCard } from "components/concert/calendarConcertCard";
 import ConcertCarousel, { concertCalendarDetail } from "components/concert/concertCarousel";
-import { FragmentType, graphql, getFragmentData } from "__generated__";
+import { graphql, getFragmentData } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import { getSimpleDateTime } from "../../page";
 

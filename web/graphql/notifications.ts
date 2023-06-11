@@ -57,7 +57,7 @@ export const notificationConcerts = graphql(`
 `);
 
 export const getNotification = graphql(`
-  query getNotification($id: Int!) {
+  query getNotification($id: Uuid!) {
     notification(id: $id) {
       id
       ...NotificationDetails

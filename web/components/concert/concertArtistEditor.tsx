@@ -25,7 +25,7 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
   if (!props.artists) return null;
 
   const changeArtist = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const artistId = parseInt(e.target.value);
+    const artistId = e.target.value;
     props.updateConcertArtist({
       ...props.concertArtist,
       artist: {

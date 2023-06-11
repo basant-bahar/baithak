@@ -11,9 +11,7 @@ interface NotificationProps {
   params: { id: string };
 }
 
-export default function ViewNotification({ params: { id: idStr } }: NotificationProps) {
-  const id = parseInt(idStr);
-
+export default function ViewNotification({ params: { id } }: NotificationProps) {
   const { data, loading } = useQuery(getNotification, {
     variables: { id },
   });
@@ -54,7 +52,7 @@ export default function ViewNotification({ params: { id: idStr } }: Notification
 }
 
 const formatedNotification = graphql(`
-  query formatedNotification($id: Int!) {
+  query formatedNotification($id: Uuid!) {
     formatNotification(concertNotificationId: $id)
   }
 `);

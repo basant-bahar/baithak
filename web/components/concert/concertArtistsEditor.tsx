@@ -59,7 +59,7 @@ export default function ConcertArtistsEditor(props: ConcertArtistsEditorProps) {
     }
   }
 
-  function removeConcertArtist(artistId: number) {
+  function removeConcertArtist(artistId: string) {
     const newConcertArtists = concertArtists.filter((ca) => ca.artist?.id !== artistId);
     setConcertArtists(newConcertArtists);
     props.updateConcertArtists(newConcertArtists);

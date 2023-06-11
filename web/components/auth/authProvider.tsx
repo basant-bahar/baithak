@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
 
 export interface AuthUser {
-  sub: number;
+  sub: string;
   firstName: string;
   lastName: string;
   email: string;

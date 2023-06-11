@@ -33,7 +33,7 @@ export default function NotificationEditor(props: NotificationEditorProps) {
   };
 
   const concertChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const id = parseInt(e.currentTarget.value);
+    const id = e.currentTarget.value;
     const concert = concerts.find((c) => c.id === id);
     const title = concert ? concert.title : "";
 

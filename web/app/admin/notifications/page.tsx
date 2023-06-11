@@ -30,7 +30,7 @@ export default function NotificationList() {
 }
 
 const deleteNotification = graphql(`
-  mutation deleteNotification($id: Int!) {
+  mutation deleteNotification($id: Uuid!) {
     deleteNotification(id: $id) {
       id
     }

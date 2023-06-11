@@ -9,7 +9,7 @@ interface ViewArtistProps {
 }
 
 export default async function ViewArtist(props: ViewArtistProps) {
-  const id = parseInt(props.params.id);
+  const id = props.params.id;
   const artistData = await getArtistFor(id);
 
   if (!artistData) return null;
@@ -21,7 +21,7 @@ export default async function ViewArtist(props: ViewArtistProps) {
   );
 }
 
-async function getArtistFor(id: number) {
+async function getArtistFor(id: string) {
   const { data } = await ssrApolloClient.query({
     query: getArtist,
     variables: { id },

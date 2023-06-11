@@ -47,7 +47,7 @@ export const searchMembership = graphql(`
 `);
 
 export const updateMembership = graphql(`
-  mutation updateMembership($id: Int!, $data: MembershipUpdateInput!) {
+  mutation updateMembership($id: Uuid!, $data: MembershipUpdateInput!) {
     updateMembership(id: $id, data: $data) {
       id
       ...MembershipOnlyDetails

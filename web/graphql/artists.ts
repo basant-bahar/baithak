@@ -22,7 +22,7 @@ export const searchArtists = graphql(`
 `);
 
 export const getArtist = graphql(`
-  query getArtist($id: Int!) {
+  query getArtist($id: Uuid!) {
     artist(id: $id) {
       id
       ...ArtistDetails

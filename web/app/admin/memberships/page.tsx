@@ -190,7 +190,7 @@ const getActiveMemberships = graphql(`
 `);
 
 const deleteMembership = graphql(`
-  mutation deleteMembership($id: Int!) {
+  mutation deleteMembership($id: Uuid!) {
     deleteMembership(id: $id) {
       id
     }

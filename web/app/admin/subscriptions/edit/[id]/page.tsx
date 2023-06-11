@@ -12,13 +12,13 @@ interface EditSubscriptionProps {
 }
 
 export default function EditSubscription(props: EditSubscriptionProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateSubscription /> : <UpdateSubscription id={id} />}</>;
 }
 
 interface UpdateSubscriptionProps {
-  id: number;
+  id: string;
 }
 
 function UpdateSubscription({ id }: UpdateSubscriptionProps) {
@@ -78,7 +78,7 @@ const subscriptionDetails = graphql(`
 `);
 
 const getSubscription = graphql(`
-  query getSubscription($id: Int!) {
+  query getSubscription($id: Uuid!) {
     subscription(id: $id) {
       id
       ...SubscriptionDetails
@@ -87,7 +87,7 @@ const getSubscription = graphql(`
 `);
 
 const updateSubscription = graphql(`
-  mutation updateSubscription($id: Int!, $data: SubscriptionUpdateInput!) {
+  mutation updateSubscription($id: Uuid!, $data: SubscriptionUpdateInput!) {
     updateSubscription(id: $id, data: $data) {
       id
       ...SubscriptionDetails

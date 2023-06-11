@@ -20,13 +20,13 @@ interface MembershipProps {
 }
 export default function Membership(props: MembershipProps) {
   const router = useRouter();
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />}</>;
 }
 
 interface UpdateMembershipProps {
-  id: number;
+  id: string;
 }
 function UpdateMembership({ id }: UpdateMembershipProps) {
   const router = useRouter();
@@ -106,7 +106,7 @@ type WithEmail = {
 
 type WithInfo = {
   __typename: "WithInfo";
-  id: number;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -126,7 +126,7 @@ function CreateMembership() {
   const [userInfoState, setUserInfoState] = useState<MembershipEditorState>({
     __typename: "NewUser",
   });
-  const [authUser, setAuthUser] = useState<{ id: number | undefined } & MemberAuthInfo>({
+  const [authUser, setAuthUser] = useState<{ id: string | undefined } & MemberAuthInfo>({
     id: undefined,
     firstName: "",
     lastName: "",
@@ -361,8 +361,8 @@ const UserDetailsComponent = ({ changeUserInfo }: UserComponentProps) => {
 
   return (
     <div className="flex-auto p-6">
-      <div className="row">
-        <label className="bb-label">Name</label>
+      <div className="flex justify-center items-center mb-8">
+        <label className="form-label">Name</label>
         <input
           className="simple-input mr-1"
           placeholder="First name"
@@ -376,7 +376,7 @@ const UserDetailsComponent = ({ changeUserInfo }: UserComponentProps) => {
           onChange={changeLastName}
         />
       </div>
-      <button className="btn-green ml-4" onClick={handleContinue}>
+      <button className="text-white bg-green-600 hover:bg-green-700 ml-4" onClick={handleContinue}>
         Continue
       </button>
     </div>
@@ -384,7 +384,7 @@ const UserDetailsComponent = ({ changeUserInfo }: UserComponentProps) => {
 };
 
 const getMembership = graphql(`
-  query getMembership($id: Int!) {
+  query getMembership($id: Uuid!) {
     membership(id: $id) {
       id
       ...MembershipDetails
@@ -395,7 +395,7 @@ const getMembership = graphql(`
 const createMembershipAndUpdateAuthUser = graphql(`
   mutation createMembershipAndUpdateAuthUser(
     $membershipData: MembershipCreationInput!
-    $authId: Int!
+    $authId: Uuid!
     $authUserData: AuthUserUpdateInput!
   ) {
     createMembership(data: $membershipData) {

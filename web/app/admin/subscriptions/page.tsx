@@ -28,7 +28,7 @@ export default function Subscriptions() {
 }
 
 const deleteSubscription = graphql(`
-  mutation deleteSubscription($id: Int!) {
+  mutation deleteSubscription($id: Uuid!) {
     deleteSubscription(id: $id) {
       id
     }

@@ -12,9 +12,9 @@ export interface MemberAuthInfo {
   email?: string | null;
 }
 interface MembershipEditorProps {
-  membershipId?: number;
+  membershipId?: string;
   membership?: MembershipOnlyDetailsFragment;
-  authId?: number;
+  authId?: string;
   authUser?: MemberAuthInfo;
   done: Function;
   manage?: boolean;
