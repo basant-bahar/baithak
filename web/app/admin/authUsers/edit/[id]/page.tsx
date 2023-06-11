@@ -13,13 +13,13 @@ interface EditUserProps {
 }
 
 export default function EditUser(props: EditUserProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateUser /> : <UpdateUser id={id} />}</>;
 }
 
 interface UpdateUserProps {
-  id: number;
+  id: string;
 }
 
 function UpdateUser({ id }: UpdateUserProps) {
@@ -65,7 +65,7 @@ function CreateUser() {
 }
 
 const getAuthUser = graphql(`
-  query getAuthUser($id: Int!) {
+  query getAuthUser($id: Uuid!) {
     authUser(id: $id) {
       id
       ...AuthUserDetails
@@ -74,7 +74,7 @@ const getAuthUser = graphql(`
 `);
 
 const updateAuthUser = graphql(`
-  mutation updateAuthUser($id: Int!, $data: AuthUserUpdateInput!) {
+  mutation updateAuthUser($id: Uuid!, $data: AuthUserUpdateInput!) {
     updateAuthUser(id: $id, data: $data) {
       ...AuthUserDetails
     }

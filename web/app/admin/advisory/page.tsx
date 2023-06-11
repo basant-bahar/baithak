@@ -14,7 +14,7 @@ const newAdvisory = {
 const levels = ["Critical", "Warning", "Info"];
 
 export default function Advisory() {
-  const [advisoryId, setAdvisoryId] = useState<number | undefined>();
+  const [advisoryId, setAdvisoryId] = useState<string | undefined>();
   const [advisoryData, setAdvisoryData] = useState(newAdvisory);
 
   const { data, loading } = useQuery(getAdvisories);
@@ -42,7 +42,7 @@ export default function Advisory() {
     setAdvisoryData({ ...advisoryData, message: e.target.value });
   }
 
-  async function handleAdvisoryDeletion(id?: number) {
+  async function handleAdvisoryDeletion(id?: string) {
     if (id === undefined) return;
 
     deleteAdvisoryMutation({
@@ -150,7 +150,7 @@ export default function Advisory() {
 }
 
 const getAdvisory = graphql(`
-  query getAdvisory($id: Int!) {
+  query getAdvisory($id: Uuid!) {
     advisory(id: $id) {
       ...AdvisoryDetails
     }
@@ -158,7 +158,7 @@ const getAdvisory = graphql(`
 `);
 
 const deleteAdvisory = graphql(`
-  mutation deleteAdvisory($id: Int!) {
+  mutation deleteAdvisory($id: Uuid!) {
     deleteAdvisory(id: $id) {
       id
     }
@@ -166,7 +166,7 @@ const deleteAdvisory = graphql(`
 `);
 
 const updateAdvisory = graphql(`
-  mutation updateAdvisory($id: Int!, $data: AdvisoryUpdateInput!) {
+  mutation updateAdvisory($id: Uuid!, $data: AdvisoryUpdateInput!) {
     updateAdvisory(id: $id, data: $data) {
       ...AdvisoryDetails
     }

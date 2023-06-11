@@ -8,7 +8,7 @@ interface ViewConcertProps {
 }
 
 export default async function ViewConcert(props: ViewConcertProps) {
-  const id = parseInt(props.params.id);
+  const id = props.params.id;
   const concert = await getConcertFor(id);
 
   if (!concert) return null;
@@ -20,7 +20,7 @@ export default async function ViewConcert(props: ViewConcertProps) {
   );
 }
 
-async function getConcertFor(id: number) {
+async function getConcertFor(id: string) {
   const { data } = await ssrApolloClient.query({
     query: getConcertView,
     variables: { id },
@@ -29,7 +29,7 @@ async function getConcertFor(id: number) {
 }
 
 const getConcertView = graphql(`
-  query getConcertView($id: Int!) {
+  query getConcertView($id: Uuid!) {
     concert(id: $id) {
       id
       ...ConcertDetails

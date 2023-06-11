@@ -28,7 +28,7 @@ export default function VenueList() {
 }
 
 const deleteAuthUser = graphql(`
-  mutation deleteAuthUser($id: Int!) {
+  mutation deleteAuthUser($id: Uuid!) {
     deleteAuthUser(id: $id) {
       id
     }

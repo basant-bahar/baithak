@@ -29,7 +29,7 @@ export default function ArtistList() {
 }
 
 const deleteArtist = graphql(`
-  mutation deleteArtist($id: Int!) {
+  mutation deleteArtist($id: Uuid!) {
     deleteArtist(id: $id) {
       id
     }

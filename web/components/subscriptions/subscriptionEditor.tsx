@@ -3,7 +3,7 @@ import { SubscriptionDetailsFragment } from "../../__generated__/graphql";
 import PageHeader from "../common/pageHeader";
 
 type SubscriptionEditorProps = {
-  id?: number;
+  id?: string;
   subscription?: SubscriptionDetailsFragment;
   done: Function;
 };

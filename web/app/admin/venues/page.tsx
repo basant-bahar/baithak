@@ -22,7 +22,7 @@ export default function VenueList() {
 }
 
 const deleteVenue = graphql(`
-  mutation deleteVenue($id: Int!) {
+  mutation deleteVenue($id: Uuid!) {
     deleteVenue(id: $id) {
       id
     }

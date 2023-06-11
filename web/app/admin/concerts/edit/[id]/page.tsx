@@ -14,13 +14,13 @@ interface EditConcertProps {
 }
 
 export default function EditConcert(props: EditConcertProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateConcert /> : <UpdateConcert id={id} />}</>;
 }
 
 interface UpdateConcertProps {
-  id: number;
+  id: string;
 }
 
 function UpdateConcert({ id }: UpdateConcertProps) {
@@ -88,7 +88,7 @@ function CreateConcert() {
 }
 
 const getConcert = graphql(`
-  query getConcert($id: Int!) {
+  query getConcert($id: Uuid!) {
     concert(id: $id) {
       id
       ...ConcertDetails
@@ -105,7 +105,7 @@ const getArtistsBasicInfo = graphql(`
 `);
 
 const updateConcert = graphql(`
-  mutation updateConcert($id: Int!, $data: ConcertUpdateInput!) {
+  mutation updateConcert($id: Uuid!, $data: ConcertUpdateInput!) {
     updateConcert(id: $id, data: $data) {
       id
       ...ConcertDetails

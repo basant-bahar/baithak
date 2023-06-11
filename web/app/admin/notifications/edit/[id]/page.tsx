@@ -17,13 +17,13 @@ interface NotificationProps {
 }
 
 export default function Notification(props: NotificationProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateNotification /> : <UpdateNotification id={id} />}</>;
 }
 
 interface UpdateNotificationProps {
-  id: number;
+  id: string;
 }
 
 function UpdateNotification({ id }: UpdateNotificationProps) {
@@ -107,7 +107,7 @@ const createNotification = graphql(`
 `);
 
 const updateNotification = graphql(`
-  mutation updateNotification($id: Int!, $data: NotificationUpdateInput!) {
+  mutation updateNotification($id: Uuid!, $data: NotificationUpdateInput!) {
     updateNotification(id: $id, data: $data) {
       id
       ...NotificationDetails

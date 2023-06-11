@@ -13,13 +13,13 @@ interface EditArtistProps {
 }
 
 export default function EditArtist(props: EditArtistProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateArtist /> : <UpdateArtist id={id} />}</>;
 }
 
 interface UpdateArtistProps {
-  id: number;
+  id: string;
 }
 
 function UpdateArtist({ id }: UpdateArtistProps) {
@@ -65,7 +65,7 @@ function CreateArtist() {
 }
 
 const updateArtist = graphql(`
-  mutation updateArtist($id: Int!, $data: ArtistUpdateInput!) {
+  mutation updateArtist($id: Uuid!, $data: ArtistUpdateInput!) {
     updateArtist(id: $id, data: $data) {
       ...ArtistDetails
     }

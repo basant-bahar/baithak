@@ -18,15 +18,15 @@ import {
 import ConcertArtistsEditor from "./concertArtistsEditor";
 
 type ConcertEditorProps = {
-  concertId?: number;
+  concertId?: string;
   concertData?: FragmentType<typeof concertDetails>;
-  venues: ({ id: number } & FragmentType<typeof venueDetails>)[];
+  venues: ({ id: string } & FragmentType<typeof venueDetails>)[];
   artists: FragmentType<typeof artistBasicInfo>[];
   done: Function;
 };
 
 export type ConcertArtistInfo = Omit<ConcertArtistInfoFragment, "artist"> & {
-  artist: { id: number };
+  artist: { id: string };
 };
 
 export type ConcertArtistEditInfo = Partial<ConcertArtistInfo>;
@@ -95,7 +95,7 @@ export default function ConcertEditor(props: ConcertEditorProps) {
   function changeVenue(e: React.ChangeEvent<HTMLSelectElement>) {
     setConcertData({
       ...concertData,
-      venue: { ...concertData.venue, id: parseInt(e.currentTarget.value) },
+      venue: { ...concertData.venue, id: e.currentTarget.value },
     });
   }
 

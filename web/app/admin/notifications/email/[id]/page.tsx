@@ -20,7 +20,7 @@ export default function EmailNotification({ params: { id } }: EmailNotificationP
 
   function sendEmail() {
     sendNotificationEmail({
-      variables: { id: parseInt(id), emailGroupName: emailTo },
+      variables: { id, emailGroupName: emailTo },
     });
     router.replace("/admin/notifications");
   }
@@ -56,7 +56,7 @@ export default function EmailNotification({ params: { id } }: EmailNotificationP
 }
 
 const emailNotification = graphql(`
-  mutation emailNotification($id: Int!, $emailGroupName: String!) {
+  mutation emailNotification($id: Uuid!, $emailGroupName: String!) {
     emailNotification(concertNotificationId: $id, emailGroupName: $emailGroupName)
   }
 `);

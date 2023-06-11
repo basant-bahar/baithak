@@ -13,13 +13,13 @@ interface EditVenueProps {
 }
 
 export default function EditVenue(props: EditVenueProps) {
-  const id = props.params.id === "new" ? props.params.id : parseInt(props.params.id);
+  const id = props.params.id;
 
   return <>{id === "new" ? <CreateVenue /> : <UpdateVenue id={id} />}</>;
 }
 
 interface UpdateVenueProps {
-  id: number;
+  id: string;
 }
 
 function UpdateVenue({ id }: UpdateVenueProps) {
@@ -65,7 +65,7 @@ function CreateVenue() {
 }
 
 const getVenue = graphql(`
-  query getVenue($id: Int!) {
+  query getVenue($id: Uuid!) {
     venue(id: $id) {
       id
       ...VenueDetails
@@ -74,7 +74,7 @@ const getVenue = graphql(`
 `);
 
 const updateVenue = graphql(`
-  mutation updateVenue($id: Int!, $data: VenueUpdateInput!) {
+  mutation updateVenue($id: Uuid!, $data: VenueUpdateInput!) {
     updateVenue(id: $id, data: $data) {
       ...VenueDetails
     }

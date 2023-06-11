@@ -36,7 +36,7 @@ export default function ConcertList() {
 }
 
 const deleteConcert = graphql(`
-  mutation deleteConcert($id: Int!) {
+  mutation deleteConcert($id: Uuid!) {
     deleteConcertArtists(where: { concert: { id: { eq: $id } } }) {
       id
     }
