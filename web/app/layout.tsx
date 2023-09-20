@@ -3,7 +3,7 @@
 import { AuthProvider } from "components/auth/authProvider";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { client } from "./apollo-client";
-import "./global.css";
+import "./globals.css";
 import Drawer from "components/navbar/drawer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
