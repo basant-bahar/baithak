@@ -38,3 +38,6 @@ next-env.d.ts
 .vscode
 
 __generated__
+
+.env.development
+.env.production
