@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 export const ssrApolloClient = new ApolloClient({
   ssrMode: true,
   link: createHttpLink({
-    uri: process.env.NEXT_API_URL,
+    uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: 'same-origin',
     headers: {
     },
@@ -13,7 +13,7 @@ export const ssrApolloClient = new ApolloClient({
 });
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_API_URL,
+  uri: process.env.NEXT_PUBLIC_API_URL,
 });
 
 const authLink = setContext((_, { headers }) => {
