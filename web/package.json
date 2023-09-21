@@ -12,9 +12,9 @@
   "dependencies": {
     "@apollo/client": "3.7.12",
     "@apollo/react-hooks": "4.0.0",
-    "@heroicons/react": "^2.0.17",
-    "daisyui": "^2.51.5",
-    "date-fns": "^2.29.3",
+    "@heroicons/react": "^2.0.18",
+    "daisyui": "^3.7.6",
+    "date-fns": "^2.30.0",
     "graphql": "^16.6.0",
     "jwt-decode": "^3.1.2",
     "next": "13.5.2",
