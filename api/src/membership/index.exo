@@ -1,0 +1,11 @@
+@deno("index.ts")
+module MembershipInterception {
+  @before("mutation updateMemberships")
+  interceptor prohibitBulkMembershipUpdate(operation: Operation, authContext: AuthContext)
+
+  @before("mutation updateMembership")
+  interceptor updateMembershipInterceptor(operation: Operation, authContext: AuthContext)
+  
+  @before("mutation createMembership")
+  interceptor createMembershipInterceptor(operation: Operation, authContext: AuthContext)
+}

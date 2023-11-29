@@ -1,0 +1,5 @@
+@deno("index.ts")
+module PaymentProcessingmodule {
+  @before("mutation createPayment")
+  interceptor processPayment(operation: Operation, exograph: Exograph)
+}

@@ -1,0 +1,94 @@
+<%
+const timeOptions = {
+  hour12: true,
+  hour: "numeric",
+  minute: "2-digit",
+};
+const dateOptions = {
+  month: "long",
+  day: "numeric",
+  weekday: "long",
+  year: "numeric",
+}
+const bbRed = "#800011";
+const bbGold = "#FFC051";
+const well = "text-align: center;min-height: 20px;padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px;";
+
+const concert = it.concert;
+const concertStartTime = new Date(new Date(concert.startTime + "Z"));
+const concertEndTime = new Date(new Date(concert.endTime + "Z"));
+
+const date = concertStartTime.toLocaleDateString("en-US", dateOptions);
+const startTime = concertStartTime.toLocaleTimeString([], timeOptions);
+const endTime = concertEndTime.toLocaleTimeString([], timeOptions);
+const concertDateTime = `${date} ${startTime} - ${endTime}`;
+
+const isNonSaturday = concertStartTime.getDay() !== 6;
+const isBefore5pm = concertStartTime.getHours() < 17;
+const specialNote = isNonSaturday || isBefore5pm
+  ? `text-align: center;padding: 20px;background-color: ${bbGold}; color: ${bbRed};font-size: medium;font-weight: bold;width: 60%;margin-left: 20%;margin-bottom: 0px;`
+  : ""
+%>
+<div style=<% concert? "" : "display: none" %>>
+  <div style="padding: 20px;border: 1px solid #eae3e3; border-radius: 4px;text-align: center">
+    <h2 style="<%= `font-weight: bold;color: ${bbRed}` %>">
+      <%= concert.title %>
+    </h2>
+    <h1 style="<%= `font-weight: bold; color: ${bbRed}` %>">
+      <%= concert.main.map((a)=> `${a.artist.name} (${a.instrument})`).join(", ") %>
+    </h1>
+    <h3 style="font-weight: bold">
+      <%= concertDateTime %>
+    </h3>
+    <a href="<%= `${it.hostUrl}/concerts/${concert.id}` %>">
+      <img style="width: 400px;height: 300px;" src="<%= it.fileServerUrl%>/<%= concert.photoUrl %>">
+    </a>
+    <% if (concert.accompany && concert.accompany.length> 0) { %>
+      <h3 style="<%= `color: ${bbRed}` %>">Accompanied by</h3>
+      <h2 style="<%= `font-weight: bold;color: ${bbRed}` %>">
+        <%= concert.accompany.map((a)=> `${a.artist.name} (${a.instrument})`).join(", ") %>
+      </h2>
+      <% } %>
+        <div style="text-align: justify;font-size: large;">
+          <%~ it.description %>
+        </div>
+    <div style="<%= specialNote %>">
+      <div style="font-weight: bold; padding-bottom: 0;">
+        <%= concertStartTime.getDay() !==6? `Please note this is a ${concertStartTime.toLocaleDateString("en-US",
+          { weekday: "long" })} concert.` : "" %>
+      </div>
+      <div style="font-weight: bold; margin-top: 10px;">
+        <%= concertStartTime.getHours() < 17? `Please note time for this concert is ${concertStartTime.toLocaleTimeString([], timeOptions)}.` : "" %>
+      </div>
+    </div>
+  <div style="<%= `${well} background-color: ${bbRed};color: white;font-size: medium;width: 60%;margin-left: 20%;` %>">
+    <div style="margin-bottom: 5px">
+      <span>
+        Tickets: <%= concert.nonMemberPrice %>
+      </span>
+      <span>&nbsp;(available at the gate), Basant Bahar Members: <%= concert.memberPrice === 0? "Free" : concert.memberPrice %></span>
+    </div>
+    <div style="margin-bottom: 5px">
+      <span style="margin-bottom: 5px">Become a Basant Bahar member and attend all concerts free for one
+        year.</span>
+      <div style="margin-top: 5px; margin-bottom: 5px">
+        <span>For details, please visit our </span>
+        <a style="<%= `color: ${bbGold}` %>" href="<%= `${it.hostUrl}/memberships/info` %>">Membership Page</a>
+      </div>
+    </div>
+    <hr />
+    <div>
+      <div style="margin-bottom: 5px">
+        <%= concertStartTime.toLocaleTimeString([], timeOptions) %>
+      </div>
+      <div>
+        <%= concert.venue.name + ", " + concert.venue.street + ", " + concert.venue.city + " " +
+          concert.venue.state + " " + concert.venue.zip %>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center; margin-bottom: 10px;">
+    <a href="<%= `${it.hostUrl}/concerts/rsvp/${concert.id}` %>">RSVP</a>
+  </div>
+</div>
+</div>

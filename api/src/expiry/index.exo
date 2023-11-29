@@ -1,0 +1,5 @@
+@deno("index.ts")
+module ExpiryNotificationmodule {
+  @access(AuthContext.role == "ADMIN")
+  export mutation emailExpiryNotifications(fromDate: LocalDate, toDate: LocalDate, @inject exograph: Exograph): String
+}
