@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<%
+let concertDate = "";
+if (it.concert) {
+  const startTime = new Date(new Date(it.concert.startTime + "Z"))
+  concertDate = startTime.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+const main = it.concert.main? it.concert.main.map(a => a.artist.name).join(" and ") : "";
+const accompany = it.concert.accompany? `with ${it.concert.accompany.map(a => a.artist.name).join(" and ")}` : "";
+const concertStr = ` ${main} ${accompany} on ${concertDate}`;
+const suffix = it.numTickets > 1? "s" : "";
+const concertUrl = `${it.hostUrl}/concerts/${it.concert.id}`;
+%>
+<body>
+  <div>
+    <p>Hello,</p>
+    Thanks for your <%= it.numTickets %> RSVP<%= suffix %> for the
+    <a href="<%= concertUrl %>"><%= concertStr %></a>
+    <span>concert.</span>
+    <p>See you at the concert.</p>
+    <p>Basant Bahar volunteers</p>
+  </div>
+</body>
+</html>

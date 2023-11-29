@@ -1,0 +1,174 @@
+import "rsvp/index"
+import "subscription/index"
+import "membership/index"
+import "payment/index"
+import "expiry/index"
+import "notification/index"
+
+context AuthContext {
+  @jwt("sub") id: Uuid
+  @jwt("role") role: String
+}
+
+@postgres
+module Concertmodule {
+  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  type Concert {
+    @pk id: Uuid = generate_uuid()
+    title: String
+    description: String
+    memberPrice: Int
+    nonMemberPrice: Int
+    venue: Venue
+    ticketLink: String?
+    photoUrl: String
+    startTime: LocalDateTime
+    endTime: LocalDateTime
+    publish: Boolean
+    rsvps: Set<Rsvp>?
+    notifications: Set<Notification>?
+    concertArtists: Set<ConcertArtist>
+  }
+
+  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  type Venue {
+    @pk id: Uuid = generate_uuid()
+    name: String
+    street: String
+    city: String
+    state: String
+    zip: String
+    concerts: Set<Concert>?
+    publish: Boolean
+  }
+
+  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  type Artist {
+    @pk id: Uuid = generate_uuid()
+    title: String?
+    name: String
+    bio: String?
+    photoUrl: String?
+    youtubeVideoIds: Array<String>?
+    instruments: Array<String>
+    publish: Boolean
+    artistConcerts: Set<ConcertArtist>?
+  }
+
+  @access(query=true, mutation=AuthContext.role == "ADMIN")
+  type ConcertArtist {
+    @pk id: Uuid = generate_uuid()
+    concert: Concert
+    artist: Artist
+    isMain: Boolean
+    rank: Int
+    instrument: String
+  }
+
+  @access(AuthContext.role == "ADMIN")
+  type Subscription {
+    @pk id: Uuid = generate_uuid()
+    email: String
+    group: String
+  }
+
+  @access(query=AuthContext.role == "ADMIN" || self.authUser.id == AuthContext.id, 
+          create=AuthContext.role == "ADMIN" || AuthContext.role == "USER",
+          update=AuthContext.role == "ADMIN" || self.authUser.id == AuthContext.id,
+          delete=AuthContext.role == "ADMIN")
+  type Membership {
+    @pk id: Uuid = generate_uuid()
+    authUser: AuthUser
+    spouseFirstName: String
+    spouseLastName: String
+    spouseEmail: String
+    expiry: LocalDate?
+    type: String
+    payments: Set<Payment>?
+  }
+
+  @access(AuthContext.role == "ADMIN")
+  type Rsvp {
+    @pk id: Uuid = generate_uuid()
+    @unique("concert_email") email: String
+    @unique("concert_email") concert: Concert
+    numTickets: Int
+  }
+
+  @access(AuthContext.role == "ADMIN")
+  type Notification {
+    @pk id: Uuid = generate_uuid()
+    concert: Concert?
+    subject: String
+    message: String
+    postMessage: String
+  }
+
+  @access(query=true, mutation=AuthContext.role == "ADMIN")
+  @plural("advisories")
+  type Advisory {
+    @pk id: Uuid = generate_uuid()
+    level: String
+    message: String
+  }
+
+  @access(AuthContext.role == "ADMIN")
+  type AuthUser {
+    @pk id: Uuid = generate_uuid()
+    @unique email: String?
+    firstName: String
+    lastName: String
+    password: String?
+    role: String = "USER"
+    verified: Boolean = false
+    enabled: Boolean = false
+    membership: Membership?
+  }
+
+  @access(AuthContext.role == "ADMIN")
+  type Payment {
+    @pk id: Uuid = generate_uuid()
+    membership: Membership
+    date: LocalDate
+    note: String
+    infoOnly: Boolean = false
+  }
+}
+
+@deno("authentication/auth-social.ts")
+module LoginSocial {
+    // Takes a code from client-side authentication and issues a JWT token on success
+    @access(true)
+    export query loginSocial(code: String, provider: String, @inject exograph: ExographPriv): String
+
+    // Given a code from client-side authentication, create a user in the database
+    @access(true)
+    export mutation signupSocial(
+        code: String, 
+        provider: String,
+        @inject exograph: ExographPriv
+    ): String
+}
+
+@deno("authentication/auth-normal.ts")
+module LoginNormal {
+    // Takes a login and a password from the client authentication and issues a JWT token on success
+    @access(true)
+    export query loginNormal(email: String, password: String, @inject exograph: ExographPriv): String
+
+    // Given an e-mail and a password, create a user in the database
+    @access(true)
+    export mutation signupNormal(
+        email: String, 
+        password: String,
+        firstName: String,
+        lastName: String,
+        @inject exograph: ExographPriv
+    ): Int
+
+    @access(true)
+    export mutation initiateResetPassword(email: String, @inject exograph: ExographPriv): String
+
+    @access(true)
+    export mutation resetPassword(email: String, password: String, code: String, @inject exograph: ExographPriv): String
+}

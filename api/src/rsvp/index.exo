@@ -1,0 +1,5 @@
+@deno("rsvp-service.ts")
+module RsvpService {
+  @access(true)
+  mutation processRsvp(concertId: Uuid, email: String, numTickets: Int, @inject exograph: ExographPriv): String
+}

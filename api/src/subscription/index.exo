@@ -1,0 +1,14 @@
+@deno("subscription-service.ts")
+module SubscriptionService {
+  @access(true)
+  mutation initiateSubscribe(email: String, @inject exograph: ExographPriv): String
+
+  @access(true)
+  mutation verifySubscribe(email: String, code: String, @inject exograph: ExographPriv): String
+
+  @access(true)
+  mutation initiateUnsubscribe(email: String, @inject exograph: ExographPriv): String
+
+  @access(true)
+  mutation verifyUnsubscribe(email: String, code: String, @inject exograph: ExographPriv): String
+}
