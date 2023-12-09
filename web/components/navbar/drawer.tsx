@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Logo from "./logo";
-import { useAuth } from "../auth/authProvider";
 import MenuElements from "./MenuElements";
 import NavBar from "./navbar";
 
 export default function Drawer({ children }: { children: React.ReactNode }) {
-  const [user, _login, logout] = useAuth();
   const drawerInput = useRef<HTMLInputElement | null>(null);
 
   const hideDrawer = () => {
@@ -29,7 +27,7 @@ export default function Drawer({ children }: { children: React.ReactNode }) {
           <div className="block lg:hidden w-auto p-2">
             <Logo />
           </div>
-          <MenuElements isDrawer={true} user={user} logout={logout} />
+          <MenuElements isDrawer={true} />
         </ul>
       </div>
     </div>

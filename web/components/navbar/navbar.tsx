@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import Logo from "./logo";
-import { useAuth } from "../auth/authProvider";
 import MenuElements from "./MenuElements";
+import LoginMenu from "./loginMenu";
 
 export default function NavBar() {
-  const [user, _login, logout] = useAuth();
   const container = useRef(null);
   const drawerInput = useRef<HTMLInputElement | null>(null);
 
@@ -50,10 +49,9 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex-none hidden lg:block">
-        <ul className="menu menu-horizontal">
-          <MenuElements isDrawer={false} user={user} logout={logout} />
-        </ul>
+        <MenuElements isDrawer={false} />
       </div>
+      <LoginMenu />
     </div>
   );
 }

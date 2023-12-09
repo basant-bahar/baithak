@@ -4,6 +4,7 @@ export const membershipDetails = graphql(`
   fragment MembershipDetails on Membership {
     authUser {
       id
+      clerkId
       firstName
       lastName
       email

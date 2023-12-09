@@ -26,12 +26,12 @@ const getSubscription = `
 
 const adminContext = {
   AuthContext: {
-    role: "ADMIN",
+    role: "admin",
   },
 };
 
-const jwtSecret = Deno.env.get("EXO_JWT_SECRET");
-if (!jwtSecret) throw new Error("Secret key must be defined");
+const subscriptionJwtSecret = Deno.env.get("SUBSCRIPTION_JWT_SECRET");
+if (!subscriptionJwtSecret) throw new Error("SUBSCRIPTION_JWT_SECRET env must be defined");
 
 export async function initiateSubscribe(email: string, exograph: ExographPriv) {
   const from = Deno.env.get("CONTACT_EMAIL") || "";
@@ -54,7 +54,7 @@ export async function initiateSubscribe(email: string, exograph: ExographPriv) {
 }
 
 export async function verifySubscribe(email: string, code: string, exograph: ExographPriv) {
-  await verifyCode(email, code);
+  await verifyCode(email, code, subscriptionJwtSecret as string);
 
   const existingSubscription = (
     await exograph.executeQueryPriv(getSubscription, { email }, adminContext)
@@ -90,7 +90,7 @@ export async function initiateUnsubscribe(email: string, exograph: ExographPriv)
 }
 
 export async function verifyUnsubscribe(email: string, code: string, exograph: ExographPriv) {
-  await verifyCode(email, code);
+  await verifyCode(email, code, subscriptionJwtSecret as string);
 
   const existingSubscription = (
     await exograph.executeQueryPriv(getSubscription, { email }, adminContext)

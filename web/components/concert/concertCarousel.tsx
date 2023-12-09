@@ -52,7 +52,7 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
   return (
     <>
       <div
-        className="carousel w-9/12 mx-auto"
+        className="carousel flex w-9/12 mx-auto"
         ref={carousel}
         onMouseOver={() => setHovered(true)}
         onMouseOut={() => setHovered(false)}

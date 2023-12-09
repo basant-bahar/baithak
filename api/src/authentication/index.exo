@@ -1,0 +1,6 @@
+
+@deno("auth.ts")
+module Authentication {
+    @access(true)
+    export mutation signup(@inject authContext: AuthContext, @inject exo: ExographPriv): String
+}

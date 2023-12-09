@@ -2,21 +2,22 @@
 
 import React from "react";
 import NavItem from "./navItem";
-import Link from "next/link";
 import Memberships from "./membershipsMenu";
 import About from "./aboutMenu";
-import LoginMenu from "./loginMenu";
-import { AuthUser, isAdmin } from "../auth/authProvider";
 import Admin from "./adminMenu";
+import { useUser } from "@clerk/clerk-react";
+import { useIsAdmin } from "components/auth/providers";
 
 interface MenuElementsProps {
   isDrawer: boolean;
-  user: AuthUser | undefined;
-  logout: () => void;
 }
-export default function MenuElements({ isDrawer, user, logout }: MenuElementsProps) {
+
+export default function MenuElements({ isDrawer }: MenuElementsProps) {
+  const isAdmin = useIsAdmin();
+  const { isSignedIn } = useUser();
+
   return (
-    <>
+    <ul className="menu menu-horizontal p-0">
       <li>
         <NavItem href="/" isLeaf={true} name="Home" />
       </li>
@@ -32,23 +33,11 @@ export default function MenuElements({ isDrawer, user, logout }: MenuElementsPro
       <li>
         <About isDrawer={isDrawer} />
       </li>
-      {user && isAdmin(user) && (
+      {isSignedIn && isAdmin && (
         <li>
           <Admin isDrawer={isDrawer} />
         </li>
       )}
-      {!user && (
-        <li>
-          <Link href="/login" className="nav-link nav-item" aria-current="page">
-            Login
-          </Link>
-        </li>
-      )}
-      {user && (
-        <li>
-          <LoginMenu user={user} logout={logout} isDrawer={isDrawer} />
-        </li>
-      )}
-    </>
+    </ul>
   );
 }

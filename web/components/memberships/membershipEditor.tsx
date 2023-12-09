@@ -1,12 +1,13 @@
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { getDateStr } from "utils";
 import { MembershipOnlyDetailsFragment } from "../../__generated__/graphql";
-import { isAdmin, useAuth } from "../auth/authProvider";
 import ManagePayment from "./managePayment";
 import TermsAndConditions from "./terms";
+import { useIsAdmin } from "components/auth/providers";
 
 export interface MemberAuthInfo {
+  clerkId?: string | null;
   firstName: string;
   lastName: string;
   email?: string | null;
@@ -14,7 +15,7 @@ export interface MemberAuthInfo {
 interface MembershipEditorProps {
   membershipId?: string;
   membership?: MembershipOnlyDetailsFragment;
-  authId?: string;
+  clerkId?: string | null;
   authUser?: MemberAuthInfo;
   done: Function;
   manage?: boolean;
@@ -30,6 +31,7 @@ const newMembership: MembershipOnlyDetailsFragment = {
   expiry: null,
 };
 const newAuthUserInfo: MemberAuthInfo = {
+  clerkId: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -37,7 +39,8 @@ const newAuthUserInfo: MemberAuthInfo = {
 
 export default function MembershipEditor(props: MembershipEditorProps) {
   const router = useRouter();
-  const [loggedInUser] = useAuth();
+  const isAdmin = useIsAdmin();
+
   const [membership, setMembership] = useState<MembershipOnlyDetailsFragment>(
     props.membership
       ? {
@@ -52,6 +55,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo>(
     props.authUser
       ? {
+          clerkId: props.authUser.clerkId,
           firstName: props.authUser.firstName,
           lastName: props.authUser.lastName,
           email: props.authUser.email,
@@ -63,7 +67,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
   const membershipTypes = ["Select membership", "Couple", "Family", "Individual", "Life"];
   const [showTerms, setShowTerms] = useState(false);
   const isIndividual = membership.type === "Individual";
-  const allowAdminEdit = isAdmin(loggedInUser);
+  const allowAdminEdit = isAdmin;
   const allowUserUpdate = props.manage && props.membershipId;
   const allowUserCreate = props.manage && !props.membershipId;
 
@@ -97,14 +101,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
 
   const save = async () => {
     if (!props.validate) {
-      props.done({ ...membership, authUser: { id: props.authId, ...memberAuthInfo } });
+      props.done({ ...membership, authUser: { id: props.clerkId, ...memberAuthInfo } });
     } else {
       const allowAdding = await props.validate({
         ...membership,
-        authUser: { id: props.authId, ...memberAuthInfo },
+        authUser: { id: props.clerkId, ...memberAuthInfo },
       });
       if (allowAdding) {
-        props.done({ ...membership, authUser: { id: props.authId, ...memberAuthInfo } });
+        props.done({ ...membership, authUser: { id: props.clerkId, ...memberAuthInfo } });
       } else {
         setErrorMessage("Membership for this email address already exists.");
       }

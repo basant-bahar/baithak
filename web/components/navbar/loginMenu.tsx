@@ -1,74 +1,18 @@
-import React, { RefObject } from "react";
-import { AuthUser } from "../auth/authProvider";
-import { UserIcon } from "@heroicons/react/20/solid";
-import { useDropdown } from "./useDropdown";
+import { UserButton, useUser } from "@clerk/clerk-react";
+import Link from "next/link";
 
-type UserPictureProps = {
-  user: AuthUser | undefined;
-};
-
-function UserPicture({ user }: UserPictureProps) {
-  if (user?.picture) {
-    const name = `${user.firstName} ${user.lastName}`;
-    return <img className="h-8 w-8 rounded-full" src={user.picture} alt={name} />;
-  } else {
-    return <UserIcon className="h-8 w-8 rounded-full" color="white" />;
-  }
-}
-
-type LoginMenuProps = {
-  user?: AuthUser;
-  logout: Function;
-  isDrawer?: boolean;
-};
-
-export default function LoginMenu({ user, logout, isDrawer }: LoginMenuProps) {
-  const [containerRef, actionRef, isOpen, close] = useDropdown();
-
-  const hideLogin = (e: React.MouseEvent) => {
-    close();
-    logout();
-  };
-  const subNav = (
-    <a
-      onClick={hideLogin}
-      className={`nav-link nav-item ${!isDrawer ? "nav-sub-link" : ""}`}
-      role="menuitem"
-      tabIndex={-1}
-      id="user-menu-item-0"
-    >
-      Sign out
-    </a>
-  );
+export default function LoginMenu() {
+  const { isSignedIn } = useUser();
 
   return (
-    <>
-      {isDrawer && subNav}
-      {!isDrawer && (
-        <div className="nav-sub-wrapper py-0" ref={containerRef as RefObject<HTMLDivElement>}>
-          <button
-            type="button"
-            className="flex text-sm rounded-full focus:outline-none hover:bg-primary-dark p-0"
-            id="user-menu-button"
-            aria-expanded="false"
-            aria-haspopup="true"
-            ref={actionRef as RefObject<HTMLButtonElement>}
-          >
-            <UserPicture user={user} />
-          </button>
-          {isOpen && (
-            <div
-              className="navbar-sub login min-h-0"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="user-menu-button"
-              tabIndex={-1}
-            >
-              {subNav}
-            </div>
-          )}
-        </div>
+    <div className="ml-auto">
+      {isSignedIn ? (
+        <UserButton />
+      ) : (
+        <Link href="/login" className="nav-link nav-item" aria-current="page">
+          Login
+        </Link>
       )}
-    </>
+    </div>
   );
 }

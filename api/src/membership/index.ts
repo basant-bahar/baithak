@@ -1,7 +1,8 @@
-import type ExographError from "./exograph.d.ts";
+import type { ExographError } from "../../generated/exograph.d.ts";
+import type { Operation } from "../../generated/exograph.d.ts";
 
 interface AuthContext {
-  id: number;
+  clerkId: string;
   role: string;
 }
 
@@ -9,8 +10,12 @@ export function prohibitBulkMembershipUpdate() {
   throw new ExographError("Bulk membership update not allowed");
 }
 
+export function prohibitBulkMembershipCreation() {
+  throw new ExographError("Bulk membership creation not allowed");
+}
+
 export function updateMembershipInterceptor(operation: Operation, authContext: AuthContext) {
-  if (authContext.role === "ADMIN") {
+  if (authContext.role === "admin") {
     return;
   }
   const allowedKeys = ["spouseEmail", "spouseFirstName", "spouseLastName"];
@@ -20,15 +25,5 @@ export function updateMembershipInterceptor(operation: Operation, authContext: A
     if (disallowedKeys.length !== 0) {
       throw new ExographError("Unauthorized attempt to update membership");
     }
-  }
-}
-
-export function createMembershipInterceptor(operation: Operation, authContext: AuthContext) {
-  if (authContext.role === "ADMIN") {
-    return;
-  }
-  const data = operation.query().arguments.data as { userId: number };
-  if (data && data.userId !== authContext.id) {
-    throw new ExographError("Unauthorized attempt to create membership");
   }
 }
