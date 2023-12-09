@@ -21,10 +21,7 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
       setCurrentSlide(index % concerts.length);
       const carouselWidth = carousel.current?.clientWidth || 1;
       const targetXPixel = carouselWidth * index;
-      // Scroll to the current slide. There is an open bug to fix TypeScript type for behavior.
-      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1195
-      // TODO: Remove following line once the bug is fixed.
-      // @ts-expect-error
+
       carousel.current?.scrollTo({ top: 0, left: targetXPixel, behavior: behavior });
     },
     [carousel, concerts]
@@ -55,7 +52,7 @@ export default function ConcertCarousel(props: ConcertCarouselProps) {
   return (
     <>
       <div
-        className="carousel w-9/12 mx-auto"
+        className="carousel flex w-9/12 mx-auto"
         ref={carousel}
         onMouseOver={() => setHovered(true)}
         onMouseOut={() => setHovered(false)}

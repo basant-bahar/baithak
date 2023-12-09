@@ -1,0 +1,8 @@
+@deno("index.ts")
+module Notificationmodule {
+  @access(AuthContext.role == "admin")
+  export query formatNotification(concertNotificationId: Uuid, @inject exograph: Exograph): String
+  
+  @access(AuthContext.role == "admin")
+  export mutation emailNotification(concertNotificationId: Uuid, emailGroupName: String, @inject exograph: Exograph): String
+}

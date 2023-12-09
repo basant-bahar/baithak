@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+<%
+let upcomingDate = "";
+if (it.upcomingConcert) {
+  const upcomingConcertStartTime = new Date(new Date(it.upcomingConcert.startTime + "Z"))
+  upcomingDate = upcomingConcertStartTime.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  }) + ": ";
+}
+%>
+<body>
+  <div style=<% it.notification.message ? "" : "display: none;" %>>
+    <div
+      style="padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px; text-align: justify;font-size: large;">
+      <%~ it.message %>
+    </div>
+  </div>
+  <% if (it.notification.concert) { %>
+    <%~ E.include('concertPartial', {concert: it.notification.concert, fileServerUrl: it.fileServerUrl, hostUrl: it.hostUrl, description: it.description}) %>
+  <% } %>
+  <% if (it.upcomingConcert) { %>
+    <div style=<% it.upcomingConcert ? "" : "display: none" %>>
+      <div
+        style="padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px; text-align: center;font-size: large;">
+        <div style="font-weight: bold;">Next Concert</div>
+        <span>
+          <%= upcomingDate %>
+        </span>
+        <a href="<%= it.upcomingConcert? `${it.hostUrl}/concerts/${it.upcomingConcert.id}` : "" %>">
+          <%= it.upcomingConcert? it.upcomingConcert.title + " (" + it.upcomingConcert.main.map((ma)=>
+            ma.artist.name).join(", ") + ")" : "" %>
+        </a>
+      </div>
+    </div>
+  <% } %>
+  <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <a href="<%= `${it.hostUrl}/subscriptions` %>">Manage your subscription</a>
+  </div>
+  <div style=<% it.postMessage ? "padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px; text-align: justify;font-size: large;" : "display: none" %>>
+    <%~ it.postMessage %>
+  </div>
+</body>
+
+</html>

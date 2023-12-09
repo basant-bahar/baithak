@@ -1,10 +1,8 @@
 "use client";
 
-import { AuthProvider } from "components/auth/authProvider";
-import { ApolloProvider } from "@apollo/react-hooks";
-import { client } from "./apollo-client";
-import "./global.css";
+import "./globals.css";
 import Drawer from "components/navbar/drawer";
+import Providers from "components/auth/providers";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,13 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <AuthProvider>
-          <ApolloProvider client={client}>
-            <Drawer>
-              <main>{children}</main>
-            </Drawer>
-          </ApolloProvider>
-        </AuthProvider>
+        <Providers>
+          <Drawer>
+            <main>{children}</main>
+          </Drawer>
+        </Providers>
       </body>
     </html>
   );

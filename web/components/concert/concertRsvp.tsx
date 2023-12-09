@@ -4,16 +4,17 @@ import { useMutation } from "@apollo/react-hooks";
 import React, { useState } from "react";
 import { graphql } from "../../__generated__";
 import { ProcessRsvpDocument } from "../../__generated__/graphql";
-import { useAuth } from "../auth/authProvider";
+import { useUser } from "@clerk/clerk-react";
 
 type ConcertRsvpProps = {
   concertId: string;
 };
 
 export const ConcertRsvp = (props: ConcertRsvpProps) => {
-  const [user] = useAuth();
+  const { user } = useUser();
 
-  const [rsvp, setRsvp] = useState({ email: user ? user.email : "", numTickets: 0 });
+  const email = (user && user.emailAddresses[0].emailAddress) || "";
+  const [rsvp, setRsvp] = useState({ email, numTickets: 0 });
   const [rsvpDone, setRsvpDone] = React.useState(false);
   const disabledRSVP = rsvp.email.length === 0 || rsvp.numTickets < 1 || rsvp.numTickets > 8;
   const id = props.concertId;

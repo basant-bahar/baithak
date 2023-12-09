@@ -1,0 +1,8 @@
+@deno("index.ts")
+module MembershipInterception {
+  @before("mutation createMemberships")
+  interceptor prohibitBulkMembershipCreation(operation: Operation, authContext: AuthContext)
+
+  @before("mutation updateMemberships")
+  interceptor prohibitBulkMembershipUpdate(operation: Operation, authContext: AuthContext)
+}

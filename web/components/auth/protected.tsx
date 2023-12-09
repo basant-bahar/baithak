@@ -1,32 +1,26 @@
 import React from "react";
 import { useEffect } from "react";
-import { AuthUser, useAuth } from "components/auth/authProvider";
 import { usePathname, useRouter } from "next/navigation";
-
-export enum AccessResult {
-  AuthNeeded = "auth-needed",
-  InsufficientPrivileges = "insufficient-privileges",
-  Allowed = "allowed",
-}
+import { UserResource } from "@clerk/types/dist/user";
+import { useUser } from "@clerk/clerk-react";
 
 interface ProtectedProps {
-  checkAccess: (user: AuthUser | undefined) => AccessResult;
+  checkAccess: (user: UserResource | null | undefined) => boolean;
   children: React.ReactNode;
 }
 
 export default function Protected({ checkAccess, children }: ProtectedProps) {
-  const [user] = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
-  const accessFailureCode = checkAccess(user);
-  const haveAccess = accessFailureCode === AccessResult.Allowed;
+  const haveAccess = checkAccess(user);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!haveAccess) router.push(`/login?reason=${accessFailureCode}&redirectUrl=${pathname}`);
+      if (!haveAccess) router.push(`/login?redirectUrl=${pathname}`);
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [router, haveAccess, accessFailureCode, pathname]);
+  }, [router, haveAccess, pathname]);
 
   return <>{haveAccess && <>{children}</>}</>;
 }

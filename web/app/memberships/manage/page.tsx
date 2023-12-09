@@ -3,8 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import MembershipEditor, { MemberAuthInfo } from "components/memberships/membershipEditor";
-import { useAuth } from "components/auth/authProvider";
-import { client } from "../../apollo-client";
+import { useApolloClient } from "@apollo/client";
 import {
   MembershipOnlyDetailsFragment,
   MembershipOnlyDetailsFragmentDoc,
@@ -12,6 +11,7 @@ import {
 import PageHeader from "components/common/pageHeader";
 import { membershipOnlyDetails, updateMembership } from "../../../graphql/memberships";
 import { getFragmentData, graphql } from "__generated__";
+import { useUser } from "@clerk/clerk-react";
 
 const newMembership = {
   spouseFirstName: "",
@@ -22,7 +22,9 @@ const newMembership = {
 };
 
 export default function ManageMembership() {
-  const [user] = useAuth();
+  const { user } = useUser();
+  const client = useApolloClient();
+
   const [membership, setMembership] = useState<MembershipOnlyDetailsFragment | undefined>();
   const [membershipId, setMembershipId] = useState<string | undefined>();
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo | undefined>();
@@ -33,8 +35,13 @@ export default function ManageMembership() {
 
   useEffect(() => {
     if (user) {
-      setMemberAuthInfo({ firstName: user.firstName, lastName: user.lastName, email: user.email });
-      getMembership({ variables: { authId: user.sub } });
+      const email = user?.emailAddresses[0].emailAddress;
+      setMemberAuthInfo({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: email,
+      });
+      getMembership({ variables: { clerkId: user.id } });
     }
   }, [user, getMembership]);
 
@@ -84,7 +91,7 @@ export default function ManageMembership() {
           variables: {
             data: {
               authUser: {
-                id: user.sub,
+                id: user.id,
               },
               ...membershipToSave,
             },
@@ -102,7 +109,7 @@ export default function ManageMembership() {
       <MembershipEditor
         membershipId={membershipId}
         membership={membership}
-        authId={user ? user.sub : undefined}
+        clerkId={user ? user.id : undefined}
         authUser={memberAuthInfo}
         done={saveMembership}
         manage={true}
@@ -121,8 +128,8 @@ const createMembership = graphql(`
 `);
 
 const getMembershipByAuthId = graphql(`
-  query getMembershipByAuthId($authId: Uuid!) {
-    memberships(where: { authUser: { id: { eq: $authId } } }) {
+  query getMembershipByAuthId($clerkId: String!) {
+    memberships(where: { authUser: { clerkId: { eq: $clerkId } } }) {
       id
       ...MembershipOnlyDetails
     }
