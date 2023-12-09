@@ -12,14 +12,13 @@ import {
 } from "../../../../../graphql/memberships";
 import { MembershipDetailsFragment, MembershipUpdateInput } from "__generated__/graphql";
 import MembershipEditor, { MemberAuthInfo } from "components/memberships/membershipEditor";
-import { useAuth } from "components/auth/authProvider";
 import { createAuthUser } from "../../../../../graphql/users";
+import { useUser } from "@clerk/clerk-react";
 
 interface MembershipProps {
   params: { id: string };
 }
 export default function Membership(props: MembershipProps) {
-  const router = useRouter();
   const id = props.params.id;
 
   return <>{id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />}</>;
@@ -66,8 +65,9 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
     expiry: membership.expiry,
   };
   const authUser = membership.authUser;
-  const authUserId = authUser.id;
+  const clerkId = authUser.clerkId;
   const authUserInfo = {
+    clerkId: authUser.clerkId,
     firstName: authUser.firstName,
     lastName: authUser.lastName,
     email: authUser.email,
@@ -80,7 +80,7 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
         <MembershipEditor
           membershipId={id}
           membership={membershipData}
-          authId={authUserId}
+          clerkId={clerkId}
           authUser={authUserInfo}
           done={saveMembership}
         />
@@ -122,12 +122,13 @@ type MembershipEditorState = NewUser | HaveEmail | NoEmail | WithEmail | WithNoE
 
 function CreateMembership() {
   const router = useRouter();
-  const [user] = useAuth();
+  const { user } = useUser();
   const [userInfoState, setUserInfoState] = useState<MembershipEditorState>({
     __typename: "NewUser",
   });
   const [authUser, setAuthUser] = useState<{ id: string | undefined } & MemberAuthInfo>({
     id: undefined,
+    clerkId: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -149,20 +150,25 @@ function CreateMembership() {
   const [createAuthUserMutation] = useMutation(createAuthUser);
 
   const addAuthUser = useCallback(
-    async (email: string | null, firstName: string, lastName: string) => {
+    async (
+      clerkId: string | undefined,
+      email: string | null,
+      firstName: string,
+      lastName: string
+    ) => {
       const result = await createAuthUserMutation({
         variables: {
           data: {
             email,
             firstName,
             lastName,
-            verified: true,
           },
         },
       });
       if (result.data?.createAuthUser.id && email) {
         setAuthUser({
           id: result?.data?.createAuthUser.id,
+          clerkId: clerkId,
           firstName,
           lastName,
           email,
@@ -200,7 +206,7 @@ function CreateMembership() {
           });
         }
       } else if (userInfoState.__typename === "WithEmail") {
-        addAuthUser(userInfoState.email, "", "");
+        addAuthUser(user?.id, userInfoState.email, "", "");
       }
     },
     [userInfoState, addAuthUser, authUserQuery]
@@ -221,7 +227,7 @@ function CreateMembership() {
           });
         }
       } else if (userInfoState.__typename === "WithNoEmailInfo") {
-        addAuthUser(null, userInfoState.firstName, userInfoState.lastName);
+        addAuthUser(undefined, null, userInfoState.firstName, userInfoState.lastName);
       }
     },
     [userInfoState, addAuthUser, authUserByNameQuery]
@@ -272,7 +278,7 @@ function CreateMembership() {
       case "WithInfo":
         return (
           <MembershipEditor
-            authId={authUser.id}
+            clerkId={authUser.clerkId}
             authUser={authUser}
             done={saveMembership}
             validate={membershipDoesNotExists}

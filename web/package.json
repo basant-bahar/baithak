@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "graphql-codegen",
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "3.8.4",
     "@apollo/react-hooks": "4.0.0",
+    "@clerk/clerk-react": "^4.28.1",
     "@heroicons/react": "^2.0.18",
     "daisyui": "^3.7.6",
     "date-fns": "^2.30.0",

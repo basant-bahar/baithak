@@ -58,7 +58,7 @@ const createRsvp = `
 
 const adminContext = {
   AuthContext: {
-    role: "ADMIN",
+    role: "admin",
   },
 };
 

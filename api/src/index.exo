@@ -1,18 +1,22 @@
-import "rsvp/index"
-import "subscription/index"
-import "membership/index"
-import "payment/index"
-import "expiry/index"
-import "notification/index"
+import "rsvp"
+import "subscription"
+import "membership"
+import "payment"
+import "expiry"
+import "notification"
+import "authentication"
 
 context AuthContext {
-  @jwt("sub") id: Uuid
-  @jwt("role") role: String
+  @jwt("sub") clerkId: String?
+  @jwt role: String
+  @jwt email: String
+  @jwt firstName: String
+  @jwt lastName: String
 }
 
 @postgres
 module Concertmodule {
-  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Concert {
     @pk id: Uuid = generate_uuid()
     title: String
@@ -30,7 +34,7 @@ module Concertmodule {
     concertArtists: Set<ConcertArtist>
   }
 
-  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Venue {
     @pk id: Uuid = generate_uuid()
     name: String
@@ -42,7 +46,7 @@ module Concertmodule {
     publish: Boolean
   }
 
-  @access(query=self.publish || AuthContext.role == "ADMIN", mutation=AuthContext.role == "ADMIN")
+  @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Artist {
     @pk id: Uuid = generate_uuid()
     title: String?
@@ -55,7 +59,7 @@ module Concertmodule {
     artistConcerts: Set<ConcertArtist>?
   }
 
-  @access(query=true, mutation=AuthContext.role == "ADMIN")
+  @access(query=true, mutation=AuthContext.role == "admin")
   type ConcertArtist {
     @pk id: Uuid = generate_uuid()
     concert: Concert
@@ -65,17 +69,16 @@ module Concertmodule {
     instrument: String
   }
 
-  @access(AuthContext.role == "ADMIN")
+  @access(AuthContext.role == "admin")
   type Subscription {
     @pk id: Uuid = generate_uuid()
     email: String
     group: String
   }
 
-  @access(query=AuthContext.role == "ADMIN" || self.authUser.id == AuthContext.id, 
-          create=AuthContext.role == "ADMIN" || AuthContext.role == "USER",
-          update=AuthContext.role == "ADMIN" || self.authUser.id == AuthContext.id,
-          delete=AuthContext.role == "ADMIN")
+  @access(query=AuthContext.role == "admin" || self.authUser.clerkId == AuthContext.clerkId, 
+          mutation=AuthContext.role == "admin" || self.authUser.clerkId == AuthContext.clerkId,
+          delete=AuthContext.role == "admin")
   type Membership {
     @pk id: Uuid = generate_uuid()
     authUser: AuthUser
@@ -87,7 +90,7 @@ module Concertmodule {
     payments: Set<Payment>?
   }
 
-  @access(AuthContext.role == "ADMIN")
+  @access(AuthContext.role == "admin")
   type Rsvp {
     @pk id: Uuid = generate_uuid()
     @unique("concert_email") email: String
@@ -95,7 +98,7 @@ module Concertmodule {
     numTickets: Int
   }
 
-  @access(AuthContext.role == "ADMIN")
+  @access(AuthContext.role == "admin")
   type Notification {
     @pk id: Uuid = generate_uuid()
     concert: Concert?
@@ -104,7 +107,7 @@ module Concertmodule {
     postMessage: String
   }
 
-  @access(query=true, mutation=AuthContext.role == "ADMIN")
+  @access(query=true, mutation=AuthContext.role == "admin")
   @plural("advisories")
   type Advisory {
     @pk id: Uuid = generate_uuid()
@@ -112,20 +115,17 @@ module Concertmodule {
     message: String
   }
 
-  @access(AuthContext.role == "ADMIN")
+  @access(AuthContext.role == "admin")
   type AuthUser {
     @pk id: Uuid = generate_uuid()
+    @unique clerkId: String?
     @unique email: String?
     firstName: String
     lastName: String
-    password: String?
-    role: String = "USER"
-    verified: Boolean = false
-    enabled: Boolean = false
     membership: Membership?
   }
 
-  @access(AuthContext.role == "ADMIN")
+  @access(AuthContext.role == "admin")
   type Payment {
     @pk id: Uuid = generate_uuid()
     membership: Membership
@@ -133,42 +133,4 @@ module Concertmodule {
     note: String
     infoOnly: Boolean = false
   }
-}
-
-@deno("authentication/auth-social.ts")
-module LoginSocial {
-    // Takes a code from client-side authentication and issues a JWT token on success
-    @access(true)
-    export query loginSocial(code: String, provider: String, @inject exograph: ExographPriv): String
-
-    // Given a code from client-side authentication, create a user in the database
-    @access(true)
-    export mutation signupSocial(
-        code: String, 
-        provider: String,
-        @inject exograph: ExographPriv
-    ): String
-}
-
-@deno("authentication/auth-normal.ts")
-module LoginNormal {
-    // Takes a login and a password from the client authentication and issues a JWT token on success
-    @access(true)
-    export query loginNormal(email: String, password: String, @inject exograph: ExographPriv): String
-
-    // Given an e-mail and a password, create a user in the database
-    @access(true)
-    export mutation signupNormal(
-        email: String, 
-        password: String,
-        firstName: String,
-        lastName: String,
-        @inject exograph: ExographPriv
-    ): Int
-
-    @access(true)
-    export mutation initiateResetPassword(email: String, @inject exograph: ExographPriv): String
-
-    @access(true)
-    export mutation resetPassword(email: String, password: String, code: String, @inject exograph: ExographPriv): String
 }

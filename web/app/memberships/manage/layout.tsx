@@ -1,12 +1,10 @@
 "use client";
 
-import { AuthUser } from "components/auth/authProvider";
-import Protected, { AccessResult } from "components/auth/protected";
+import { useUser } from "@clerk/clerk-react";
+import Protected from "components/auth/protected";
 
-function checkAuthUser(user: AuthUser | undefined): AccessResult {
-  return user === undefined ? AccessResult.AuthNeeded : AccessResult.Allowed;
-}
+export default function MembershipLayout({ children }: { children: React.ReactNode }) {
+  const { isSignedIn } = useUser();
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <Protected checkAccess={checkAuthUser}>{children}</Protected>;
+  return <Protected checkAccess={() => isSignedIn || false}>{children}</Protected>;
 }

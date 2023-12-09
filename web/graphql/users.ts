@@ -2,6 +2,7 @@ import { graphql } from "../__generated__";
 
 export const authUserDetails = graphql(`
   fragment AuthUserDetails on AuthUser {
+    clerkId
     firstName
     lastName
     email
