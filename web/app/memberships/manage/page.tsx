@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import MembershipEditor, { MemberAuthInfo } from "components/memberships/membershipEditor";
 import { useApolloClient } from "@apollo/client";
 import {
@@ -32,6 +32,9 @@ export default function ManageMembership() {
   const [getMembership, { loading, error, data }] = useLazyQuery(getMembershipByAuthId);
   const [updateMembershipMutation] = useMutation(updateMembership);
   const [createMembershipMutation] = useMutation(createMembership);
+  const { data: meData, loading: meLoading } = useQuery(me, {
+    variables: { clerkId: user?.id as string },
+  });
 
   useEffect(() => {
     if (user) {
@@ -86,14 +89,15 @@ export default function ManageMembership() {
         },
       });
     } else {
-      if (user) {
+      if (user && meData && meData.authUsers.length === 1) {
+        const myId = meData?.authUsers[0].id;
         createMembershipMutation({
           variables: {
             data: {
-              authUser: {
-                id: user.id,
-              },
               ...membershipToSave,
+              authUser: {
+                id: myId,
+              },
             },
           },
         }).then((data) => afterCreate(data));
@@ -101,7 +105,8 @@ export default function ManageMembership() {
     }
   };
 
-  if (loading || !membership || !memberAuthInfo) return <div>Loading...</div>;
+  if (loading || !membership || !memberAuthInfo || meLoading || !meData)
+    return <div>Loading...</div>;
 
   return (
     <div className="main-container">
@@ -132,6 +137,14 @@ const getMembershipByAuthId = graphql(`
     memberships(where: { authUser: { clerkId: { eq: $clerkId } } }) {
       id
       ...MembershipOnlyDetails
+    }
+  }
+`);
+
+const me = graphql(`
+  query me($clerkId: String!) {
+    authUsers(where: { clerkId: { eq: $clerkId } }) {
+      id
     }
   }
 `);

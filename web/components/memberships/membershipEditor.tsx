@@ -64,12 +64,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
   );
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const membershipTypes = ["Select membership", "Couple", "Family", "Individual", "Life"];
+  const membershipTypes = ["Couple", "Family", "Individual", "Life"];
   const [showTerms, setShowTerms] = useState(false);
   const isIndividual = membership.type === "Individual";
   const allowAdminEdit = isAdmin;
   const allowUserUpdate = props.manage && props.membershipId;
   const allowUserCreate = props.manage && !props.membershipId;
+  const allowFirstNameChange = (allowUserCreate && !props.authUser?.firstName) || isAdmin;
+  const allowLastNameChange = (allowUserCreate && !props.authUser?.lastName) || isAdmin;
 
   function changeFirstName(e: React.ChangeEvent<HTMLInputElement>) {
     setMemberAuthInfo({ ...memberAuthInfo, firstName: e.target.value });
@@ -101,14 +103,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
 
   const save = async () => {
     if (!props.validate) {
-      props.done({ ...membership, authUser: { id: props.clerkId, ...memberAuthInfo } });
+      props.done({ ...membership, authUser: { id: props.clerkId } });
     } else {
       const allowAdding = await props.validate({
         ...membership,
-        authUser: { id: props.clerkId, ...memberAuthInfo },
+        authUser: { id: props.clerkId },
       });
       if (allowAdding) {
-        props.done({ ...membership, authUser: { id: props.clerkId, ...memberAuthInfo } });
+        props.done({ ...membership, authUser: { id: props.clerkId } });
       } else {
         setErrorMessage("Membership for this email address already exists.");
       }
@@ -135,8 +137,11 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             value={membership.type}
             disabled={!allowAdminEdit && !allowUserCreate}
           >
+            <option value="">Select membership type</option>
             {membershipTypes.map((type) => (
-              <option key={type}>{type}</option>
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
         </div>
@@ -147,14 +152,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             placeholder="First name"
             value={memberAuthInfo.firstName}
             onChange={changeFirstName}
-            disabled={!allowAdminEdit || !props.allowAuthInfoUpdate}
+            disabled={!allowFirstNameChange}
           />
           <input
             className="simple-input"
             placeholder="Last name"
             value={memberAuthInfo.lastName}
             onChange={changeLastName}
-            disabled={!allowAdminEdit || !props.allowAuthInfoUpdate}
+            disabled={!allowLastNameChange}
           />
         </div>
         <div className="form-row">
@@ -238,7 +243,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
           <button
             className="text-white bg-green-600 hover:bg-green-700 max-w-[10rem]"
             onClick={() => save()}
-            disabled={!allowAdminEdit && !allowUserUpdate && !allowUserCreate}
+            disabled={(!allowAdminEdit && !allowUserUpdate && !allowUserCreate) || !membership.type}
           >
             Save
           </button>

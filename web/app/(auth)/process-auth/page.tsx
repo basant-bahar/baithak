@@ -3,13 +3,14 @@
 import { useMutation } from "@apollo/client";
 import { useUser } from "@clerk/clerk-react";
 import { graphql } from "__generated__";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 export default function AfterSignup() {
-  const [signup] = useMutation(signupMutation);
+  const [syncAuthUser] = useMutation(syncAuthUserMutation);
   const signupInProcess = useRef(false);
-
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl");
   const { isSignedIn, user } = useUser();
   const router = useRouter();
 
@@ -17,8 +18,12 @@ export default function AfterSignup() {
     async function handleSignUp() {
       if (!signupInProcess.current) {
         signupInProcess.current = true;
-        await signup();
-        router.replace("/");
+        await syncAuthUser();
+        if (redirectUrl) {
+          router.replace(redirectUrl);
+        } else {
+          router.replace("/");
+        }
       }
     }
     if (isSignedIn && user) {
@@ -33,8 +38,8 @@ export default function AfterSignup() {
   return <div></div>;
 }
 
-const signupMutation = graphql(`
-  mutation signup {
-    signup
+const syncAuthUserMutation = graphql(`
+  mutation syncAuthUser {
+    syncAuthUser
   }
 `);

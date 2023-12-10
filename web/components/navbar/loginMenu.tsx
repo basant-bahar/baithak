@@ -7,9 +7,9 @@ export default function LoginMenu() {
   return (
     <div className="ml-auto">
       {isSignedIn ? (
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
       ) : (
-        <Link href="/login" className="nav-link nav-item" aria-current="page">
+        <Link href="/signin" className="nav-link nav-item" aria-current="page">
           Login
         </Link>
       )}

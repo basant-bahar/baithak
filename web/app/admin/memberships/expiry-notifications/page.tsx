@@ -52,7 +52,6 @@ export default function MembershipExpiryNotifications() {
         router.back();
       })
       .catch((e) => {
-        console.log(e);
         setError(true);
       });
   }

@@ -17,7 +17,7 @@ export default function Protected({ checkAccess, children }: ProtectedProps) {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!haveAccess) router.push(`/login?redirectUrl=${pathname}`);
+      if (!haveAccess) router.push(`/signin?redirectUrl=${pathname}`);
     }, 1000);
     return () => clearTimeout(timeout);
   }, [router, haveAccess, pathname]);

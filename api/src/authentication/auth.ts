@@ -30,7 +30,7 @@ async function getUserByEmail(email: string, exo: ExographPriv) {
   }
 }
 
-export async function signup(authContext: AuthContext, exo: ExographPriv): Promise<string> {
+export async function syncAuthUser(authContext: AuthContext, exo: ExographPriv): Promise<string> {
   const { clerkId, email, firstName, lastName } = authContext;
 
   try {
@@ -54,12 +54,10 @@ export async function signup(authContext: AuthContext, exo: ExographPriv): Promi
           },
           signUpContext
         );
-      } else {
-        throw new ExographError("Already signed up");
       }
     } else {
       await exo.executeQueryPriv(
-        `mutation($clerkId: String!, $email: String!, $firstName: String!, $lastName: String!) {
+        `mutation($clerkId: String!, $email: String!, $firstName: String, $lastName: String) {
           createAuthUser(data: { clerkId: $clerkId, email: $email, firstName: $firstName, lastName: $lastName}) {
             id
           }

@@ -82,9 +82,9 @@ module Concertmodule {
   type Membership {
     @pk id: Uuid = generate_uuid()
     authUser: AuthUser
-    spouseFirstName: String
-    spouseLastName: String
-    spouseEmail: String
+    spouseFirstName: String?
+    spouseLastName: String?
+    spouseEmail: String?
     expiry: LocalDate?
     type: String
     payments: Set<Payment>?
@@ -115,13 +115,13 @@ module Concertmodule {
     message: String
   }
 
-  @access(AuthContext.role == "admin")
+  @access(query=self.clerkId == AuthContext.clerkId || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type AuthUser {
     @pk id: Uuid = generate_uuid()
     @unique clerkId: String?
     @unique email: String?
-    firstName: String
-    lastName: String
+    firstName: String?
+    lastName: String?
     membership: Membership?
   }
 

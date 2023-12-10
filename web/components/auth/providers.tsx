@@ -13,7 +13,7 @@ const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
+    <ClerkProvider publishableKey={clerkPubKey} signInUrl="/signin" signUpUrl="/signup">
       <ClerkLoaded>
         <ClerkApolloProvider>{children}</ClerkApolloProvider>
       </ClerkLoaded>
