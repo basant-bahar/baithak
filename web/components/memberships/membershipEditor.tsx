@@ -180,14 +180,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
                 className="simple-input mr-1"
                 placeholder="First name"
                 onChange={changeSpouseFirstName}
-                value={membership.spouseFirstName}
+                value={membership.spouseFirstName || ""}
                 disabled={!allowAdminEdit && !allowUserCreate && !allowUserUpdate}
               />
               <input
                 className="simple-input"
                 placeholder="Last name"
                 onChange={changeSpouseLastName}
-                value={membership.spouseLastName}
+                value={membership.spouseLastName || ""}
                 disabled={!allowAdminEdit && !allowUserCreate && !allowUserUpdate}
               />
             </div>
@@ -197,7 +197,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
                 className="simple-input"
                 placeholder="Spouse Email"
                 onChange={changeSpouseEmail}
-                value={membership.spouseEmail}
+                value={membership.spouseEmail || ""}
                 disabled={!allowAdminEdit && !allowUserCreate && !allowUserUpdate}
               />
             </div>
