@@ -108,8 +108,8 @@ type WithInfo = {
   __typename: "WithInfo";
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string | null;
+  lastName?: string | null;
 };
 
 type WithNoEmailInfo = {
@@ -133,6 +133,7 @@ function CreateMembership() {
     lastName: "",
     email: "",
   });
+
   const newMembership = {
     spouseFirstName: "",
     spouseLastName: "",
@@ -209,7 +210,7 @@ function CreateMembership() {
         addAuthUser(user?.id, userInfoState.email, "", "");
       }
     },
-    [userInfoState, addAuthUser, authUserQuery]
+    [userInfoState, addAuthUser, authUserQuery, user?.id]
   );
 
   const findAuthUserByName = useCallback(

@@ -8,8 +8,8 @@ import { useIsAdmin } from "components/auth/providers";
 
 export interface MemberAuthInfo {
   clerkId?: string | null;
-  firstName: string;
-  lastName: string;
+  firstName?: string | null;
+  lastName?: string | null;
   email?: string | null;
 }
 interface MembershipEditorProps {
@@ -150,14 +150,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
           <input
             className="simple-input mr-1"
             placeholder="First name"
-            value={memberAuthInfo.firstName}
+            value={memberAuthInfo.firstName || ""}
             onChange={changeFirstName}
             disabled={!allowFirstNameChange}
           />
           <input
             className="simple-input"
             placeholder="Last name"
-            value={memberAuthInfo.lastName}
+            value={memberAuthInfo.lastName || ""}
             onChange={changeLastName}
             disabled={!allowLastNameChange}
           />

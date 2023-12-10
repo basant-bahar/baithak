@@ -43,13 +43,13 @@ export default function AuthUserEditor(props: AuthUserEditorProps) {
         <input
           className="simple-input mr-1"
           placeholder="First name"
-          value={userData.firstName}
+          value={userData.firstName || ""}
           onChange={changeFirstName}
         />
         <input
           className="simple-input"
           placeholder="Last name"
-          value={userData.lastName}
+          value={userData.lastName || ""}
           onChange={changeLastName}
         />
       </div>

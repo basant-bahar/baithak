@@ -29,7 +29,7 @@ export default function AfterSignup() {
     if (isSignedIn && user) {
       handleSignUp();
     }
-  }, [isSignedIn, user]);
+  }, [isSignedIn, user, redirectUrl, router, syncAuthUser]);
 
   if (isSignedIn || user) {
     return null;
