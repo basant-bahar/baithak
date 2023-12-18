@@ -7,16 +7,16 @@ import TermsAndConditions from "./terms";
 import { useIsAdmin } from "components/auth/providers";
 
 export interface MemberAuthInfo {
-  clerkId?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
 }
+
 interface MembershipEditorProps {
   membershipId?: string;
   membership?: MembershipOnlyDetailsFragment;
-  clerkId?: string | null;
-  authUser?: MemberAuthInfo;
+  authUserId: string;
+  authUser: MemberAuthInfo;
   done: Function;
   manage?: boolean;
   allowAuthInfoUpdate?: boolean;
@@ -30,8 +30,8 @@ const newMembership: MembershipOnlyDetailsFragment = {
   type: "",
   expiry: null,
 };
+
 const newAuthUserInfo: MemberAuthInfo = {
-  clerkId: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -55,7 +55,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo>(
     props.authUser
       ? {
-          clerkId: props.authUser.clerkId,
           firstName: props.authUser.firstName,
           lastName: props.authUser.lastName,
           email: props.authUser.email,
@@ -103,14 +102,14 @@ export default function MembershipEditor(props: MembershipEditorProps) {
 
   const save = async () => {
     if (!props.validate) {
-      props.done({ ...membership, authUser: { id: props.clerkId } });
+      props.done({ ...membership, authUser: { id: props.authUserId, ...memberAuthInfo } });
     } else {
       const allowAdding = await props.validate({
         ...membership,
-        authUser: { id: props.clerkId },
+        authUser: { id: props.authUserId },
       });
       if (allowAdding) {
-        props.done({ ...membership, authUser: { id: props.clerkId } });
+        props.done({ ...membership, authUser: { id: props.authUserId, ...memberAuthInfo } });
       } else {
         setErrorMessage("Membership for this email address already exists.");
       }

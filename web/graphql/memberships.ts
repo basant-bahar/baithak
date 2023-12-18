@@ -47,6 +47,23 @@ export const searchMembership = graphql(`
   }
 `);
 
+export const updateMembershipAndUpdateAuthUser = graphql(`
+  mutation updateMembershipAndUpdateAuthUser(
+    $id: Uuid!
+    $data: MembershipUpdateInput!
+    $authId: Uuid!
+    $authUserData: AuthUserUpdateInput!
+  ) {
+    updateMembership(id: $id, data: $data) {
+      id
+      ...MembershipOnlyDetails
+    }
+    updateAuthUser(id: $authId, data: $authUserData) {
+      id
+    }
+  }
+`);
+
 export const updateMembership = graphql(`
   mutation updateMembership($id: Uuid!, $data: MembershipUpdateInput!) {
     updateMembership(id: $id, data: $data) {

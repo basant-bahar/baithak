@@ -8,7 +8,7 @@ import PageHeader from "components/common/pageHeader";
 import {
   membershipDetails,
   searchMembership,
-  updateMembership,
+  updateMembershipAndUpdateAuthUser,
 } from "../../../../../graphql/memberships";
 import { MembershipDetailsFragment, MembershipUpdateInput } from "__generated__/graphql";
 import MembershipEditor, { MemberAuthInfo } from "components/memberships/membershipEditor";
@@ -27,6 +27,7 @@ export default function Membership(props: MembershipProps) {
 interface UpdateMembershipProps {
   id: string;
 }
+
 function UpdateMembership({ id }: UpdateMembershipProps) {
   const router = useRouter();
 
@@ -34,23 +35,9 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
     variables: { id },
   });
 
-  const [updateMembershipMutation] = useMutation(updateMembership);
-
-  const saveMembership = async (membership: MembershipDetailsFragment) => {
-    const updateMembershipData: MembershipUpdateInput = {
-      spouseFirstName: membership.spouseFirstName,
-      spouseLastName: membership.spouseLastName,
-      spouseEmail: membership.spouseEmail,
-      type: membership.type,
-      expiry: membership.expiry,
-    };
-    updateMembershipMutation({
-      variables: {
-        id,
-        data: updateMembershipData,
-      },
-    }).then((_) => router.back());
-  };
+  const [updateMembershipAndUpdateAuthUserMutation] = useMutation(
+    updateMembershipAndUpdateAuthUser
+  );
 
   if (loading || !data) {
     return <>Loading...</>;
@@ -65,12 +52,29 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
     expiry: membership.expiry,
   };
   const authUser = membership.authUser;
-  const clerkId = authUser.clerkId;
+  const authUserId = authUser.id;
   const authUserInfo = {
-    clerkId: authUser.clerkId,
     firstName: authUser.firstName,
     lastName: authUser.lastName,
     email: authUser.email,
+  };
+
+  const updateMembership = async (membership: MembershipDetailsFragment) => {
+    const updateMembershipData: MembershipUpdateInput = {
+      spouseFirstName: membership.spouseFirstName,
+      spouseLastName: membership.spouseLastName,
+      spouseEmail: membership.spouseEmail,
+      type: membership.type,
+      expiry: membership.expiry,
+    };
+    updateMembershipAndUpdateAuthUserMutation({
+      variables: {
+        id,
+        data: updateMembershipData,
+        authId: authUserId,
+        authUserData: { ...membership.authUser },
+      },
+    }).then((_) => router.back());
   };
 
   return (
@@ -80,9 +84,9 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
         <MembershipEditor
           membershipId={id}
           membership={membershipData}
-          clerkId={clerkId}
+          authUserId={authUser.id}
           authUser={authUserInfo}
-          done={saveMembership}
+          done={updateMembership}
         />
       )}
     </div>
@@ -126,9 +130,8 @@ function CreateMembership() {
   const [userInfoState, setUserInfoState] = useState<MembershipEditorState>({
     __typename: "NewUser",
   });
-  const [authUser, setAuthUser] = useState<{ id: string | undefined } & MemberAuthInfo>({
-    id: undefined,
-    clerkId: "",
+  const [authUser, setAuthUser] = useState<{ id: string } & MemberAuthInfo>({
+    id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -151,12 +154,7 @@ function CreateMembership() {
   const [createAuthUserMutation] = useMutation(createAuthUser);
 
   const addAuthUser = useCallback(
-    async (
-      clerkId: string | undefined,
-      email: string | null,
-      firstName: string,
-      lastName: string
-    ) => {
+    async (email: string | null, firstName: string, lastName: string) => {
       const result = await createAuthUserMutation({
         variables: {
           data: {
@@ -166,18 +164,17 @@ function CreateMembership() {
           },
         },
       });
-      if (result.data?.createAuthUser.id && email) {
+      if (result.data?.createAuthUser.id) {
         setAuthUser({
           id: result?.data?.createAuthUser.id,
-          clerkId: clerkId,
           firstName,
           lastName,
-          email,
+          email: email ? email : "",
         });
         setUserInfoState({
           __typename: "WithInfo",
           id: result?.data?.createAuthUser.id,
-          email,
+          email: email ? email : "",
           firstName,
           lastName,
         });
@@ -207,7 +204,7 @@ function CreateMembership() {
           });
         }
       } else if (userInfoState.__typename === "WithEmail") {
-        addAuthUser(user?.id, userInfoState.email, "", "");
+        addAuthUser(userInfoState.email, "", "");
       }
     },
     [userInfoState, addAuthUser, authUserQuery, user?.id]
@@ -228,7 +225,7 @@ function CreateMembership() {
           });
         }
       } else if (userInfoState.__typename === "WithNoEmailInfo") {
-        addAuthUser(undefined, null, userInfoState.firstName, userInfoState.lastName);
+        addAuthUser(null, userInfoState.firstName, userInfoState.lastName);
       }
     },
     [userInfoState, addAuthUser, authUserByNameQuery]
@@ -242,12 +239,16 @@ function CreateMembership() {
     }
   }, [userInfoState, findAuthUser, findAuthUserByName]);
 
-  const membershipDoesNotExists = async (membership: MembershipDetailsFragment) => {
+  const membershipDoesNotExists = async (
+    membership: MembershipDetailsFragment
+  ): Promise<boolean> => {
     if (membership.authUser.email) {
       const result = await membershipByEmail({
         variables: { email: membership.authUser.email },
       });
       return !(result.data?.memberships && result.data.memberships.length > 0);
+    } else {
+      return true;
     }
   };
 
@@ -279,7 +280,7 @@ function CreateMembership() {
       case "WithInfo":
         return (
           <MembershipEditor
-            clerkId={authUser.clerkId}
+            authUserId={authUser.id}
             authUser={authUser}
             done={saveMembership}
             validate={membershipDoesNotExists}

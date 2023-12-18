@@ -35,18 +35,20 @@ export default function ManageMembership() {
   const { data: meData, loading: meLoading } = useQuery(me, {
     variables: { clerkId: user?.id as string },
   });
+  const myAuthUser = meData?.authUsers[0];
+  const myAuthUserId = myAuthUser?.id;
 
   useEffect(() => {
-    if (user) {
+    if (user && myAuthUser) {
       const email = user?.emailAddresses[0].emailAddress;
       setMemberAuthInfo({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
+        firstName: myAuthUser?.firstName || user.firstName || "",
+        lastName: myAuthUser?.lastName || user.lastName || "",
         email: email,
       });
       getMembership({ variables: { clerkId: user.id } });
     }
-  }, [user, getMembership]);
+  }, [user, myAuthUser, getMembership]);
 
   useEffect(() => {
     if (!loading && data) {
@@ -114,7 +116,7 @@ export default function ManageMembership() {
       <MembershipEditor
         membershipId={membershipId}
         membership={membership}
-        clerkId={user ? user.id : undefined}
+        authUserId={myAuthUserId}
         authUser={memberAuthInfo}
         done={saveMembership}
         manage={true}
@@ -145,6 +147,8 @@ const me = graphql(`
   query me($clerkId: String!) {
     authUsers(where: { clerkId: { eq: $clerkId } }) {
       id
+      firstName
+      lastName
     }
   }
 `);
