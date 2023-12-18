@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { DocumentNode } from "graphql";
-import { client } from "../../app/apollo-client";
 
 type Entity<D> = { id: number } & D;
 
@@ -63,11 +62,6 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   const [deleteMutation] = useMutation(deleteMutationDocument, {
     onCompleted: () => {
       setSearchStr("");
-      client.cache.evict({
-        id: "ROOT_QUERY",
-        fieldName: resourcePath,
-        broadcast: true,
-      });
     },
   });
 
@@ -76,7 +70,10 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   }
 
   async function deleteEntity(id: number) {
-    await deleteMutation({ variables: { id } });
+    await deleteMutation({
+      variables: { id },
+      refetchQueries: [{ query: searchQueryDocument, variables: { search: "%%" } }],
+    });
   }
 
   function onSearchStrChange(e: React.ChangeEvent<HTMLInputElement>) {
