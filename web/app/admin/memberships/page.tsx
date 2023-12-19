@@ -140,7 +140,7 @@ const AdditionalButtons = () => {
         </button>
         <Link
           className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
-          href={`admin/memberships/expiry-notifications`}
+          href={`memberships/expiry-notifications`}
         >
           Send Expiry Notificaions
         </Link>
