@@ -77,16 +77,18 @@ export function parseDateYYYYMMDD(dateStr: string) {
   return startDate;
 }
 
-export async function handleFileUpload(file: File): Promise<string | null> {
+export async function handleFileUpload(
+  file: File,
+  authToken: string | null
+): Promise<string | null> {
   if (!process.env.NEXT_PUBLIC_UPLOAD_URL) return "";
 
   const resizedImageBlob = await resizeImage(file, 800, 600);
   if (!resizedImageBlob) return null;
 
   const resizedFile = new File([resizedImageBlob], file.name);
-  const token = localStorage.getItem("token");
   const headers = {
-    authorization: token ? `Bearer ${token}` : "",
+    authorization: authToken ? `Bearer ${authToken}` : "",
   };
   const data = new FormData();
   data.append("file", resizedFile);

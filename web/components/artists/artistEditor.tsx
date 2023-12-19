@@ -8,6 +8,7 @@ import { artistDetails } from "../../graphql/artists";
 import { ArtistDetailsFragment } from "../../__generated__/graphql";
 import { handleFileUpload, imageUrl } from "utils";
 import TagInput from "../common/tagInput";
+import { useAuth } from "@clerk/clerk-react";
 
 type ArtistEditorProps = {
   artistData?: FragmentType<typeof artistDetails>;
@@ -25,6 +26,7 @@ const newArtist: ArtistDetailsFragment = {
 };
 
 export default function ArtistEditor(props: ArtistEditorProps) {
+  const { getToken } = useAuth();
   const artist = getFragmentData(artistDetails, props.artistData);
   const [artistData, setArtistData] = useState(artist ? artist : newArtist);
   const youtubeVideoIds = artistData.youtubeVideoIds ? artistData.youtubeVideoIds : [];
@@ -61,7 +63,8 @@ export default function ArtistEditor(props: ArtistEditorProps) {
   const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
-      const updatedPhotoUrl = await handleFileUpload(file);
+      const token = await getToken({ template: "ExoUser", skipCache: true });
+      const updatedPhotoUrl = await handleFileUpload(file, token);
       setArtistData({ ...artistData, photoUrl: updatedPhotoUrl });
     }
   };

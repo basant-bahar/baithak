@@ -16,6 +16,7 @@ import {
   ConcertDetailsFragment,
 } from "../../__generated__/graphql";
 import ConcertArtistsEditor from "./concertArtistsEditor";
+import { useAuth } from "@clerk/clerk-react";
 
 type ConcertEditorProps = {
   concertId?: string;
@@ -47,6 +48,7 @@ const newConcert = {
 };
 
 export default function ConcertEditor(props: ConcertEditorProps) {
+  const { getToken } = useAuth();
   const concert = getFragmentData(concertDetails, props.concertData);
   const artists = getFragmentData(artistBasicInfo, props.artists);
   const venues = props.venues.map((v) => {
@@ -218,7 +220,8 @@ export default function ConcertEditor(props: ConcertEditorProps) {
   const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
-      const updatedPhotoUrl = await handleFileUpload(file);
+      const token = await getToken({ template: "ExoUser", skipCache: true });
+      const updatedPhotoUrl = await handleFileUpload(file, token);
       if (updatedPhotoUrl) setConcertData({ ...concertData, photoUrl: updatedPhotoUrl });
     }
   };
