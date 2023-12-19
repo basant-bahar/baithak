@@ -3,7 +3,6 @@
 import { useMutation } from "@apollo/react-hooks";
 import React, { useState } from "react";
 import { graphql } from "../../__generated__";
-import { ProcessRsvpDocument } from "../../__generated__/graphql";
 import { useUser } from "@clerk/clerk-react";
 
 type ConcertRsvpProps = {
@@ -18,7 +17,7 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
   const [rsvpDone, setRsvpDone] = React.useState(false);
   const disabledRSVP = rsvp.email.length === 0 || rsvp.numTickets < 1 || rsvp.numTickets > 8;
   const id = props.concertId;
-  const [processRsvpMutation] = useMutation(ProcessRsvpDocument);
+  const [processRsvpMutation] = useMutation(processRsvp);
 
   const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRsvp({ ...rsvp, email: e.target.value });

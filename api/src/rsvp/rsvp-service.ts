@@ -8,12 +8,12 @@ const concertQuery = `
       id
       title
       startTime
-      main: concertArtists(where: {role: {eq: "Main"}}, orderBy: {rank: ASC}) {
+      main: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {
         artist {
           name
         }
       }
-      accompany: concertArtists(where: {role: {eq: "Accompany"}}, orderBy: {rank: ASC}) {
+      accompany: concertArtists(where: {isMain: {eq: false}}, orderBy: {rank: ASC}) {
         artist {
           name
         }
@@ -63,7 +63,7 @@ const adminContext = {
 };
 
 async function sendRsvpEmail(
-  exograph: ExographPriv,
+  exograph: Exograph,
   concertId: number,
   email: string,
   numTickets: number
@@ -71,9 +71,8 @@ async function sendRsvpEmail(
   const from = Deno.env.get("CONTACT_EMAIL") || "";
   const hostUrl = Deno.env.get("HOST_URL");
 
-  const concert = (await exograph.executeQueryPriv(concertQuery, { id: concertId }, adminContext))
-    .concert;
-  let template = await Deno.readTextFile("./rsvp/rsvpTemplate.html");
+  const concert = (await exograph.executeQuery(concertQuery, { id: concertId })).concert;
+  let template = await Deno.readTextFile("./src/rsvp/rsvpTemplate.html");
   const templateFunction = Eta.compile(template);
   const startTime = new Date(new Date(concert.startTime + "Z"));
   const concertDate = startTime.toLocaleDateString("en-US", {
