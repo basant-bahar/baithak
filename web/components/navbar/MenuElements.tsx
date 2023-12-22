@@ -11,30 +11,31 @@ import { useIsAdmin } from "components/auth/providers";
 interface MenuElementsProps {
   isDrawer: boolean;
 }
-
 export default function MenuElements({ isDrawer }: MenuElementsProps) {
   const isAdmin = useIsAdmin();
   const { isSignedIn } = useUser();
+  const menuItemStyle = isDrawer ? "hover:bg-primary-dark" : "";
+  const menuWithSubItemsStyle = isDrawer ? "pt-2" : "justify-center";
 
   return (
-    <ul className="menu menu-horizontal p-0">
-      <li>
+    <ul className={`menu ${isDrawer ? "pt-1" : "menu-horizontal"} p-0`}>
+      <li className={menuItemStyle}>
         <NavItem href="/" isLeaf={true} name="Home" />
       </li>
-      <li>
+      <li className={menuItemStyle}>
         <NavItem href="/concerts/calendar" isLeaf={true} name="Concert Calendar" />
       </li>
-      <li>
+      <li className={menuItemStyle}>
         <NavItem href="/subscriptions" name="Mailing List" />
       </li>
-      <li>
+      <li className={menuWithSubItemsStyle}>
         <Memberships isDrawer={isDrawer} />
       </li>
-      <li>
+      <li className={menuWithSubItemsStyle}>
         <About isDrawer={isDrawer} />
       </li>
       {isSignedIn && isAdmin && (
-        <li>
+        <li className={menuWithSubItemsStyle}>
           <Admin isDrawer={isDrawer} />
         </li>
       )}

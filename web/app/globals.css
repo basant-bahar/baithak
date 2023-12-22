@@ -74,16 +74,16 @@
     @apply my-1;
   }
   .navbar-drawer .nav-sub-wrapper {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
   }
   .navbar-drawer .nav-sub-wrapper:hover {
     background-color: unset;
   }
   .nav-sub-link {
-    @apply nav-link block px-3 py-2 text-sm w-full text-left hover:bg-primary-dark;
-    padding-left: 1.75rem !important;
+    @apply nav-link block py-2 text-sm w-full text-left hover:bg-primary-dark;
+    padding-left: 3rem !important;
   }
   .nav-link.selected {
     @apply bg-primary-dark;
