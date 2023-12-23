@@ -6,6 +6,7 @@ import ConcertCarousel, { concertCalendarDetail } from "components/concert/conce
 import { graphql, getFragmentData } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import { getSimpleDateTime } from "../../page";
+import { concertsForCalendar } from "graphql/concert";
 
 export default async function Calendar() {
   const calendarConcertsData = await getConcertCalendarData();
@@ -39,17 +40,3 @@ async function getConcertCalendarData() {
   });
   return data && data.concerts;
 }
-
-const concertsForCalendar = graphql(`
-  query concertsForCalendar($start: LocalDateTime, $end: LocalDateTime) {
-    concerts(
-      where: {
-        and: [{ startTime: { gte: $start } }, { startTime: { lte: $end } }]
-        publish: { eq: true }
-      }
-      orderBy: { startTime: ASC }
-    ) {
-      ...ConcertCalendarDetail
-    }
-  }
-`);

@@ -43,7 +43,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   const venueAddress = getVenueAddress(venue);
 
   function googleEventDateLink() {
-    const venueString = `${venue.name}, ${venueAddress}`;
+    const venueString = venue ? `${venue.name}, ${venueAddress}` : "Venue TBD";
     const googleDate = (date: Date) => {
       return format(date, "yyyyMMdd'T'HHmmssX");
     };

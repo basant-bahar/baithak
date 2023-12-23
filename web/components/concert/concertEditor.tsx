@@ -35,7 +35,6 @@ export type ConcertArtistEditInfo = Partial<ConcertArtistInfo>;
 const newConcert = {
   title: "",
   description: "",
-  venue: { id: 1 },
   photoUrl: "",
   ticketLink: "",
   memberPrice: 0,
@@ -54,7 +53,9 @@ export default function ConcertEditor(props: ConcertEditorProps) {
   const venues = props.venues.map((v) => {
     return { ...getFragmentData(venueDetails, v), id: v.id };
   });
-  const [concertData, setConcertData] = useState(concert ? concert : newConcert);
+  const [concertData, setConcertData] = useState(
+    concert ? concert : { ...newConcert, venue: { id: venues[0].id } }
+  );
   const [concertArtists, setConcertArtists] = useState<ConcertArtistEditInfo[]>(
     [...concertData.mainArtists, ...concertData.accompanyingArtists].map((artistData) => {
       const concertArtist = getFragmentData(concertArtistInfo, artistData);

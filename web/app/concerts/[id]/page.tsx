@@ -1,7 +1,7 @@
 import React from "react";
 import ConcertView from "components/concert/concertView";
-import { graphql } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
+import { getConcertView } from "graphql/concert";
 
 interface ViewConcertProps {
   params: { id: string };
@@ -27,12 +27,3 @@ async function getConcertFor(id: string) {
   });
   return data.concert;
 }
-
-const getConcertView = graphql(`
-  query getConcertView($id: Uuid!) {
-    concert(id: $id) {
-      id
-      ...ConcertDetails
-    }
-  }
-`);

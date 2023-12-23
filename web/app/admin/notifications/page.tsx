@@ -21,6 +21,7 @@ export default function NotificationList() {
           getNotifications,
           deleteNotification,
           undefined,
+          undefined,
           true
         )
       }

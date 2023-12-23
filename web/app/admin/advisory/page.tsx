@@ -5,7 +5,6 @@ import { useQuery, useMutation } from "@apollo/client";
 import { getFragmentData, graphql } from "__generated__";
 import PageHeader from "components/common/pageHeader";
 import { advisoryDetails, getAdvisories } from "../../../graphql/advisory";
-import { client } from "../../apollo-client";
 
 const newAdvisory = {
   level: "Warning",
@@ -18,9 +17,15 @@ export default function Advisory() {
   const [advisoryData, setAdvisoryData] = useState(newAdvisory);
 
   const { data, loading } = useQuery(getAdvisories);
-  const [updateAdvisoryMutation] = useMutation(updateAdvisory);
-  const [createAdvisoryMutation] = useMutation(createAdvisory);
-  const [deleteAdvisoryMutation] = useMutation(deleteAdvisory);
+  const [updateAdvisoryMutation] = useMutation(updateAdvisory, {
+    refetchQueries: [{ query: getAdvisories }, { query: getAdvisory }],
+  });
+  const [createAdvisoryMutation] = useMutation(createAdvisory, {
+    refetchQueries: [{ query: getAdvisories }, { query: getAdvisory }],
+  });
+  const [deleteAdvisoryMutation] = useMutation(deleteAdvisory, {
+    refetchQueries: [{ query: getAdvisories }, { query: getAdvisory }],
+  });
 
   useEffect(() => {
     if (data && data.advisories && data.advisories[0]) {
@@ -30,9 +35,7 @@ export default function Advisory() {
     }
   }, [data]);
 
-  if (loading) {
-    return <>Loading...</>;
-  }
+  if (loading) return null;
 
   function selectLevel(e: React.ChangeEvent<HTMLSelectElement>) {
     setAdvisoryData({ ...advisoryData, level: e.target.value });
@@ -52,27 +55,22 @@ export default function Advisory() {
     }).then((_) => {
       setAdvisoryData(newAdvisory);
       setAdvisoryId(undefined);
-
-      client.cache.modify({
-        fields: {
-          advisories(existingAdvisories, { readField }) {
-            return existingAdvisories.filter(
-              (advisoryRef: any) => id !== readField("id", advisoryRef)
-            );
-          },
-        },
-      });
     });
   }
 
   async function saveAdvisory() {
     if (advisoryId) {
-      await updateAdvisoryMutation({
+      const result = await updateAdvisoryMutation({
         variables: {
           id: advisoryId,
           data: advisoryData,
         },
       });
+      const updatedAdvisory = getFragmentData(advisoryDetails, result.data?.updateAdvisory);
+      if (updatedAdvisory) {
+        setAdvisoryData(updatedAdvisory);
+        setAdvisoryId(updatedAdvisory.id);
+      }
     } else {
       const result = await createAdvisoryMutation({
         variables: {
@@ -85,17 +83,6 @@ export default function Advisory() {
       if (currentAdvisory) {
         setAdvisoryData(currentAdvisory);
         setAdvisoryId(currentAdvisory.id);
-        client.cache.modify({
-          fields: {
-            advisories(existingAdvisories, { readField }) {
-              const newAdvisoryRef = client.cache.writeFragment({
-                data: currentAdvisory,
-                fragment: advisoryDetails,
-              });
-              return [...existingAdvisories, newAdvisoryRef];
-            },
-          },
-        });
       }
     }
   }

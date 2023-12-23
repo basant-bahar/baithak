@@ -148,6 +148,6 @@ export function getVenueAddress(venue: {
   state: string;
   zip: string;
 }) {
-  const showAddress = venue.name !== "Online" && venue.name !== "TBD";
+  const showAddress = venue && venue.name !== "Online" && venue.name !== "TBD";
   return showAddress ? `${venue.street}, ${venue.city} ${venue.state} ${venue.zip}` : "";
 }

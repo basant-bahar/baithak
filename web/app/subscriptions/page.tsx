@@ -17,7 +17,7 @@ interface SubscriptionProps {
 
 export default function Subscriptions(props: SubscriptionProps) {
   const confirmationMessage =
-    "A confirmation email has been sent. Please follow the instructions in it.";
+    "If this is a new subscription, you should receive a confirmation email. Please follow the instructions in it.";
   const [email, setEmail] = useState("");
   const [subscribeSuccessful, setSubscribeSuccessful] = useState<boolean | undefined>();
   const [unsubscribeSuccessful, setUnsubscribeSuccessful] = useState<boolean | undefined>();

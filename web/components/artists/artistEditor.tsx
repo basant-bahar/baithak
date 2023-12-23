@@ -97,7 +97,11 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           </div>
           <div className="form-row">
             <label className="form-label">Instruments</label>
-            <TagInput existingTags={artistData.instruments} onChange={updateInstrument} />
+            <TagInput
+              existingTags={artistData.instruments}
+              placeholder="Press enter to add instrument"
+              onChange={updateInstrument}
+            />
           </div>
           <div className="form-row">
             <label className="form-label">Bio</label>
@@ -129,7 +133,11 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           </div>
           <div className="form-row">
             <label className="form-label">Youtube</label>
-            <TagInput existingTags={youtubeVideoIds} onChange={updateYoutubeIds} />
+            <TagInput
+              existingTags={youtubeVideoIds}
+              placeholder="Press enter to add youtube video id"
+              onChange={updateYoutubeIds}
+            />
           </div>
           <div className="form-row max-xs:flex max-xs:gap-0">
             <div className="form-label max-xs:gap-0">

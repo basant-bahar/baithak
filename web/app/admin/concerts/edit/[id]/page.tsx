@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { graphql } from "__generated__";
 import ConcertEditor from "components/concert/concertEditor";
-import { searchConcert } from "../../../../../graphql/concert";
+import { concertsForCalendar, searchConcert } from "../../../../../graphql/concert";
 import { searchVenues } from "../../../../../graphql/venues";
 import { ConcertCreationInput, ConcertDetailsFragment } from "__generated__/graphql";
+import { getSimpleDateTime } from "app/page";
+import { endOfYear, startOfYear } from "date-fns";
 
 interface EditConcertProps {
   params: { id: string };
@@ -36,11 +38,23 @@ function UpdateConcert({ id }: UpdateConcertProps) {
   const [updateConcertMutation] = useMutation(updateConcert);
 
   const saveConcert = async (concertUpdateData: ConcertDetailsFragment) => {
+    const today = new Date();
+
     updateConcertMutation({
       variables: {
         id,
         data: concertUpdateData,
       },
+      refetchQueries: [
+        { query: searchConcert, variables: { search: "%%" } },
+        {
+          query: concertsForCalendar,
+          variables: {
+            start: getSimpleDateTime(startOfYear(today)),
+            end: getSimpleDateTime(endOfYear(today)),
+          },
+        },
+      ],
     }).then((_) => router.back());
   };
 
@@ -71,10 +85,21 @@ function CreateConcert() {
   });
 
   const saveConcert = (concert: ConcertCreationInput) => {
+    const today = new Date();
+
     addConcert({
       variables: {
         data: concert,
       },
+      refetchQueries: [
+        {
+          query: concertsForCalendar,
+          variables: {
+            start: getSimpleDateTime(startOfYear(today)),
+            end: getSimpleDateTime(endOfYear(today)),
+          },
+        },
+      ],
     }).then((_) => router.back());
   };
 

@@ -4,8 +4,10 @@ import React from "react";
 import { getSeparatedDateDetails } from "utils";
 import { ConcertDetailsFragment } from "__generated__/graphql";
 import EntityList, { EntityInfo } from "components/common/entityList";
-import { concertArtistInfo, searchConcert } from "../../../graphql/concert";
+import { concertArtistInfo, concertsForCalendar, searchConcert } from "../../../graphql/concert";
 import { getFragmentData, graphql } from "__generated__";
+import { getSimpleDateTime } from "app/page";
+import { endOfYear, startOfYear } from "date-fns";
 
 export default function ConcertList() {
   function descFn(concert: ConcertDetailsFragment) {
@@ -19,6 +21,16 @@ export default function ConcertList() {
     return `${concert.title} (${artistStr}) on ${date.month} ${date.date}, ${date.year} ${date.time}`;
   }
 
+  const today = new Date();
+  const deleteRefetchQueries = [
+    {
+      query: concertsForCalendar,
+      variables: {
+        start: getSimpleDateTime(startOfYear(today)),
+        end: getSimpleDateTime(endOfYear(today)),
+      },
+    },
+  ];
   return (
     <EntityList
       entityInfo={
@@ -27,7 +39,8 @@ export default function ConcertList() {
           "Concerts",
           "concerts",
           searchConcert,
-          deleteConcert
+          deleteConcert,
+          deleteRefetchQueries
         )
       }
       descFn={descFn}

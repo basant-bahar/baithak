@@ -66,3 +66,26 @@ export const searchConcert = graphql(`
     }
   }
 `);
+
+export const concertsForCalendar = graphql(`
+  query concertsForCalendar($start: LocalDateTime, $end: LocalDateTime) {
+    concerts(
+      where: {
+        and: [{ startTime: { gte: $start } }, { startTime: { lte: $end } }]
+        publish: { eq: true }
+      }
+      orderBy: { startTime: ASC }
+    ) {
+      ...ConcertCalendarDetail
+    }
+  }
+`);
+
+export const getConcertView = graphql(`
+  query getConcertView($id: Uuid!) {
+    concert(id: $id) {
+      id
+      ...ConcertDetails
+    }
+  }
+`);

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { InternalRefetchQueryDescriptor, useMutation, useQuery } from "@apollo/react-hooks";
 import { DocumentNode } from "graphql";
 
 type Entity<D> = { id: number } & D;
@@ -18,6 +18,7 @@ export class EntityInfo<D> {
   resourcePath: string; // an overloaded cpncept tp represent the path name for UI and name of the data in the list query (TODO: Separate them)
   searchQueryDocument: DocumentNode;
   deleteMutationDocument: DocumentNode;
+  deleteRefetchQueries?: InternalRefetchQueryDescriptor[];
   additionalButtons?: JSX.Element;
   showViewButton?: boolean;
 
@@ -27,6 +28,7 @@ export class EntityInfo<D> {
     resourcePath: string,
     searchQueryDocument: DocumentNode,
     deleteMutationDocument: DocumentNode,
+    deleteRefetchQueries?: InternalRefetchQueryDescriptor[],
     additionalButtons?: JSX.Element,
     showViewButton?: boolean
   ) {
@@ -35,6 +37,7 @@ export class EntityInfo<D> {
     this.resourcePath = resourcePath;
     this.searchQueryDocument = searchQueryDocument;
     this.deleteMutationDocument = deleteMutationDocument;
+    this.deleteRefetchQueries = deleteRefetchQueries;
     this.additionalButtons = additionalButtons;
     this.showViewButton = showViewButton;
   }
@@ -48,6 +51,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
     resourcePath,
     searchQueryDocument,
     deleteMutationDocument,
+    deleteRefetchQueries,
     additionalButtons,
     showViewButton,
   } = entityInfo;
@@ -70,9 +74,14 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   }
 
   async function deleteEntity(id: number) {
+    const updatedRefetchQueries = deleteRefetchQueries || [];
+    updatedRefetchQueries?.push({ query: searchQueryDocument, variables: { search: "%%" } });
+
     await deleteMutation({
       variables: { id },
-      refetchQueries: [{ query: searchQueryDocument, variables: { search: "%%" } }],
+      refetchQueries: updatedRefetchQueries,
+    }).then((_) => {
+      setSearchStr("");
     });
   }
 

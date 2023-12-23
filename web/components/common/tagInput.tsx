@@ -5,10 +5,15 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 
 interface TagInputProps {
   existingTags?: string[];
+  placeholder?: string;
   onChange: (tags: string[]) => void;
 }
 
-export default function TagInput({ existingTags = [], onChange }: TagInputProps) {
+export default function TagInput({
+  existingTags = [],
+  placeholder = "Press enter to add new",
+  onChange,
+}: TagInputProps) {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>(existingTags);
 
@@ -44,11 +49,11 @@ export default function TagInput({ existingTags = [], onChange }: TagInputProps)
     <div className="col-span-2">
       <div className="flex gap-2">{tagElements}</div>
       <input
-        className="simple-input mt-1 max-lg:w-48"
+        className="simple-input mt-1 min-w-[300px]"
         value={tag}
         onChange={handleTagChange}
         onKeyDown={handleEnter}
-        placeholder="Press enter to add new"
+        placeholder={placeholder}
       />
     </div>
   );
