@@ -1,4 +1,4 @@
 target/*
 generated/*
-.env
+.env.*
 docker-compose.yml
