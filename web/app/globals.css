@@ -83,6 +83,9 @@
   }
   .nav-sub-link {
     @apply nav-link block py-2 text-sm w-full text-left hover:bg-primary-dark;
+    padding-left: 2rem !important;
+  }
+  .navbar-drawer .nav-sub-link {
     padding-left: 3rem !important;
   }
   .nav-link.selected {
