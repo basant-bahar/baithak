@@ -1,9 +1,14 @@
 import { create, getNumericDate, verify } from "https://deno.land/x/djwt@v2.4/mod.ts";
 
-export async function createJwt(payload: Record<string, unknown>, secret: string): Promise<string> {
+export async function createJwt(
+  payload: Record<string, unknown>,
+  secret: string,
+  expirySeconds: number
+): Promise<string> {
+  const expiry = getNumericDate(expirySeconds);
   return await create(
     { alg: "HS256", typ: "JWT" },
-    { exp: computeExpiry(60 * 60 * 24), ...payload },
+    { exp: expiry, ...payload },
     await computeKey(secret)
   );
 }
@@ -19,8 +24,4 @@ async function computeKey(secret: string) {
     "sign",
     "verify",
   ]);
-}
-
-export function computeExpiry(expirationPeriodSeconds: number): number {
-  return getNumericDate(expirationPeriodSeconds);
 }

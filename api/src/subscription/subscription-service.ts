@@ -1,6 +1,6 @@
-import _type from "../../generated/exograph.d.ts";
-import { processAndSendEmail } from "../utils/processAndSendEmail.ts";
-import { verifyCode } from "../utils/codeManagement.ts";
+import _type, { ExographPriv } from "../../generated/exograph.d.ts";
+import { processAndSendEmail } from "./processAndSendEmail.ts";
+import { verifyCode } from "./codeManagement.ts";
 
 const deleteSubscription = `
   mutation deleteSubscription($email: String) {
@@ -47,7 +47,8 @@ export async function initiateSubscribe(email: string, exograph: ExographPriv) {
       email,
       from,
       hostUrl,
-      subject
+      subject,
+      subscriptionJwtSecret as string
     );
   }
   return "OK";
@@ -83,7 +84,8 @@ export async function initiateUnsubscribe(email: string, exograph: ExographPriv)
       email,
       from,
       hostUrl,
-      subject
+      subject,
+      subscriptionJwtSecret as string
     );
   }
   return "OK";
