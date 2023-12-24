@@ -27,7 +27,11 @@ const ConcertsRsvp = (props: ConcertsRsvpProps) => {
     const main = getFragmentData(concertArtistInfo, mainConcertArtist);
     const nameText =
       mainArtistsCount > 1 ? `${main.artist.name} (${main.instrument})` : main.artist.name;
-    return <div className="cursor-pointer">{nameText} </div>;
+    return (
+      <div key={main.id} className="cursor-pointer">
+        {nameText}{" "}
+      </div>
+    );
   });
   const startDate = getSeparatedDateDetails(new Date(new Date(concert.startTime + "Z")));
   const endDate = getSeparatedDateDetails(new Date(new Date(concert.endTime + "Z")));
