@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "graphql-codegen",
     "dev": "next dev -p 3000",
+    "prebuild": "graphql-codegen",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
