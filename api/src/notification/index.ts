@@ -1,4 +1,8 @@
-import { Marked } from "https://deno.land/x/markdown@v2.0.0/mod.ts";
+import rehypeStringify from "npm:rehype-stringify";
+import remarkParse from "npm:remark-parse";
+import remarkRehype from "npm:remark-rehype";
+import { unified } from "npm:unified";
+
 import * as Eta from "https://deno.land/x/eta@v1.12.3/mod.ts";
 import { sendEmail } from "../email/index.ts";
 import type { Exograph } from "../../generated/exograph.d.ts";
@@ -75,9 +79,10 @@ export async function formatNotification(
   const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
     .notification;
   const concert = notification.concert;
-  const message = Marked.parse(notification.message).content;
-  const postMessage = Marked.parse(notification.postMessage).content;
-  const description = concert ? Marked.parse(concert.description).content : "";
+  const message = await toHtml(notification.message);
+  const postMessage = await toHtml(notification.postMessage);
+  const description = concert ? await toHtml(concert.description) : "";
+
   const nextConcertReferenceDate = concert
     ? concert.startTime
     : new Date().toISOString().slice(0, -1);
@@ -97,6 +102,12 @@ export async function formatNotification(
   }
 
   return template;
+}
+
+async function toHtml(markdown: string): Promise<string> {
+  return String(
+    await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(markdown)
+  );
 }
 
 const subscribersQuery = `
