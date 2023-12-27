@@ -33,29 +33,48 @@ export async function sendEmail(input: {
   subject: string;
   message: string;
   from: string;
-  to: string | [string];
-  cc?: string | [string];
+  to: string;
+  cc?: string;
   bcc?: string | [string];
-}): Promise<boolean> {
+}): Promise<string> {
   const { subject, message, from, to, cc, bcc } = input;
-  const client = createClient();
+  const bccs = typeof bcc === "string" ? [bcc] : bcc;
 
-  try {
-    await client.send({
-      to,
-      cc,
-      bcc,
-      from,
-      subject,
-      content: "auto",
-      html: message,
-      priority: "low",
-    });
-  } catch (e) {
-    console.log("Error sending email", e);
-    throw e;
+  if (bccs) {
+    const batchSize = 800;
+    let remaining = bccs;
+    while (remaining.length > 0) {
+      const batchedBccs = bccs.slice(0, batchSize);
+      await sendBatch(subject, message, from, to, cc, batchedBccs);
+      remaining = remaining.slice(batchSize);
+    }
+    return remaining.length === 0
+      ? "ok"
+      : `Error while sending emails. Remaining emails: ${remaining.length}`;
+  } else {
+    await sendBatch(subject, message, from, to, cc);
+    return "ok";
   }
+}
 
+async function sendBatch(
+  subject: string,
+  message: string,
+  from: string,
+  to: string,
+  cc?: string,
+  bccs?: string[]
+): Promise<void> {
+  const client = createClient();
+  await client.send({
+    to,
+    cc,
+    bcc: bccs,
+    from,
+    subject,
+    content: "auto",
+    html: message,
+    priority: "low",
+  });
   await client.close();
-  return true;
 }

@@ -1,5 +1,5 @@
 import type { ExographError } from "../../generated/exograph.d.ts";
-import { ExographPriv } from "../../generated/exograph.d.ts";
+import type { ExographPriv } from "../../generated/exograph.d.ts";
 import type { AuthContext } from "../../generated/contexts.d.ts";
 
 const signUpContext = {

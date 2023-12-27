@@ -67,7 +67,7 @@ async function sendRsvpEmail(
   concertId: number,
   email: string,
   numTickets: number
-) {
+): Promise<string> {
   const from = Deno.env.get("CONTACT_EMAIL") || "";
   const hostUrl = Deno.env.get("HOST_URL");
 
@@ -88,7 +88,7 @@ async function sendRsvpEmail(
   }
 
   try {
-    await sendEmail({
+    return await sendEmail({
       subject,
       message: template || "",
       to: email,

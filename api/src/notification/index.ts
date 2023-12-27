@@ -1,6 +1,7 @@
 import { Marked } from "https://deno.land/x/markdown@v2.0.0/mod.ts";
 import * as Eta from "https://deno.land/x/eta@v1.12.3/mod.ts";
 import { sendEmail } from "../email/index.ts";
+import type { Exograph } from "../../generated/exograph.d.ts";
 
 const upcomingConcertQuery = `
   query($today: LocalDateTime) {
@@ -117,19 +118,20 @@ export async function emailNotification(
   const subscribers = await exograph.executeQuery(subscribersQuery, { group: emailGroupName });
   const subject = notification.subject;
   const toFrom = Deno.env.get("EMAIL_NOTIFICATION_FROM_ADDRESS");
+  if (!toFrom) throw Error("Env EMAIL_NOTIFICATION_FROM_ADDRESS is not set");
 
   try {
-    const bccs: [string] = subscribers.subscriptions.map((s) => s.email);
+    const bccs: [string] = subscribers.subscriptions.map((s: { email: string }) => s.email);
 
-    await sendEmail({
+    return await sendEmail({
       subject: subject,
       message: notificationText,
       to: toFrom,
       from: toFrom,
-      cc: bccs,
+      bcc: bccs,
     });
-    return "success";
   } catch (e) {
     console.log(e);
+    throw e;
   }
 }
