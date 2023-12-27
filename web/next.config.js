@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: process.env.NEXT_PUBLIC_UPLOAD_DOMAINS.split(','),
+    domains: process.env.UPLOAD_DOMAINS.split(','),
   },
 }
 
