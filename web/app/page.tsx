@@ -4,6 +4,9 @@ import ConcertView from "components/concert/concertView";
 import { graphql } from "__generated__";
 import { ssrApolloClient } from "./apollo-client";
 
+// TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
+export const revalidate = 0;
+
 export default async function Home() {
   const concertData = await getFrontPageConcert();
 
