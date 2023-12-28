@@ -4,16 +4,18 @@ import SubNavArrow from "./subNavArrow";
 import { useDropdown } from "./useDropdown";
 
 interface AdminProps {
+  isSelected: boolean;
   isDrawer?: boolean;
 }
 
-export default function Admin({ isDrawer }: AdminProps) {
+export default function Admin({ isSelected, isDrawer }: AdminProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideAdmin = (e: React.MouseEvent) => {
     close();
   };
-  const mainClassName = `nav-sub-wrapper ${isDrawer ? " p-0 h-fit" : ""}`;
+  const selectedClass = isSelected ? "selected" : "";
+  const mainClassName = `nav-sub-wrapper ${selectedClass} ${isDrawer ? " p-0 h-fit" : ""}`;
   const adminLabelClass = `nav-sub-name ${isDrawer ? " pl-3" : ""}`;
 
   return (

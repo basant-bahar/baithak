@@ -2,12 +2,14 @@ import React, { RefObject } from "react";
 import Link from "next/link";
 import { useDropdown } from "./useDropdown";
 import SubNavArrow from "./subNavArrow";
+import { usePathname } from "next/navigation";
 
 interface MembershipsProps {
+  isSelected: boolean;
   isDrawer?: boolean;
 }
 
-export default function Memberships({ isDrawer }: MembershipsProps) {
+export default function Memberships({ isSelected, isDrawer }: MembershipsProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideMembership = (e: React.MouseEvent) => {
@@ -38,7 +40,8 @@ export default function Memberships({ isDrawer }: MembershipsProps) {
       </Link>
     </>
   );
-  const mainClassName = `nav-sub-wrapper ${isDrawer ? " p-0 h-fit" : ""}`;
+  const selectedClass = isSelected ? "selected" : "";
+  const mainClassName = `nav-sub-wrapper ${selectedClass} ${isDrawer ? " p-0 h-fit" : ""}`;
   const membershipLabelClass = `nav-sub-name ${isDrawer ? " pl-3" : ""}`;
 
   return (

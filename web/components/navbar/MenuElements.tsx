@@ -7,6 +7,7 @@ import About from "./aboutMenu";
 import Admin from "./adminMenu";
 import { useUser } from "@clerk/clerk-react";
 import { useIsAdmin } from "components/auth/providers";
+import { usePathname } from "next/navigation";
 
 interface MenuElementsProps {
   isDrawer: boolean;
@@ -14,6 +15,7 @@ interface MenuElementsProps {
 export default function MenuElements({ isDrawer }: MenuElementsProps) {
   const isAdmin = useIsAdmin();
   const { isSignedIn } = useUser();
+  const pathname = usePathname();
   const menuItemStyle = isDrawer ? "hover:bg-primary-dark" : "";
   const menuWithSubItemsStyle = isDrawer ? "pt-2" : "justify-center";
 
@@ -29,14 +31,14 @@ export default function MenuElements({ isDrawer }: MenuElementsProps) {
         <NavItem href="/subscriptions" name="Mailing List" />
       </li>
       <li className={menuWithSubItemsStyle}>
-        <Memberships isDrawer={isDrawer} />
+        <Memberships isDrawer={isDrawer} isSelected={pathname?.startsWith("/memberships")} />
       </li>
       <li className={menuWithSubItemsStyle}>
-        <About isDrawer={isDrawer} />
+        <About isDrawer={isDrawer} isSelected={pathname?.startsWith("/about")} />
       </li>
       {isSignedIn && isAdmin && (
         <li className={menuWithSubItemsStyle}>
-          <Admin isDrawer={isDrawer} />
+          <Admin isDrawer={isDrawer} isSelected={pathname?.startsWith("/admin")} />
         </li>
       )}
     </ul>

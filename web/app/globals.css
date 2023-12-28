@@ -35,7 +35,7 @@
   }
 
   .menu-horizontal li {
-    @apply mx-1 items-center hover:bg-primary-dark;
+    @apply mx-1 items-center hover:bg-primary-dark hover:text-secondary;
   }
   .menu-horizontal .navbar-sub.login,
   .menu-horizontal .navbar-sub.admin {
@@ -62,7 +62,7 @@
     right: -12px;
   }
   .nav-link {
-    @apply h-10 text-secondary;
+    @apply h-10 text-secondary !important;
     user-select: none;
     cursor: pointer;
     padding: 0;
@@ -82,14 +82,14 @@
     background-color: unset;
   }
   .nav-sub-link {
-    @apply nav-link block py-2 text-sm w-full text-left hover:bg-primary-dark;
+    @apply nav-link block py-2 text-sm w-full text-left hover:bg-primary-dark text-secondary;
     padding-left: 2rem !important;
   }
   .navbar-drawer .nav-sub-link {
     padding-left: 3rem !important;
   }
-  .nav-link.selected {
-    @apply bg-primary-dark;
+  .nav-link.selected, .nav-sub-wrapper.selected {
+    @apply bg-primary-dark !important;
   }
   .nav-sub-name {
     @apply inline-flex items-center font-medium text-sm rounded-md text-secondary;

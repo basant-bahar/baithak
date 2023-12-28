@@ -4,16 +4,18 @@ import { useDropdown } from "./useDropdown";
 import SubNavArrow from "./subNavArrow";
 
 interface AboutProps {
+  isSelected: boolean;
   isDrawer?: boolean;
 }
 
-export default function About({ isDrawer }: AboutProps) {
+export default function About({ isSelected, isDrawer }: AboutProps) {
   const [containerRef, actionRef, isOpen, close] = useDropdown();
 
   const hideAbout = (e: React.MouseEvent) => {
     close();
   };
-  const mainClassName = `nav-sub-wrapper ${isDrawer ? " p-0 h-fit" : ""}`;
+  const selectedClass = isSelected ? "selected" : "";
+  const mainClassName = `nav-sub-wrapper ${selectedClass} ${isDrawer ? " p-0 h-fit" : ""}`;
   const aboutLabelClass = `nav-sub-name ${isDrawer ? " pl-3" : ""}`;
 
   return (
