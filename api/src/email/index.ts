@@ -62,7 +62,12 @@ export async function sendEmail(input: {
     console.log("Error sending email ", e);
     throw e;
   } finally {
-    await client.close();
+    try {
+      await client.close();
+    } catch (e) {
+      // Denomailer errors when closing client after sending zero emails.
+      console.log("Error closing SMTP client", e);
+    }
   }
 }
 
