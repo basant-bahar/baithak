@@ -37,27 +37,37 @@ export async function sendEmail(input: {
   cc?: string;
   bcc?: string | [string];
 }): Promise<string> {
+  const client = createClient();
   const { subject, message, from, to, cc, bcc } = input;
   const bccs = typeof bcc === "string" ? [bcc] : bcc;
 
-  if (bccs) {
-    const batchSize = 800;
-    let remaining = bccs;
-    while (remaining.length > 0) {
-      const batchedBccs = bccs.slice(0, batchSize);
-      await sendBatch(subject, message, from, to, cc, batchedBccs);
-      remaining = remaining.slice(batchSize);
+  try {
+    if (bccs) {
+      const batchSize = 800;
+      let remaining = bccs;
+      while (remaining.length > 0) {
+        const batchedBccs = remaining.slice(0, batchSize);
+        await sendBatch(client, subject, message, from, to, cc, batchedBccs);
+        remaining = remaining.slice(batchSize);
+      }
+
+      return remaining.length === 0
+        ? "ok"
+        : `Error while sending emails. Remaining emails: ${remaining.length}`;
+    } else {
+      await sendBatch(client, subject, message, from, to, cc);
+      return "ok";
     }
-    return remaining.length === 0
-      ? "ok"
-      : `Error while sending emails. Remaining emails: ${remaining.length}`;
-  } else {
-    await sendBatch(subject, message, from, to, cc);
-    return "ok";
+  } catch (e) {
+    console.log("Error sending email ", e);
+    throw e;
+  } finally {
+    await client.close();
   }
 }
 
 async function sendBatch(
+  client: SMTPClient,
   subject: string,
   message: string,
   from: string,
@@ -65,7 +75,6 @@ async function sendBatch(
   cc?: string,
   bccs?: string[]
 ): Promise<void> {
-  const client = createClient();
   await client.send({
     to,
     cc,
@@ -76,5 +85,4 @@ async function sendBatch(
     html: message,
     priority: "low",
   });
-  await client.close();
 }
