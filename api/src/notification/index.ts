@@ -110,6 +110,14 @@ async function toHtml(markdown: string): Promise<string> {
   );
 }
 
+const allSubscribersQuery = `
+  query {
+    subscriptions {
+      email
+    }
+  }
+`;
+
 const subscribersQuery = `
   query($group: String) {
     subscriptions(where: {group: {eq: $group}}) {
@@ -126,7 +134,12 @@ export async function emailNotification(
   const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
     .notification;
   const notificationText = await formatNotification(concertNotificationId, exograph);
-  const subscribers = await exograph.executeQuery(subscribersQuery, { group: emailGroupName });
+  let subscribers;
+  if (emailGroupName === "all") {
+    subscribers = await exograph.executeQuery(allSubscribersQuery);
+  } else {
+    subscribers = await exograph.executeQuery(subscribersQuery, { group: emailGroupName });
+  }
   const subject = notification.subject;
   const toFrom = Deno.env.get("EMAIL_NOTIFICATION_FROM_ADDRESS");
   if (!toFrom) throw Error("Env EMAIL_NOTIFICATION_FROM_ADDRESS is not set");
