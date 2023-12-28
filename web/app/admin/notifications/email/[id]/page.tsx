@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { graphql } from "__generated__";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ interface EmailNotificationProps {
 }
 export default function EmailNotification({ params: { id } }: EmailNotificationProps) {
   const router = useRouter();
-  const [emailTo, setEmailTo] = React.useState("Test");
+  const [emailTo, setEmailTo] = useState("test");
   let [sendNotificationEmail] = useMutation(emailNotification);
 
   function changeEmailTo(e: React.ChangeEvent<HTMLSelectElement>) {
