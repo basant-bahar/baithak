@@ -72,3 +72,12 @@ export const updateMembership = graphql(`
     }
   }
 `);
+
+export const getMembership = graphql(`
+  query getMembership($id: Uuid!) {
+    membership(id: $id) {
+      id
+      ...MembershipDetails
+    }
+  }
+`);

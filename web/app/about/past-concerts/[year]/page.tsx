@@ -4,8 +4,8 @@ import { startOfYear } from "date-fns";
 import PageHeader from "components/common/pageHeader";
 import { graphql, getFragmentData } from "__generated__";
 import { ssrApolloClient } from "../../../apollo-client";
-import { getSimpleDateTime } from "../../../page";
 import { ConcertCard } from "components/concert/concertCard";
+import { getServerDateTime } from "utils";
 
 interface PastConcertsProps {
   params: { year: string };
@@ -126,7 +126,10 @@ async function getPastConcertsByYear(year: number) {
 
   const { data } = await ssrApolloClient.query({
     query: concertsBetweenDates,
-    variables: { start: getSimpleDateTime(startDate), end: getSimpleDateTime(endDate) },
+    variables: {
+      start: getServerDateTime(startDate),
+      end: getServerDateTime(endDate),
+    },
   });
 
   return data && data.concerts;

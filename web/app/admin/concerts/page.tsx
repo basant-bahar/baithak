@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import { getSeparatedDateDetails } from "utils";
+import { getSeparatedDateDetails, getServerDateTime } from "utils";
 import { ConcertDetailsFragment } from "__generated__/graphql";
 import EntityList, { EntityInfo } from "components/common/entityList";
 import { concertArtistInfo, concertsForCalendar, searchConcert } from "../../../graphql/concert";
 import { getFragmentData, graphql } from "__generated__";
-import { getSimpleDateTime } from "app/page";
 import { endOfYear, startOfYear } from "date-fns";
 
 export default function ConcertList() {
@@ -26,8 +25,8 @@ export default function ConcertList() {
     {
       query: concertsForCalendar,
       variables: {
-        start: getSimpleDateTime(startOfYear(today)),
-        end: getSimpleDateTime(endOfYear(today)),
+        start: getServerDateTime(startOfYear(today)),
+        end: getServerDateTime(endOfYear(today)),
       },
     },
   ];

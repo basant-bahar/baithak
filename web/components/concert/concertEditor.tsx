@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import ConcertView from "./concertView";
 import PreviewContainer from "../common/previewContainer";
-import { getSimpleDateTime } from "../../app/page";
 import { artistBasicInfo, concertArtistInfo, concertDetails } from "../../graphql/concert";
 import { FragmentType, getFragmentData, makeFragmentData } from "../../__generated__";
 import { venueDetails } from "../../graphql/venues";
-import { getDateTimeStr, handleFileUpload, imageUrl } from "utils";
+import { ORG_TIMEZONE, getServerDateTime, handleFileUpload, imageUrl } from "utils";
 import PageHeader from "../common/pageHeader";
 import {
   ArtistBasicInfoFragment,
@@ -17,6 +16,7 @@ import {
 } from "../../__generated__/graphql";
 import ConcertArtistsEditor from "./concertArtistsEditor";
 import { useAuth } from "@clerk/clerk-react";
+import { formatInTimeZone } from "date-fns-tz";
 
 type ConcertEditorProps = {
   concertId?: string;
@@ -42,8 +42,8 @@ const newConcert = {
   publish: false,
   mainArtists: [],
   accompanyingArtists: [],
-  startTime: getSimpleDateTime(new Date()),
-  endTime: getSimpleDateTime(new Date()),
+  startTime: getServerDateTime(new Date()),
+  endTime: getServerDateTime(new Date()),
 };
 
 export default function ConcertEditor(props: ConcertEditorProps) {
@@ -108,14 +108,14 @@ export default function ConcertEditor(props: ConcertEditorProps) {
     endDate.setHours(date.getHours() + 3);
     setConcertData({
       ...concertData,
-      startTime: getSimpleDateTime(date),
-      endTime: getSimpleDateTime(endDate),
+      startTime: getServerDateTime(date),
+      endTime: getServerDateTime(endDate),
     });
   }
 
   function changeEndDateTime(e: React.ChangeEvent<HTMLInputElement>) {
     const date = new Date(Date.parse(e.target.value));
-    setConcertData({ ...concertData, endTime: getSimpleDateTime(date) });
+    setConcertData({ ...concertData, endTime: getServerDateTime(date) });
   }
 
   function changeDescription(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -365,4 +365,10 @@ export default function ConcertEditor(props: ConcertEditorProps) {
       </PreviewContainer>
     </>
   );
+}
+
+// Convert the given date to a format compatible with html <input type = "datetime-local" ... />
+function getDateTimeStr(rawDate?: string): string {
+  const normalizedDate = rawDate ? rawDate + "Z" : new Date();
+  return formatInTimeZone(normalizedDate, ORG_TIMEZONE, "yyyy-MM-dd HH:mm");
 }

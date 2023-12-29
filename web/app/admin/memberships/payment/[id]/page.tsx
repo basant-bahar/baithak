@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/navigation";
 import { graphql } from "__generated__";
-import { getDateStr, getSimpleDate } from "utils";
+import { getDateStr, getServerDateOnly } from "utils";
+import { getMembership } from "graphql/memberships";
 
 interface PaymentInfoProps {
   params: { id: string };
@@ -20,7 +21,10 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
   const isPayment = !payment.infoOnly;
   const header = isPayment ? "Post Payment" : "Post Info";
   const [createPaymentMutation] = useMutation(createPayment, {
-    refetchQueries: [{ query: getPaymentsForMembership, variables: { id: membershipId } }],
+    refetchQueries: [
+      { query: getPaymentsForMembership, variables: { id: membershipId } },
+      { query: getMembership, variables: { id: membershipId } },
+    ],
   });
 
   useEffect(() => {
@@ -55,7 +59,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
   };
 
   const changePaymentDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const paymentDate = getSimpleDate(new Date(Date.parse(e.target.value)));
+    const paymentDate = getServerDateOnly(new Date(Date.parse(e.target.value)));
     setPayment({ ...payment, date: paymentDate });
   };
 

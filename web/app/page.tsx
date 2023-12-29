@@ -3,6 +3,7 @@ import { ConcertRsvp } from "components/concert/concertRsvp";
 import ConcertView from "components/concert/concertView";
 import { graphql } from "__generated__";
 import { ssrApolloClient } from "./apollo-client";
+import { getServerDateTime } from "utils";
 
 // TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
 export const revalidate = 0;
@@ -23,20 +24,16 @@ export default async function Home() {
   );
 }
 
-export function getSimpleDateTime(date: Date): string {
-  return date.toISOString().slice(0, -1);
-}
-
-export async function getFrontPageConcert() {
+async function getFrontPageConcert() {
   const today = new Date();
 
   const { data: upcomingConcert } = await ssrApolloClient.query({
     query: getUpcomingConcert,
-    variables: { today: getSimpleDateTime(today) },
+    variables: { today: getServerDateTime(today) },
   });
   const { data: lastConcert } = await ssrApolloClient.query({
     query: getLastConcert,
-    variables: { today: getSimpleDateTime(today) },
+    variables: { today: getServerDateTime(today) },
   });
 
   if (upcomingConcert && upcomingConcert.concerts && upcomingConcert.concerts.length > 0) {

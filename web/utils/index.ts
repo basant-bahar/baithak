@@ -1,3 +1,5 @@
+import { formatInTimeZone } from "date-fns-tz";
+
 export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
 
 export function imageUrl(path: string): string {
@@ -13,15 +15,21 @@ type DateDetails = {
   time: string;
 };
 
+export const ORG_TIMEZONE: string = process.env.NEXT_PUBLIC_ORGANIZATION_TIMEZONE as string;
+
 export function getSeparatedDateDetails(localDate: Date): DateDetails {
-  const month = localDate.toLocaleDateString("en-US", { month: "long" });
-  const date = localDate.toLocaleDateString("en-US", { day: "numeric" });
-  const weekday = localDate.toLocaleDateString("en-US", { weekday: "long" });
-  const year = localDate.toLocaleDateString("en-US", { year: "numeric" });
+  const month = localDate.toLocaleDateString("en-US", { month: "long", timeZone: ORG_TIMEZONE });
+  const date = localDate.toLocaleDateString("en-US", { day: "numeric", timeZone: ORG_TIMEZONE });
+  const weekday = localDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: ORG_TIMEZONE,
+  });
+  const year = localDate.toLocaleDateString("en-US", { year: "numeric", timeZone: ORG_TIMEZONE });
   const time = localDate.toLocaleTimeString([], {
     hour12: true,
     hour: "numeric",
     minute: "2-digit",
+    timeZone: ORG_TIMEZONE,
   });
   return {
     month,
@@ -32,40 +40,25 @@ export function getSeparatedDateDetails(localDate: Date): DateDetails {
   };
 }
 
-const dateOptions: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-};
-
 export function getDateStr(rawDate?: string | Date): string {
-  let localDate;
+  let normalizedDate: Date | string;
   if (rawDate && rawDate instanceof Date) {
-    localDate = rawDate ? rawDate : new Date();
+    normalizedDate = rawDate;
   } else {
-    localDate = rawDate ? new Date(new Date(rawDate + "Z")) : new Date();
+    // string date
+    normalizedDate = rawDate + " T23:59:59";
   }
-  let localDateStr = localDate.toLocaleDateString("en-US", dateOptions);
-  const arr = localDateStr.split("/");
-  localDateStr = arr[2] + "-" + arr[0] + "-" + arr[1];
-  return localDateStr;
+  return formatInTimeZone(normalizedDate, ORG_TIMEZONE as string, "yyyy-MM-dd");
 }
 
-export function getDateTimeStr(rawDate?: string): string {
-  const time24Options: Intl.DateTimeFormatOptions = {
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-  };
-  const localDate = rawDate ? new Date(new Date(rawDate + "Z")) : new Date();
-  let localDateStr = getDateStr(rawDate);
-
-  const localTimeStr = localDate.toLocaleTimeString([], time24Options);
-  return localDateStr + "T" + localTimeStr;
-}
-
-export function getSimpleDate(date: Date): string {
+export function getServerDateOnly(date: Date): string {
+  // ISOString returns '2023-12-29T17:28:31.788Z' so split drops everything after 'T'
   return date.toISOString().split("T")[0];
+}
+
+// Datetime format as prefered by API server
+export function getServerDateTime(date: Date): string {
+  return date.toISOString().slice(0, -1);
 }
 
 export function parseDateYYYYMMDD(dateStr: string) {

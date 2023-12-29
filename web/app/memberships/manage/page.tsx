@@ -107,8 +107,9 @@ export default function ManageMembership() {
     }
   };
 
-  if (loading || !membership || !memberAuthInfo || meLoading || !meData)
-    return <div>Loading...</div>;
+  if (loading || !membership || !memberAuthInfo || meLoading || !meData) {
+    return null;
+  }
 
   return (
     <div className="main-container">

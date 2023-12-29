@@ -8,8 +8,8 @@ import ConcertEditor from "components/concert/concertEditor";
 import { concertsForCalendar, searchConcert } from "../../../../../graphql/concert";
 import { searchVenues } from "../../../../../graphql/venues";
 import { ConcertCreationInput, ConcertDetailsFragment } from "__generated__/graphql";
-import { getSimpleDateTime } from "app/page";
 import { endOfYear, startOfYear } from "date-fns";
+import { getServerDateTime } from "utils";
 
 interface EditConcertProps {
   params: { id: string };
@@ -50,8 +50,8 @@ function UpdateConcert({ id }: UpdateConcertProps) {
         {
           query: concertsForCalendar,
           variables: {
-            start: getSimpleDateTime(startOfYear(today)),
-            end: getSimpleDateTime(endOfYear(today)),
+            start: getServerDateTime(startOfYear(today)),
+            end: getServerDateTime(endOfYear(today)),
           },
         },
       ],
@@ -95,8 +95,8 @@ function CreateConcert() {
         {
           query: concertsForCalendar,
           variables: {
-            start: getSimpleDateTime(startOfYear(today)),
-            end: getSimpleDateTime(endOfYear(today)),
+            start: getServerDateTime(startOfYear(today)),
+            end: getServerDateTime(endOfYear(today)),
           },
         },
       ],

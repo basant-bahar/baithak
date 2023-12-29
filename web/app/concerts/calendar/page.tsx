@@ -5,8 +5,8 @@ import { CalendarConcertCard } from "components/concert/calendarConcertCard";
 import ConcertCarousel, { concertCalendarDetail } from "components/concert/concertCarousel";
 import { graphql, getFragmentData } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
-import { getSimpleDateTime } from "../../page";
 import { concertsForCalendar } from "graphql/concert";
+import { getServerDateTime } from "utils";
 
 export default async function Calendar() {
   const calendarConcertsData = await getConcertCalendarData();
@@ -34,8 +34,8 @@ async function getConcertCalendarData() {
   const { data } = await ssrApolloClient.query({
     query: concertsForCalendar,
     variables: {
-      start: getSimpleDateTime(startOfYear(today)),
-      end: getSimpleDateTime(endOfYear(today)),
+      start: getServerDateTime(startOfYear(today)),
+      end: getServerDateTime(endOfYear(today)),
     },
   });
   return data && data.concerts;

@@ -6,6 +6,7 @@ import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { getFragmentData, graphql } from "__generated__";
 import PageHeader from "components/common/pageHeader";
 import {
+  getMembership,
   membershipDetails,
   searchMembership,
   updateMembershipAndUpdateAuthUser,
@@ -390,15 +391,6 @@ const UserDetailsComponent = ({ changeUserInfo }: UserComponentProps) => {
     </div>
   );
 };
-
-const getMembership = graphql(`
-  query getMembership($id: Uuid!) {
-    membership(id: $id) {
-      id
-      ...MembershipDetails
-    }
-  }
-`);
 
 const createMembershipAndUpdateAuthUser = graphql(`
   mutation createMembershipAndUpdateAuthUser(

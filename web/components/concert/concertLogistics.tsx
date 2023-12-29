@@ -5,7 +5,7 @@ import format from "date-fns/format";
 import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import VenueView from "../venues/venueView";
-import { getVenueAddress, ORGANIZATION_NAME } from "utils";
+import { getVenueAddress, ORG_TIMEZONE, ORGANIZATION_NAME } from "utils";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -24,8 +24,14 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: ORG_TIMEZONE,
   };
-  const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", minute: "2-digit" };
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour12: true,
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: ORG_TIMEZONE,
+  };
 
   const isFree = props.memberPrice === 0;
   const localDate = props.startTime ? new Date(new Date(props.startTime + "Z")) : new Date();

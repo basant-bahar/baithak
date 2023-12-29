@@ -6,7 +6,7 @@ import { useLazyQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import { graphql, getFragmentData } from "__generated__";
 import { membershipDetails, searchMembership } from "../../../graphql/memberships";
-import { getSimpleDate } from "utils";
+import { getServerDateOnly } from "utils";
 import { MembershipDetailsFragment } from "__generated__/graphql";
 
 export default function MembershipList() {
@@ -49,7 +49,7 @@ const AdditionalButtons = () => {
   useEffect(() => {
     const getMemberships = async () => {
       const { data } = await getActiveMembershipsQuery({
-        variables: { expiry: getSimpleDate(new Date()) },
+        variables: { expiry: getServerDateOnly(new Date()) },
       });
       const membershipMap = new Map();
       membershipMap.set("Couple", getFragmentData(membershipCount, data?.couple)?.id?.count);
@@ -69,7 +69,7 @@ const AdditionalButtons = () => {
     const start = new Date();
     start.setMonth(today.getMonth() - 6);
     const { data } = await membershipsForDeskPrintout({
-      variables: { expiry: getSimpleDate(start) },
+      variables: { expiry: getServerDateOnly(start) },
     });
 
     const border = "1px solid gray";
