@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: process.env.UPLOAD_DOMAINS.split(','),
-  },
+    unoptimized: true,
+  }
 }
 
 module.exports = nextConfig
