@@ -1,5 +1,5 @@
 import React from "react";
-import { getSeparatedDateDetails, imageUrl } from "utils";
+import { LocalizedDate, imageUrl } from "utils";
 import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 
 interface ConcertCarouselSlideProps {
@@ -19,8 +19,10 @@ export default function ConcertCarouselSlide({
     .map((m) => (m.artist?.title ? m.artist.title + " " + m.artist.name : m.artist?.name))
     .join(" and ");
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
-  const localDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
-  const { month, date } = getSeparatedDateDetails(localDate);
+  const utcDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
+  const localizedDate = new LocalizedDate(utcDate);
+  const month = localizedDate.getMonthString();
+  const date = localizedDate.getDateString();
   const prev = (currentSlide - 1 + totalSlides) % totalSlides;
   const next = (currentSlide + 1) % totalSlides;
 

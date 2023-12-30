@@ -1,4 +1,4 @@
-import { formatInTimeZone, getTimezoneOffset, utcToZonedTime } from "date-fns-tz";
+import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 
 export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
 
@@ -7,41 +7,61 @@ export function imageUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${path}`;
 }
 
-type DateDetails = {
-  localDate: Date;
-  month: string;
-  date: string;
-  weekday: string;
-  year: string;
-  time: string;
-};
-
 export const ORG_TIMEZONE: string = process.env.NEXT_PUBLIC_ORGANIZATION_TIMEZONE as string;
 
-export function getSeparatedDateDetails(utcDate: Date): DateDetails {
-  const localDate = utcToZonedTime(utcDate, ORG_TIMEZONE);
+const dateOptions: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  timeZone: ORG_TIMEZONE,
+};
 
-  const month = localDate.toLocaleDateString("en-US", { month: "long" });
-  const date = localDate.toLocaleDateString("en-US", { day: "numeric" });
-  const weekday = localDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    timeZone: ORG_TIMEZONE,
-  });
-  const year = localDate.toLocaleDateString("en-US", { year: "numeric" });
-  const time = localDate.toLocaleTimeString([], {
-    hour12: true,
-    hour: "numeric",
-    minute: "2-digit",
-  });
+export class LocalizedDate {
+  private utcDate: Date;
+  private localDate: Date;
 
-  return {
-    localDate,
-    month,
-    date,
-    weekday,
-    year,
-    time,
-  };
+  constructor(date: Date) {
+    this.utcDate = date;
+    const timezoneOffsetMillis = getTimezoneOffset(ORG_TIMEZONE, date);
+    this.localDate = new Date(this.utcDate.getTime() + timezoneOffsetMillis);
+  }
+
+  getHours() {
+    return this.localDate.getHours();
+  }
+
+  getDay() {
+    return this.localDate.getDay();
+  }
+
+  getDateDisplayString() {
+    return this.utcDate.toLocaleDateString("en-us", dateOptions);
+  }
+
+  getMonthString() {
+    return this.utcDate.toLocaleDateString("en-US", { month: "long", timeZone: ORG_TIMEZONE });
+  }
+  getDateString() {
+    return this.utcDate.toLocaleDateString("en-US", { day: "numeric", timeZone: ORG_TIMEZONE });
+  }
+  getWeekdayString() {
+    return this.utcDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      timeZone: ORG_TIMEZONE,
+    });
+  }
+  getYearString() {
+    return this.utcDate.toLocaleDateString("en-US", { year: "numeric", timeZone: ORG_TIMEZONE });
+  }
+  getTimeString() {
+    return this.utcDate.toLocaleTimeString([], {
+      hour12: true,
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: ORG_TIMEZONE,
+    });
+  }
 }
 
 export function getDateStr(rawDate?: string | Date): string {

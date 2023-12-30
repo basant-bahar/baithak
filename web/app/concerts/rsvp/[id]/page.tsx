@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { getSeparatedDateDetails } from "utils";
+import { LocalizedDate } from "utils";
 import PageHeader from "components/common/pageHeader";
 import { ConcertRsvp } from "components/concert/concertRsvp";
 import { concertArtistInfo, concertDetails, getConcertView } from "graphql/concert";
@@ -33,9 +33,9 @@ const ConcertsRsvp = (props: ConcertsRsvpProps) => {
       </div>
     );
   });
-  const startDate = getSeparatedDateDetails(new Date(new Date(concert.startTime + "Z")));
-  const endDate = getSeparatedDateDetails(new Date(new Date(concert.endTime + "Z")));
-  const dateTimeStr = `${startDate.weekday}, ${startDate.month} ${startDate.date}, ${startDate.year} ${startDate.time} - ${endDate.time}`;
+  const startDate = new LocalizedDate(new Date(new Date(concert.startTime + "Z")));
+  const endDate = new LocalizedDate(new Date(new Date(concert.endTime + "Z")));
+  const dateTimeStr = `${startDate.getWeekdayString()}, ${startDate.getMonthString()} ${startDate.getDateString()}, ${startDate.getYearString()} ${startDate.getTimeString()} - ${endDate.getTimeString()}`;
 
   return (
     <div className="main-container">

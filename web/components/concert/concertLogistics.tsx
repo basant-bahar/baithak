@@ -5,7 +5,7 @@ import format from "date-fns/format";
 import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import VenueView from "../venues/venueView";
-import { getSeparatedDateDetails, getVenueAddress, ORGANIZATION_NAME } from "utils";
+import { LocalizedDate, getVenueAddress, ORG_TIMEZONE, ORGANIZATION_NAME } from "utils";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -19,28 +19,21 @@ type ConcertLogisticsProps = {
 export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   const venue = getFragmentData(venueDetails, props.venue);
 
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
   const isFree = props.memberPrice === 0;
   const utcDate = props.startTime ? new Date(new Date(props.startTime + "Z")) : new Date();
   const utcEndDate = props.endTime ? new Date(new Date(props.endTime + "Z")) : new Date();
-  const dateDetails = getSeparatedDateDetails(utcDate);
-  const endDateDetails = getSeparatedDateDetails(utcEndDate);
 
-  const localDate = dateDetails.localDate;
-  const localDateStr = localDate.toLocaleDateString("en-US", dateOptions);
-  const isNonSaturday = localDate.getDay() !== 6;
-  const isOddTime = localDate.getHours() < 17 || localDate.getHours() > 18;
+  const localizedStart = new LocalizedDate(utcDate);
+  const localizedEnd = new LocalizedDate(utcEndDate);
+
+  const localDateStr = localizedStart.getDateDisplayString();
+  const isNonSaturday = localizedStart.getDay() !== 6;
+  const isOddTime = localizedStart.getHours() < 17 || localizedStart.getHours() > 18;
   const specialNoteStyle = isNonSaturday || isOddTime ? "pb-4" : "";
-  const day = dateDetails.weekday;
+  const day = localizedStart.getWeekdayString();
 
-  const localStartTimeStr = dateDetails.time;
-  const localEndTimeStr = endDateDetails.time;
+  const localStartTimeStr = localizedStart.getTimeString();
+  const localEndTimeStr = localizedEnd.getTimeString();
   const dateStr = `${localDateStr} ${localStartTimeStr} -  ${localEndTimeStr}`;
 
   const venueAddress = getVenueAddress(venue);

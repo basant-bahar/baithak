@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { getSeparatedDateDetails, imageUrl } from "utils";
+import { LocalizedDate, imageUrl } from "utils";
 import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 
 type CalendarConcertCardProps = {
@@ -12,7 +12,8 @@ export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
   const utcDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
-  const dateDetails = getSeparatedDateDetails(utcDate);
+  const localizedDate = new LocalizedDate(utcDate);
+
   const concertArtists = concert.mainArtists
     .flatMap((concertArtist) => {
       if (concertArtist.artist) {
@@ -28,10 +29,14 @@ export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
     <Link href={`/concerts/${concert.id}`}>
       <div className="card gap-2 lg:gap-0 card-side lg:justify-around max-sm:justify-evenly border p-2 shadow-lg cursor-pointer items-center h-full">
         <div className="w-40 max-md:w-36 text-center rounded-md border-sky-600 border grow-0 p-0">
-          <h2 className="bg-sky-600 text-white p-2 rounded-t-md">{dateDetails.month}</h2>
-          <div className="text-2xl text-sky-600 font-bold pt-3 pb-3">{dateDetails.date}</div>
-          <div className="text-sky-600">{dateDetails.weekday}</div>
-          <div className="text-sky-600">{dateDetails.time}</div>
+          <h2 className="bg-sky-600 text-white p-2 rounded-t-md">
+            {localizedDate.getMonthString()}
+          </h2>
+          <div className="text-2xl text-sky-600 font-bold pt-3 pb-3">
+            {localizedDate.getDateString()}
+          </div>
+          <div className="text-sky-600">{localizedDate.getWeekdayString()}</div>
+          <div className="text-sky-600">{localizedDate.getTimeString()}</div>
         </div>
         <div className="max-lg:mt-2 text-center">
           <div className="flex justify-center max-md:max-w-[160px]">

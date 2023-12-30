@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { getSeparatedDateDetails, getServerDateTime } from "utils";
+import { LocalizedDate, getServerDateTime } from "utils";
 import { ConcertDetailsFragment } from "__generated__/graphql";
 import EntityList, { EntityInfo } from "components/common/entityList";
 import { concertArtistInfo, concertsForCalendar, searchConcert } from "../../../graphql/concert";
@@ -16,8 +16,10 @@ export default function ConcertList() {
         return artistData.artist.name;
       })
       .join(", ");
-    const date = getSeparatedDateDetails(new Date(new Date(concert.startTime + "Z")));
-    return `${concert.title} (${artistStr}) on ${date.month} ${date.date}, ${date.year} ${date.time}`;
+    const localizedDate = new LocalizedDate(new Date(new Date(concert.startTime + "Z")));
+    return `${
+      concert.title
+    } (${artistStr}) on ${localizedDate.getMonthString()} ${localizedDate.getDateString()}, ${localizedDate.getYearString()} ${localizedDate.getTimeString()}`;
   }
 
   const today = new Date();
