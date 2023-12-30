@@ -11,8 +11,8 @@ type CalendarConcertCardProps = {
 export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
   const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
-  const localDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
-  const dateDetails = getSeparatedDateDetails(localDate);
+  const utcDate = concert.startTime ? new Date(new Date(concert.startTime + "Z")) : new Date();
+  const dateDetails = getSeparatedDateDetails(utcDate);
   const concertArtists = concert.mainArtists
     .flatMap((concertArtist) => {
       if (concertArtist.artist) {

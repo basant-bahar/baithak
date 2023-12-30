@@ -1,4 +1,4 @@
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone, getTimezoneOffset, utcToZonedTime } from "date-fns-tz";
 
 export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
 
@@ -8,6 +8,7 @@ export function imageUrl(path: string): string {
 }
 
 type DateDetails = {
+  localDate: Date;
   month: string;
   date: string;
   weekday: string;
@@ -17,21 +18,24 @@ type DateDetails = {
 
 export const ORG_TIMEZONE: string = process.env.NEXT_PUBLIC_ORGANIZATION_TIMEZONE as string;
 
-export function getSeparatedDateDetails(localDate: Date): DateDetails {
-  const month = localDate.toLocaleDateString("en-US", { month: "long", timeZone: ORG_TIMEZONE });
-  const date = localDate.toLocaleDateString("en-US", { day: "numeric", timeZone: ORG_TIMEZONE });
+export function getSeparatedDateDetails(utcDate: Date): DateDetails {
+  const localDate = utcToZonedTime(utcDate, ORG_TIMEZONE);
+
+  const month = localDate.toLocaleDateString("en-US", { month: "long" });
+  const date = localDate.toLocaleDateString("en-US", { day: "numeric" });
   const weekday = localDate.toLocaleDateString("en-US", {
     weekday: "long",
     timeZone: ORG_TIMEZONE,
   });
-  const year = localDate.toLocaleDateString("en-US", { year: "numeric", timeZone: ORG_TIMEZONE });
+  const year = localDate.toLocaleDateString("en-US", { year: "numeric" });
   const time = localDate.toLocaleTimeString([], {
     hour12: true,
     hour: "numeric",
     minute: "2-digit",
-    timeZone: ORG_TIMEZONE,
   });
+
   return {
+    localDate,
     month,
     date,
     weekday,

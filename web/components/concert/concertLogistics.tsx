@@ -5,7 +5,7 @@ import format from "date-fns/format";
 import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import VenueView from "../venues/venueView";
-import { getVenueAddress, ORG_TIMEZONE, ORGANIZATION_NAME } from "utils";
+import { getSeparatedDateDetails, getVenueAddress, ORGANIZATION_NAME } from "utils";
 
 type ConcertLogisticsProps = {
   title: string;
@@ -19,31 +19,28 @@ type ConcertLogisticsProps = {
 export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   const venue = getFragmentData(venueDetails, props.venue);
 
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: ORG_TIMEZONE,
-  };
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour12: true,
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: ORG_TIMEZONE,
   };
 
   const isFree = props.memberPrice === 0;
-  const localDate = props.startTime ? new Date(new Date(props.startTime + "Z")) : new Date();
-  const localEndDate = props.endTime ? new Date(new Date(props.endTime + "Z")) : new Date();
-  const localDateStr = localDate.toLocaleDateString("en-US", options);
-  const isNonSaturday = localDate.getDay() !== 6;
-  const isBefore5pm = localDate.getHours() < 17;
-  const specialNoteStyle = isNonSaturday || isBefore5pm ? "pb-4" : "";
-  const day = localDate.toLocaleDateString("en-US", { weekday: "long" });
+  const utcDate = props.startTime ? new Date(new Date(props.startTime + "Z")) : new Date();
+  const utcEndDate = props.endTime ? new Date(new Date(props.endTime + "Z")) : new Date();
+  const dateDetails = getSeparatedDateDetails(utcDate);
+  const endDateDetails = getSeparatedDateDetails(utcEndDate);
 
-  const localStartTimeStr = localDate.toLocaleTimeString([], timeOptions);
-  const localEndTimeStr = localEndDate.toLocaleTimeString([], timeOptions);
+  const localDate = dateDetails.localDate;
+  const localDateStr = localDate.toLocaleDateString("en-US", dateOptions);
+  const isNonSaturday = localDate.getDay() !== 6;
+  const isOddTime = localDate.getHours() < 17 || localDate.getHours() > 18;
+  const specialNoteStyle = isNonSaturday || isOddTime ? "pb-4" : "";
+  const day = dateDetails.weekday;
+
+  const localStartTimeStr = dateDetails.time;
+  const localEndTimeStr = endDateDetails.time;
   const dateStr = `${localDateStr} ${localStartTimeStr} -  ${localEndTimeStr}`;
 
   const venueAddress = getVenueAddress(venue);
@@ -54,7 +51,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
       return format(date, "yyyyMMdd'T'HHmmssX");
     };
     const text = `text=${props.title}`;
-    const dates = `dates=${googleDate(localDate)}/${googleDate(localEndDate)}`;
+    const dates = `dates=${googleDate(utcDate)}/${googleDate(utcEndDate)}`;
     const details = `details=${process.env.NEXT_PUBLIC_ORGANIZATION_URL}`;
     const location = `location=${venueString}`;
 
@@ -67,7 +64,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         {isNonSaturday && (
           <div className="font-bold p-4 pb-0">Please note this is a {day} concert.</div>
         )}
-        {isBefore5pm && (
+        {isOddTime && (
           <div className="font-bold p-4 pb-0 pt-2">
             Please note time for this concert is {localStartTimeStr}.
           </div>
