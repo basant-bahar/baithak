@@ -1,7 +1,10 @@
 import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 
 export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
-const UPLOAD_URL = `${process.env.NEXT_PUBLIC_UPLOAD_PROTOCOL}://${process.env.NEXT_PUBLIC_UPLOAD_HOST}:${process.env.NEXT_PUBLIC_UPLOAD_PORT}${process.env.NEXT_PUBLIC_UPLOAD_PATH}`;
+const UPLOAD_URL_PORT_PART = process.env.NEXT_PUBLIC_UPLOAD_PORT
+  ? `:${process.env.NEXT_PUBLIC_UPLOAD_PORT}`
+  : "";
+const UPLOAD_URL = `${process.env.NEXT_PUBLIC_UPLOAD_PROTOCOL}://${process.env.NEXT_PUBLIC_UPLOAD_HOST}${UPLOAD_URL_PORT_PART}${process.env.NEXT_PUBLIC_UPLOAD_PATH}`;
 
 export function imageUrl(path: string): string {
   if (!path.startsWith("/")) {
