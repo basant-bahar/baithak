@@ -129,4 +129,8 @@
   .form-label {
     @apply flex xs:justify-end xs:font-medium justify-start font-semibold items-center pr-3;
   }
+
+  .react-markdown p {
+    @apply my-3;
+  }
 }
