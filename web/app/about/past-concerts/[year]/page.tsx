@@ -27,12 +27,18 @@ export default async function PastConcerts(props: PastConcertsProps) {
   }
 
   const renderTabs = () => {
-    const startYear = new Date(
-      new Date(firstAndLastConcert.firstConcert?.startTime + "Z")
-    ).getFullYear();
-    const endYear = new Date(
-      new Date(firstAndLastConcert.lastConcert?.startTime + "Z")
-    ).getFullYear();
+    const currentYear = new Date().getFullYear();
+
+    const startYear = Math.min(
+      new Date(new Date(firstAndLastConcert.firstConcert?.startTime + "Z")).getFullYear(),
+      currentYear
+    );
+
+    const endYear = Math.min(
+      new Date(new Date(firstAndLastConcert.lastConcert?.startTime + "Z")).getFullYear(),
+      currentYear
+    );
+
     return range(startYear, endYear).map((year, i) => {
       const isActive = year === selectedYear;
       const linkHref = `/about/past-concerts/${year}`;
