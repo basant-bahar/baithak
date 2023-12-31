@@ -13,13 +13,9 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   return (
     <Link href={`/artists/${artist.id}`}>
       <div className="flex flex-col rounded-2xl border min-h-[210px] lg:p-4 p-1 mb-2 shadow-lg cursor-pointer items-center gap-y-2">
-        <img
-          className="rounded-2xl max-xs:w-3/4"
-          src={imageSrc}
-          width="70%"
-          height="auto"
-          alt="Artist photo"
-        />
+        <picture className="rounded-2xl w-[70%] max-xs:w-3/4">
+          <img src={imageSrc} alt="Artist photo" />
+        </picture>
         <div className="text-primary text-center max-xs:truncate max-xs:w-11/12">{artistName}</div>
       </div>
     </Link>

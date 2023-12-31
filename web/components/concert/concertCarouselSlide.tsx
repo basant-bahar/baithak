@@ -28,7 +28,10 @@ export default function ConcertCarouselSlide({
 
   return (
     <div className="carousel-item w-full relative">
-      <img className="block w-full" src={imageSrc} alt="Concert photo" />
+      <picture className="block w-full">
+        <img src={imageSrc} alt="Concert photo" />
+      </picture>
+
       <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
         <a
           className="btn p-2 border-0 text-lg text-slate-300"

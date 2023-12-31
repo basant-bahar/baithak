@@ -1,10 +1,13 @@
 import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 
 export const ORGANIZATION_NAME = process.env.NEXT_PUBLIC_ORGANIZATION_NAME;
+const UPLOAD_URL = `${process.env.NEXT_PUBLIC_UPLOAD_PROTOCOL}://${process.env.NEXT_PUBLIC_UPLOAD_HOST}:${process.env.NEXT_PUBLIC_UPLOAD_PORT}${process.env.NEXT_PUBLIC_UPLOAD_PATH}`;
 
 export function imageUrl(path: string): string {
-  if (!path.startsWith("/")) path = `/${path}`;
-  return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${path}`;
+  if (!path.startsWith("/")) {
+    path = `/${path}`;
+  }
+  return `${UPLOAD_URL}${path}`;
 }
 
 export const ORG_TIMEZONE: string = process.env.NEXT_PUBLIC_ORGANIZATION_TIMEZONE as string;
@@ -98,7 +101,7 @@ export async function handleFileUpload(
   file: File,
   authToken: string | null
 ): Promise<string | null> {
-  if (!process.env.NEXT_PUBLIC_UPLOAD_URL) return "";
+  if (!UPLOAD_URL) return "";
 
   const resizedImageBlob = await resizeImage(file, 800, 600);
   if (!resizedImageBlob) return null;
@@ -109,7 +112,7 @@ export async function handleFileUpload(
   };
   const data = new FormData();
   data.append("file", resizedFile);
-  const response = await fetch(process.env.NEXT_PUBLIC_UPLOAD_URL, {
+  const response = await fetch(UPLOAD_URL, {
     method: "POST",
     headers,
     body: data,

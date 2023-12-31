@@ -20,13 +20,9 @@ export const ConcertCard = ({ concert }: ConcertCardProps) => {
     <Link href={`/concerts/${concert.id}`}>
       <div className="relative flex flex-col overflow-hidden rounded-2xl border lg:p-4 p-1 shadow-lg cursor-pointer">
         <div className="flex justify-center">
-          <img
-            className="rounded-md"
-            src={imageSrc}
-            width="70%"
-            height="auto"
-            alt="Comncert photo"
-          />
+          <picture className="rounded-md w-[70%]">
+            <img src={imageSrc} alt="Comncert photo" />
+          </picture>
         </div>
         <div className="text-primary pt-2 truncate">
           {concert.title + " (" + concertArtists + ")"}
