@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 import { LocalizedDate, imageUrl } from "utils";
 import { ConcertCalendarDetailFragment } from "../../__generated__/graphql";
 
@@ -40,13 +39,15 @@ export const CalendarConcertCard = ({ concert }: CalendarConcertCardProps) => {
         </div>
         <div className="max-lg:mt-2 text-center">
           <div className="flex justify-center max-md:max-w-[160px]">
-            <Image
-              className="rounded-md max-md:max-w-[160px]"
-              src={imageSrc}
-              width="180"
-              height="135"
-              alt="Artist photo"
-            />
+            <picture>
+              <img
+                className="rounded-md max-md:max-w-[160px]"
+                src={imageSrc}
+                width="180"
+                height="135"
+                alt="Artist photo"
+              />
+            </picture>
           </div>
           <div className="pl-2 pr-2 pt-2 m-0 text-sm truncate max-w-[180px] max-md:max-w-[160px] text-primary min-h-[28px]">
             {concertArtists ? concertArtists : ""}

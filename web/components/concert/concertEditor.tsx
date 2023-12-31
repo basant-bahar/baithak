@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import ConcertView from "./concertView";
 import PreviewContainer from "../common/previewContainer";
 import { artistBasicInfo, concertArtistInfo, concertDetails } from "../../graphql/concert";
@@ -316,13 +315,15 @@ export default function ConcertEditor(props: ConcertEditorProps) {
           <div className="form-row max-xs:grid-cols-[1fr]">
             <label className="form-label">Photo</label>
             {concertData.photoUrl && (
-              <Image
-                className="col-start-2 col-span-3"
-                src={imageUrl(concertData.photoUrl)}
-                width={80}
-                height={60}
-                alt="Concert image"
-              />
+              <picture>
+                <img
+                  className="col-start-2 col-span-3"
+                  src={imageUrl(concertData.photoUrl)}
+                  width={80}
+                  height={60}
+                  alt="Concert image"
+                />
+              </picture>
             )}
             <input
               type="file"

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { concertArtistInfo, concertDetails } from "../../graphql/concert";
@@ -22,7 +21,9 @@ export default function ConcertView(props: ConcertViewProps) {
         <ArtistLink key={"main"} isMain={true} concertArtistsData={concert.mainArtists} />
       )}
       <div className="flex justify-center">
-        <Image src={imageSrc} width={600} height={450} alt="Concert photo" />
+        <picture>
+          <img src={imageSrc} width={600} height={450} alt="Concert photo" />
+        </picture>
       </div>
       {concert.accompanyingArtists.length > 0 && (
         <>

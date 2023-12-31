@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ArtistView from "./artistView";
-import Image from "next/image";
 import { FragmentType, getFragmentData, makeFragmentData } from "../../__generated__";
 import PageHeader from "../common/pageHeader";
 import PreviewContainer from "../common/previewContainer";
@@ -116,13 +115,9 @@ export default function ArtistEditor(props: ArtistEditorProps) {
           <div className="form-row max-xs:grid-cols-[1fr]">
             <label className="form-label">Photo</label>
             {artistData.photoUrl && (
-              <Image
-                className="col-start-2 col-span-3"
-                src={imageUrl(artistData.photoUrl)}
-                width={80}
-                height={60}
-                alt={`Artist ${artistData.name} photo`}
-              />
+              <picture className="col-start-2 col-span-3 w-[80px] h-[60px]">
+                <img src={imageUrl(artistData.photoUrl)} alt={`Artist ${artistData.name} photo`} />
+              </picture>
             )}
             <input
               type="file"
