@@ -5,10 +5,12 @@ import { useQuery, useMutation } from "@apollo/client";
 import { getFragmentData, graphql } from "__generated__";
 import PageHeader from "components/common/pageHeader";
 import { advisoryDetails, getAdvisories } from "../../../graphql/advisory";
+import { getAdvisoryClass } from "components/advisory/util";
+import Markdown from "components/concert/markdown";
 
 const newAdvisory = {
   level: "Warning",
-  message: "...Advisory",
+  message: "",
 };
 const levels = ["Critical", "Warning", "Info"];
 
@@ -88,51 +90,58 @@ export default function Advisory() {
   }
 
   return (
-    <div className="main-container">
-      <PageHeader title="Advisory" />
-      <div className="flex-auto p-6">
-        <div className="form-row">
-          <label className="form-label">Level</label>
-          <select
-            className="lg:mr-2 border-b bg-transparent focus:outline-none disabled:opacity-50"
-            onChange={selectLevel}
-            value={advisoryData ? advisoryData.level : levels[2]}
-          >
-            {levels.map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-row">
-          <label className="form-label">Message</label>
-          <textarea
-            className="border col-span-2 p-2"
-            rows={5}
-            placeholder="Bio"
-            onChange={changeMessage}
-            value={advisoryData.message}
-          />
-        </div>
-        <div className="form-row mb-4">
-          <div className="flex gap-2 col-start-2 max-xs:col-start-1">
-            <button
-              className="text-white bg-green-600 hover:bg-green-700"
-              onClick={() => saveAdvisory()}
+    <>
+      <div className="main-container">
+        <PageHeader title="Advisory" />
+        <div className="flex-auto p-6">
+          <div className="form-row">
+            <label className="form-label">Level</label>
+            <select
+              className="lg:mr-2 border-b bg-transparent focus:outline-none disabled:opacity-50"
+              onChange={selectLevel}
+              value={advisoryData ? advisoryData.level : levels[2]}
             >
-              Save
-            </button>
-            <button
-              className="text-white bg-red-400 hover:bg-red-500"
-              onClick={() => handleAdvisoryDeletion(advisoryId)}
-            >
-              Delete
-            </button>
+              {levels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-row">
+            <label className="form-label">Message</label>
+            <textarea
+              className="border col-span-2 p-2"
+              rows={5}
+              placeholder="Advisory message"
+              onChange={changeMessage}
+              value={advisoryData.message}
+            />
+          </div>
+          <div className="form-row mb-4">
+            <div className="flex gap-2 col-start-2 max-xs:col-start-1">
+              <button
+                className="text-white bg-green-600 hover:bg-green-700"
+                onClick={() => saveAdvisory()}
+              >
+                Save
+              </button>
+              <button
+                className="text-white bg-red-400 hover:bg-red-500"
+                onClick={() => handleAdvisoryDeletion(advisoryId)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {advisoryData && advisoryData.message && (
+        <div className={getAdvisoryClass(advisoryData.level)}>
+          <Markdown>{advisoryData.message}</Markdown>
+        </div>
+      )}
+    </>
   );
 }
 

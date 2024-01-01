@@ -3,29 +3,16 @@ import { ssrApolloClient } from "../../app/apollo-client";
 import { advisoryDetails, getAdvisories } from "../../graphql/advisory";
 import { getFragmentData } from "../../__generated__";
 import Markdown from "../concert/markdown";
+import { getAdvisoryClass } from "./util";
 
 export default function Advisory({ children }: { children: React.ReactNode }) {
   const advisoriesData = use(getAdvisory());
   const advisory = getFragmentData(advisoryDetails, advisoriesData);
 
-  const getAdvisoryClass = () => {
-    const advisoryClass =
-      "flex-auto mx-auto max-w-screen-lg p-6 flex-auto rounded mt-20 border border-solid";
-
-    switch (advisory && advisory.level) {
-      case "Critical":
-        return `${advisoryClass} red-600 bg-red-100 border-red-200`;
-      case "Warning":
-        return `${advisoryClass} amber-600 bg-amber-100 border-amber-200`;
-      case "Info":
-        return `${advisoryClass} green-600 bg-green-100 border-green-200`;
-    }
-  };
-
   return (
     <>
       {advisory && (
-        <div className={getAdvisoryClass()}>
+        <div className={getAdvisoryClass(advisory.level)}>
           <Markdown>{advisory.message}</Markdown>
         </div>
       )}
