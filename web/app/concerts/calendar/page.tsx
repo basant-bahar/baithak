@@ -3,10 +3,13 @@ import React from "react";
 import PageHeader from "components/common/pageHeader";
 import { CalendarConcertCard } from "components/concert/calendarConcertCard";
 import ConcertCarousel, { concertCalendarDetail } from "components/concert/concertCarousel";
-import { graphql, getFragmentData } from "__generated__";
+import { getFragmentData } from "__generated__";
 import { ssrApolloClient } from "../../apollo-client";
 import { concertsForCalendar } from "graphql/concert";
 import { getServerDateTime } from "utils";
+
+// TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
+export const revalidate = 0;
 
 export default async function Calendar() {
   const calendarConcertsData = await getConcertCalendarData();
