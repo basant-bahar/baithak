@@ -130,7 +130,23 @@
     @apply flex xs:justify-end xs:font-medium justify-start font-semibold items-center pr-3;
   }
 
-  .react-markdown p {
-    @apply my-3;
+  .react-markdown {
+    p {
+      @apply my-3;
+    }
+
+    h1 {
+      @apply text-3xl font-bold pt-3 pb-3;
+    }
+    h2 {
+      @apply text-2xl font-bold pt-2 pb-2;
+    }
+    h3 {
+      @apply text-xl font-medium pt-1 pb-1;
+    }
+
+    a {
+      @apply underline text-blue-500;
+    }
   }
 }
