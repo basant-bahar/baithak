@@ -15,10 +15,9 @@ export default async function Home() {
 
   return (
     <>
-      <Advisory />
-      <div className="main-container">
+      <Advisory>
         <ConcertView concert={concertData} />
-      </div>
+      </Advisory>
       <ConcertRsvp concertId={concertData?.id} />
     </>
   );

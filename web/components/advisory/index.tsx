@@ -4,19 +4,15 @@ import { advisoryDetails, getAdvisories } from "../../graphql/advisory";
 import { getFragmentData } from "../../__generated__";
 import Markdown from "../concert/markdown";
 
-export default function Advisory() {
+export default function Advisory({ children }: { children: React.ReactNode }) {
   const advisoriesData = use(getAdvisory());
   const advisory = getFragmentData(advisoryDetails, advisoriesData);
 
-  if (!advisory) {
-    return <>Loading...</>;
-  }
-
   const getAdvisoryClass = () => {
     const advisoryClass =
-      "flex-auto mx-auto max-w-screen-lg p-6 flex-auto rounded mt-24 border border-solid";
+      "flex-auto mx-auto max-w-screen-lg p-6 flex-auto rounded mt-20 border border-solid";
 
-    switch (advisory.level) {
+    switch (advisory && advisory.level) {
       case "Critical":
         return `${advisoryClass} red-600 bg-red-100 border-red-200`;
       case "Warning":
@@ -33,6 +29,7 @@ export default function Advisory() {
           <Markdown>{advisory.message}</Markdown>
         </div>
       )}
+      <div className={`main-container ${advisory ? "mt-4" : ""}`}>{children}</div>
     </>
   );
 }
