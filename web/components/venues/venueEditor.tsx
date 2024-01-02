@@ -17,7 +17,7 @@ const newVenue: VenueDetailsFragment = {
   city: "",
   state: "",
   zip: "",
-  publish: false,
+  publish: true,
 };
 
 export default function VenueEditor(props: VenueEditorProps) {

@@ -38,7 +38,7 @@ const newConcert = {
   ticketLink: "",
   memberPrice: 0,
   nonMemberPrice: 0,
-  publish: false,
+  publish: true,
   mainArtists: [],
   accompanyingArtists: [],
   startTime: getServerDateTime(new Date()),

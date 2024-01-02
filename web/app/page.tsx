@@ -44,7 +44,7 @@ async function getFrontPageConcert() {
 
 const getUpcomingConcert = graphql(`
   query getUpcomingConcert($today: LocalDateTime) {
-    concerts(where: { startTime: { gte: $today } }, orderBy: { startTime: ASC }) {
+    concerts(where: { endTime: { gte: $today } }, orderBy: { endTime: ASC }) {
       id
       ...ConcertDetails
     }

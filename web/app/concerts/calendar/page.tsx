@@ -8,7 +8,6 @@ import { ssrApolloClient } from "../../apollo-client";
 import { concertsForCalendar } from "graphql/concert";
 import { getServerDateTime } from "utils";
 
-// TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
 export const revalidate = 0;
 
 export default async function Calendar() {

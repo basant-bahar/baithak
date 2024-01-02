@@ -3,7 +3,6 @@ import ConcertView from "components/concert/concertView";
 import { ssrApolloClient } from "../../apollo-client";
 import { getConcertView } from "graphql/concert";
 
-// TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
 export const revalidate = 0;
 
 interface ViewConcertProps {

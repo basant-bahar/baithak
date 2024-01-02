@@ -65,7 +65,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
       </div>
       <div className="p-4 text-center text-white bg-primary">
         <div className="flex flex-wrap justify-center mb-4">
-          <span>Tickets: {props.nonMemberPrice} (available at the gate)</span>
+          <span>Tickets: ${props.nonMemberPrice} (available at the gate)</span>
           <span className="xs:block hidden mr-1">,</span>
           <span>
             &nbsp;{`${ORGANIZATION_NAME}`} Members: {isFree ? "Free" : props.memberPrice}
