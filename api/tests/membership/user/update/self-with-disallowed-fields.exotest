@@ -1,0 +1,108 @@
+stages:
+  - operation: |
+      mutation($membershipId: Uuid!) {
+        updateMembership(id: $membershipId, data: {type: "Couple"}) {
+          id
+        }
+      }
+    variable: |
+      {
+          "membershipId": $.m2Id
+      }
+    auth: |
+      {
+          "sub": $.user2ClerkId
+      }
+    response: |
+      {
+        "errors": [
+          {
+            "message": "Not authorized"
+          }
+        ]
+      }
+
+  - operation: |
+      mutation($membershipId: Uuid!) {
+        updateMembership(id: $membershipId, data: {expiry: "2025-02-03"}) {
+          id
+        }
+      }
+    variable: |
+      {
+          "membershipId": $.m2Id
+      }
+    auth: |
+      {
+          "sub": $.user2ClerkId
+      }
+    response: |
+      {
+        "errors": [
+          {
+            "message": "Not authorized"
+          }
+        ]
+      }
+
+  - operation: |
+      mutation($membershipId: Uuid!) {
+        updateMembership(id: $membershipId, data: {payments: {create: {date: "2024-01-01", note: ""}}}) {
+          id
+        }
+      }
+    variable: |
+      {
+          "membershipId": $.m2Id
+      }
+    auth: |
+      {
+          "sub": $.user2ClerkId
+      }
+    response: |
+      {
+        "errors": [
+          {
+            "message": "Not authorized"
+          }
+        ]
+      }
+
+  - operation: |
+      query {
+        memberships {
+          id
+          type
+          expiry
+          authUser {
+            id
+          }
+        }
+      }
+    auth: |
+        {
+            "role": "admin"
+        }      
+    response: |
+      {
+        "data": {
+          "memberships": [
+            {
+              id: $.m1Id,
+              type: "Individual",
+              expiry: "2021-12-31",
+              authUser: {
+                id: $.user1Id
+              }
+            },
+            {
+              id: $.m2Id,
+              type: "Couple",
+              expiry: "2022-12-31",
+              authUser: {
+                id: $.user2Id
+              }
+            }
+          ]
+        }
+      }   

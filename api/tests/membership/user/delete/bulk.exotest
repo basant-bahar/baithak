@@ -1,0 +1,56 @@
+stages:
+  - operation: |
+        mutation($m1Id: Uuid!, $m2Id: Uuid!) {
+          deleteMemberships(where: {or: [{id: {eq: $m1Id}}, {id: {eq: $m2Id}}]}) {
+            id
+          }
+        }
+    variable: |
+        {
+            "m1Id": $.m1Id,
+            "m2Id": $.m2Id
+        }
+    auth: |
+        {
+            "sub": $.user2ClerkId
+        }
+    response: |
+        {
+          "errors": [
+            {
+              "message": "Not authorized"
+            }
+          ]
+        }
+  - operation: |
+      query {
+        memberships {
+          id
+          authUser {
+            id
+          }
+        }
+      }
+    auth: |
+        {
+            "role": "admin"
+        }      
+    response: |
+      {
+        "data": {
+          "memberships": [
+            {
+              id: $.m1Id,
+              authUser: {
+                id: $.user1Id
+              }
+            },
+            {
+              id: $.m2Id,
+              authUser: {
+                id: $.user2Id
+              }
+            }
+          ]
+        }
+      }    

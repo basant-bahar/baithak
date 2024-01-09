@@ -1,0 +1,56 @@
+# User 4 trying to create a membership for user 3 (through bulk create mutation)
+stages:
+  - operation: |
+      mutation($userId: Uuid!) {
+        createMemberships(data: [{authUser: {id: $userId}, type: "Individual"}]) {
+          __typename
+        }
+      }
+    variable: |
+        {
+            "userId": $.user3Id
+        }
+    auth: |
+        {
+            "sub": $.user4ClerkId
+        }
+    response: |
+        {
+          "errors": [
+            {
+              "message": "Not authorized"
+            }
+          ]
+        }
+  - operation: |
+      query {
+        memberships {
+          id
+          authUser {
+            id
+          }
+        }
+      }
+    auth: |
+        {
+            "role": "admin"
+        }      
+    response: |
+      {
+        "data": {
+          "memberships": [
+            {
+              id: $.m1Id,
+              authUser: {
+                id: $.user1Id
+              }
+            },
+            {
+              id: $.m2Id,
+              authUser: {
+                id: $.user2Id
+              }
+            }
+          ]
+        }
+      }

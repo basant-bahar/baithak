@@ -1,0 +1,23 @@
+# User 4 trying to create a membership for user 3
+operation: |
+    mutation($userId: Uuid!) {
+      createMembership(data: {authUser: {id: $userId}, type: "Individual"}) {
+        __typename # Ask for minimal response to avoid query access playing a role
+      }
+    }
+variable: |
+    {
+        "userId": $.user3Id
+    }
+auth: |
+    {
+        "sub": $.user4ClerkId
+    }
+response: |
+    {
+      "errors": [
+        {
+          "message": "Not authorized"
+        }
+      ]
+    }

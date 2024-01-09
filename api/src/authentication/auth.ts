@@ -1,5 +1,5 @@
 import type { ExographError } from "../../generated/exograph.d.ts";
-import type { ExographPriv } from "../../generated/exograph.d.ts";
+import type { Exograph, ExographPriv } from "../../generated/exograph.d.ts";
 import type { AuthContext } from "../../generated/contexts.d.ts";
 
 const signUpContext = {
@@ -70,5 +70,32 @@ export async function syncAuthUser(authContext: AuthContext, exo: ExographPriv):
   } catch (e) {
     console.log("Failed to sign up ", e);
     throw new ExographError("Failed to sign up");
+  }
+}
+
+export async function getAuthUserId(
+  authContext: AuthContext,
+  exo: Exograph
+): Promise<string | null> {
+  if (!authContext.clerkId) {
+    return null;
+  }
+
+  const res = await exo.executeQuery(
+    `query($clerkId: String!) {
+        authUsers(where: {clerkId: {eq: $clerkId}}) {
+          id
+        }
+      }`,
+    { clerkId: authContext.clerkId }
+  );
+
+  const foundAuthUsers = res.authUsers;
+  if (foundAuthUsers.length === 1) {
+    return foundAuthUsers[0].id;
+  } else if (foundAuthUsers.length > 1) {
+    throw new Error(`Multiple users found for clerkId ${authContext.clerkId}`);
+  } else {
+    return null;
   }
 }

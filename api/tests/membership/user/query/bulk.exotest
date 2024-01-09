@@ -1,0 +1,25 @@
+operation: |
+    query($m1Id: Uuid!, $m2Id: Uuid!) {
+      memberships(where: {or: [{id: {eq: $m1Id}}, {id: {eq: $m2Id}}]}) {
+        id
+      }
+    }
+variable: |
+    {
+        "m1Id": $.m1Id,
+        "m2Id": $.m2Id
+    }    
+auth: |
+    {
+        "sub": $.user2ClerkId
+    }
+response: |
+    {
+      "data": {
+        "memberships": [
+          {
+            "id": $.m2Id
+          }
+        ]
+      }
+    }

@@ -1,0 +1,23 @@
+operation: |
+    mutation($userId: Uuid!) {
+      createMemberships(data: [{authUser: {id: $userId}, type: "Couple", spouseFirstName: "s-FN", spouseLastName: "s-LN"}, 
+                               {authUser: {id: $userId}, type: "Couple", spouseFirstName: "s-FN", spouseLastName: "s-LN"}]) {
+        id
+      }
+    }
+variable: |
+    {
+        "userId": $.user3Id
+    }
+auth: |
+    {
+        "sub": $.user3ClerkId
+    }
+response: |
+    {
+      "errors": [
+        {
+          "message": "Postgres operation failed"
+        }
+      ]
+    }

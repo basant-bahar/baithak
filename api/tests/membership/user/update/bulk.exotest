@@ -1,0 +1,55 @@
+stages:
+  # Trying to update self membership in addition to someone else's; only self should be updated
+  - operation: |
+        mutation($m1Id: Uuid!, $m2Id: Uuid!) {
+          updateMemberships(where: {or: [{id: {eq: $m1Id}}, {id: {eq: $m2Id}}]}, data: {spouseFirstName: "Jane"}) {
+            id
+            spouseFirstName
+          }
+        }
+    auth: |
+        {
+            "sub": $.user2ClerkId
+        }
+    variable: |
+        {
+            "m1Id": $.m1Id,
+            "m2Id": $.m2Id
+        }        
+    response: |
+        {
+          "data": {
+            "updateMemberships": [
+              {
+                "id": $.m2Id,
+                "spouseFirstName": "Jane"
+              }
+            ]
+          }
+        }
+  - operation: |
+        query {
+          memberships {
+            id
+            spouseFirstName
+          }
+        }
+    auth: |
+        {
+            "role": "admin"
+        }
+    response: |
+        {
+          "data": {
+            "memberships": [
+              {
+                "id": $.m1Id,
+                spouseFirstName: null
+              },
+              {
+                "id": $.m2Id,
+                "spouseFirstName": "Jane"
+              }
+            ]
+          }
+        }

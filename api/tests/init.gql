@@ -1,0 +1,23 @@
+operation: |
+    mutation {
+      user1: createAuthUser(data: {email: "a@a.com", clerkId: "user1ClerkId"}) {
+        id @bind(name: "user1Id")
+        clerkId @bind(name: "user1ClerkId")
+      }
+      user2: createAuthUser(data: {email: "b@a.com", clerkId: "user2ClerkId"}) {
+        id @bind(name: "user2Id")
+        clerkId @bind(name: "user2ClerkId")
+      }
+      user3: createAuthUser(data: {email: "c@a.com", clerkId: "user3ClerkId"}) {
+        id @bind(name: "user3Id")
+        clerkId @bind(name: "user3ClerkId")
+      }
+      user4: createAuthUser(data: {email: "d@a.com", clerkId: "user4ClerkId"}) {
+        id @bind(name: "user4Id")
+        clerkId @bind(name: "user4ClerkId")
+      }                  
+    }
+auth: |
+    {
+        "role": "admin"
+    }

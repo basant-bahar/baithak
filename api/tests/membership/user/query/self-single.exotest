@@ -1,0 +1,42 @@
+operation: |
+    query($membershipId: Uuid!) {
+      membership(id: $membershipId) {
+        id
+        authUser {
+          id
+          clerkId
+          email
+          firstName
+          lastName
+        }
+        spouseFirstName
+        spouseLastName
+        expiry
+      }
+    }
+variable: |
+    {
+        "membershipId": $.m2Id
+    }
+auth: |
+    {
+        "sub": $.user2ClerkId
+    }
+response: |
+    {
+      "data": {
+        "membership": {
+          "id": $.m2Id,
+          "authUser": {
+            "id": $.user2Id,
+            "clerkId": $.user2ClerkId,
+            "email": "b@a.com",
+            "firstName": null,
+            "lastName": null
+          },
+          "spouseFirstName": "b-FN",
+          "spouseLastName": "b-LN",
+          "expiry": "2022-12-31"
+        }
+      }
+    }

@@ -1,0 +1,57 @@
+# User 4 trying to create a membership for user 3 (in addition to for the self)
+stages:
+  - operation: |
+        mutation($allowedUserId: Uuid!, $disallowedUserId: Uuid!) {
+          createMemberships(data: [{authUser: {id: $disallowedUserId}, type: "Individual"}, {authUser: {id: $allowedUserId}, type: "Individual"}]) {
+            __typename
+          }
+        }
+    variable: |
+        {
+            "allowedUserId": $.user4Id,
+            "disallowedUserId": $.user3Id
+        }
+    auth: |
+        {
+            "sub": $.user4ClerkId
+        }
+    response: |
+        {
+          "errors": [
+            {
+              "message": "Not authorized"
+            }
+          ]
+        }
+  - operation: |
+      query {
+        memberships @unordered {
+          id
+          authUser {
+            id
+          }
+        }
+      }
+    auth: |
+        {
+            "role": "admin"
+        }      
+    response: |
+      {
+        "data": {
+          "memberships": [
+            {
+              id: $.m1Id,
+              authUser: {
+                id: $.user1Id
+              }
+            },
+            {
+              id: $.m2Id,
+              authUser: {
+                id: $.user2Id
+              }
+            }
+          ]
+        }
+      }      

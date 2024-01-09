@@ -1,0 +1,49 @@
+stages:
+  - operation: |
+        mutation {
+          updateMemberships(data: {spouseFirstName: "Jane"}) {
+            id
+            spouseFirstName
+          }
+        }
+    auth: |
+        {
+            "sub": $.user2ClerkId
+        }
+    response: |
+        {
+          "data": {
+            "updateMemberships": [
+              {
+                "id": $.m2Id,
+                "spouseFirstName": "Jane"
+              }
+            ]
+          }
+        }
+  - operation: |
+        query {
+          memberships {
+            id
+            spouseFirstName
+          }
+        }
+    auth: |
+        {
+            "role": "admin"
+        }
+    response: |
+        {
+          "data": {
+            "memberships": [
+              {
+                "id": $.m1Id,
+                spouseFirstName: null
+              },
+              {
+                "id": $.m2Id,
+                "spouseFirstName": "Jane"
+              }
+            ]
+          }
+        }

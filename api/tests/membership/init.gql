@@ -1,0 +1,18 @@
+operation: |
+    mutation($user1Id: Uuid!, $user2Id: Uuid!) {
+      m1: createMembership(data: {authUser: {id: $user1Id}, type: "Individual", expiry: "2021-12-31"}) {
+        id @bind(name: "m1Id")
+      }
+      m2: createMembership(data: {authUser: {id: $user2Id}, type: "Couple", spouseFirstName: "b-FN", spouseLastName: "b-LN", spouseEmail: "b-spouse@a.com", expiry: "2022-12-31"}) {
+        id @bind(name: "m2Id")
+      }      
+    }
+variable: |
+    {
+        "user1Id": $.user1Id,
+        "user2Id": $.user2Id
+    }
+auth: |
+    {
+        "role": "admin"
+    }    

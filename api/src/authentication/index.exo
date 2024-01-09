@@ -3,4 +3,7 @@
 module Authentication {
     @access(true)
     export mutation syncAuthUser(@inject authContext: AuthContext, @inject exo: ExographPriv): String
+
+    @access(true)
+    query getAuthUserId(@inject authContext: AuthContext, @inject exo: Exograph): String
 }

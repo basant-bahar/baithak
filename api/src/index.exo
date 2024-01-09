@@ -1,6 +1,5 @@
 import "rsvp"
 import "subscription"
-import "membership"
 import "payment"
 import "expiry"
 import "notification"
@@ -12,6 +11,10 @@ context AuthContext {
   @jwt email: String
   @jwt firstName: String
   @jwt lastName: String
+}
+
+context AuthUserContext {
+  @query("getAuthUserId") authUserId: Uuid
 }
 
 @postgres
@@ -76,8 +79,8 @@ module Concertmodule {
     group: String
   }
 
-  @access(query=AuthContext.role == "admin" || self.authUser.clerkId == AuthContext.clerkId, 
-          mutation=AuthContext.role == "admin" || self.authUser.clerkId == AuthContext.clerkId,
+  @access(query=AuthContext.role == "admin" || self.authUser.id == AuthUserContext.authUserId, 
+          mutation=AuthContext.role == "admin" || self.authUser.id == AuthUserContext.authUserId,
           delete=AuthContext.role == "admin")
   type Membership {
     @pk id: Uuid = generate_uuid()
@@ -85,7 +88,11 @@ module Concertmodule {
     spouseFirstName: String?
     spouseLastName: String?
     spouseEmail: String?
+    
+    @access(query=true, mutation=AuthContext.role == "admin")
     expiry: LocalDate?
+
+    @access(query=true, mutation=AuthContext.role == "admin", create=true)
     type: String
     payments: Set<Payment>?
   }
@@ -125,7 +132,7 @@ module Concertmodule {
     membership: Membership?
   }
 
-  @access(AuthContext.role == "admin")
+  @access(query=AuthContext.role == "admin", create=AuthContext.role == "admin", delete=false, update=false)
   type Payment {
     @pk id: Uuid = generate_uuid()
     membership: Membership

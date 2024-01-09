@@ -1,0 +1,20 @@
+operation: |
+    query {
+      memberships {
+        id
+      }
+    }
+auth: |
+    {
+        "sub": $.user2ClerkId
+    }
+response: |
+    {
+      "data": {
+        "memberships": [
+          {
+            "id": $.m2Id
+          }
+        ]
+      }
+    }

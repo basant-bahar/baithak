@@ -1,0 +1,22 @@
+operation: |
+    mutation($userId: Uuid!) {
+      createMembership(data: {authUser: {id: $userId}, type: "Couple", spouseFirstName: "s-FN", spouseLastName: "s-LN"}) {
+        id
+      }
+    }
+variable: |
+    {
+        "userId": $.user3Id
+    }
+auth: |
+    {
+        "sub": $.user3ClerkId
+    }
+response: |
+    {
+      "data": {
+        "createMembership": {
+          "id": () => true
+        }
+      }
+    }
