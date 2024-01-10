@@ -22,16 +22,16 @@ module Concertmodule {
   @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Concert {
     @pk id: Uuid = generate_uuid()
-    title: String
+    @index title: String
     description: String
     memberPrice: Int
     nonMemberPrice: Int
     venue: Venue
     ticketLink: String?
     photoUrl: String
-    startTime: LocalDateTime
-    endTime: LocalDateTime
-    publish: Boolean
+    @index startTime: LocalDateTime
+    @index endTime: LocalDateTime
+    @index publish: Boolean
     rsvps: Set<Rsvp>?
     notifications: Set<Notification>?
     concertArtists: Set<ConcertArtist>
@@ -40,25 +40,25 @@ module Concertmodule {
   @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Venue {
     @pk id: Uuid = generate_uuid()
-    name: String
+    @index name: String
     street: String
     city: String
     state: String
     zip: String
     concerts: Set<Concert>?
-    publish: Boolean
+    @index publish: Boolean
   }
 
   @access(query=self.publish || AuthContext.role == "admin", mutation=AuthContext.role == "admin")
   type Artist {
     @pk id: Uuid = generate_uuid()
     title: String?
-    name: String
+    @index name: String
     bio: String?
     photoUrl: String?
     youtubeVideoIds: Array<String>?
     instruments: Array<String>
-    publish: Boolean
+    @index publish: Boolean
     artistConcerts: Set<ConcertArtist>?
   }
 
@@ -67,7 +67,7 @@ module Concertmodule {
     @pk id: Uuid = generate_uuid()
     concert: Concert
     artist: Artist
-    isMain: Boolean
+    @index isMain: Boolean
     rank: Int
     instrument: String
   }
@@ -75,7 +75,7 @@ module Concertmodule {
   @access(AuthContext.role == "admin")
   type Subscription {
     @pk id: Uuid = generate_uuid()
-    email: String
+    @index email: String
     group: String
   }
 
@@ -85,13 +85,15 @@ module Concertmodule {
   type Membership {
     @pk id: Uuid = generate_uuid()
     authUser: AuthUser
-    spouseFirstName: String?
-    spouseLastName: String?
+    @index spouseFirstName: String?
+    @index spouseLastName: String?
     spouseEmail: String?
     
+    @index
     @access(query=true, mutation=AuthContext.role == "admin")
     expiry: LocalDate?
 
+    @index 
     @access(query=true, mutation=AuthContext.role == "admin", create=true)
     type: String
     payments: Set<Payment>?
@@ -109,7 +111,7 @@ module Concertmodule {
   type Notification {
     @pk id: Uuid = generate_uuid()
     concert: Concert?
-    subject: String
+    @index subject: String
     message: String
     postMessage: String
   }
@@ -127,8 +129,8 @@ module Concertmodule {
     @pk id: Uuid = generate_uuid()
     @unique clerkId: String?
     @unique email: String?
-    firstName: String?
-    lastName: String?
+    @index firstName: String?
+    @index lastName: String?
     membership: Membership?
   }
 
