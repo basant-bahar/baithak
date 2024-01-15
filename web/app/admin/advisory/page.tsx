@@ -7,6 +7,8 @@ import PageHeader from "components/common/pageHeader";
 import { advisoryDetails, getAdvisories } from "../../../graphql/advisory";
 import { getAdvisoryClass } from "components/advisory/util";
 import Markdown from "components/concert/markdown";
+import { revalidateSSRPages } from "utils/revalidateSSRPage";
+import { SSR_PAGES } from "utils/ssrPages";
 
 const newAdvisory = {
   level: "Warning",
@@ -17,6 +19,7 @@ const levels = ["Critical", "Warning", "Info"];
 export default function Advisory() {
   const [advisoryId, setAdvisoryId] = useState<string | undefined>();
   const [advisoryData, setAdvisoryData] = useState(newAdvisory);
+  const [dirty, setDirty] = useState(false);
 
   const { data, loading } = useQuery(getAdvisories);
   const [updateAdvisoryMutation] = useMutation(updateAdvisory, {
@@ -40,10 +43,12 @@ export default function Advisory() {
   if (loading) return null;
 
   function selectLevel(e: React.ChangeEvent<HTMLSelectElement>) {
+    setDirty(true);
     setAdvisoryData({ ...advisoryData, level: e.target.value });
   }
 
   function changeMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setDirty(true);
     setAdvisoryData({ ...advisoryData, message: e.target.value });
   }
 
@@ -54,38 +59,32 @@ export default function Advisory() {
       variables: {
         id,
       },
-    }).then((_) => {
+    }).then(async (_) => {
+      await revalidateSSRPages(SSR_PAGES.HOME);
       setAdvisoryData(newAdvisory);
       setAdvisoryId(undefined);
     });
   }
 
   async function saveAdvisory() {
+    setDirty(false);
     if (advisoryId) {
-      const result = await updateAdvisoryMutation({
+      updateAdvisoryMutation({
         variables: {
           id: advisoryId,
           data: advisoryData,
         },
+      }).then(async (_) => {
+        await revalidateSSRPages(SSR_PAGES.HOME);
       });
-      const updatedAdvisory = getFragmentData(advisoryDetails, result.data?.updateAdvisory);
-      if (updatedAdvisory) {
-        setAdvisoryData(updatedAdvisory);
-        setAdvisoryId(updatedAdvisory.id);
-      }
     } else {
-      const result = await createAdvisoryMutation({
+      createAdvisoryMutation({
         variables: {
           data: advisoryData,
         },
+      }).then(async (_) => {
+        await revalidateSSRPages(SSR_PAGES.HOME);
       });
-
-      const currentAdvisory = getFragmentData(advisoryDetails, result?.data?.advisory);
-
-      if (currentAdvisory) {
-        setAdvisoryData(currentAdvisory);
-        setAdvisoryId(currentAdvisory.id);
-      }
     }
   }
 
@@ -123,12 +122,14 @@ export default function Advisory() {
               <button
                 className="text-white bg-green-600 hover:bg-green-700"
                 onClick={() => saveAdvisory()}
+                disabled={!dirty}
               >
                 Save
               </button>
               <button
                 className="text-white bg-red-400 hover:bg-red-500"
                 onClick={() => handleAdvisoryDeletion(advisoryId)}
+                disabled={!advisoryId}
               >
                 Delete
               </button>

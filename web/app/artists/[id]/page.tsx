@@ -3,8 +3,6 @@ import { ssrApolloClient } from "../../apollo-client";
 import ArtistView from "components/artists/artistView";
 import { getArtist } from "../../../graphql/artists";
 
-export const revalidate = 0;
-
 interface ViewArtistProps {
   params: { id: string };
 }

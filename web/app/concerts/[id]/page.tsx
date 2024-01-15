@@ -3,8 +3,6 @@ import ConcertView from "components/concert/concertView";
 import { ssrApolloClient } from "../../apollo-client";
 import { getConcertView } from "graphql/concert";
 
-export const revalidate = 0;
-
 interface ViewConcertProps {
   params: { id: string };
 }

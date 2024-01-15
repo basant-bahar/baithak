@@ -8,8 +8,6 @@ import { ssrApolloClient } from "../../apollo-client";
 import { concertsForCalendar } from "graphql/concert";
 import { getServerDateTime } from "utils";
 
-export const revalidate = 0;
-
 export default async function Calendar() {
   const calendarConcertsData = await getConcertCalendarData();
   if (!calendarConcertsData) return null;

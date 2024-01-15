@@ -5,9 +5,6 @@ import { graphql } from "__generated__";
 import { ssrApolloClient } from "./apollo-client";
 import { getServerDateTime } from "utils";
 
-// TODO: Update this time once https://github.com/vercel/next.js/issues/59883 is fixed
-export const revalidate = 0;
-
 export default async function Home() {
   const concertData = await getFrontPageConcert();
 

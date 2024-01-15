@@ -7,6 +7,8 @@ import VenueEditor from "components/venues/venueEditor";
 import { graphql } from "__generated__";
 import { searchVenues } from "../../../../../graphql/venues";
 import { VenueDetailsFragment } from "__generated__/graphql";
+import { SSR_PAGES } from "utils/ssrPages";
+import { revalidateSSRPages } from "utils/revalidateSSRPage";
 
 interface EditVenueProps {
   params: { id: string };
@@ -38,7 +40,10 @@ function UpdateVenue({ id }: UpdateVenueProps) {
         id,
         data: venue,
       },
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(SSR_PAGES.HOME, SSR_PAGES.CONCERTS_CALENDAR, SSR_PAGES.VENUES_ID);
+      router.back();
+    });
   };
 
   if (!data) return null;
@@ -58,7 +63,10 @@ function CreateVenue() {
       variables: {
         data: venue,
       },
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(SSR_PAGES.HOME, SSR_PAGES.CONCERTS_CALENDAR);
+      router.back();
+    });
   };
 
   return <VenueEditor done={saveVenue} />;

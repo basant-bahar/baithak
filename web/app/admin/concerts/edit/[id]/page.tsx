@@ -10,6 +10,8 @@ import { searchVenues } from "../../../../../graphql/venues";
 import { ConcertCreationInput, ConcertDetailsFragment } from "__generated__/graphql";
 import { endOfYear, startOfYear } from "date-fns";
 import { getServerDateTime } from "utils";
+import { revalidateSSRPages } from "utils/revalidateSSRPage";
+import { SSR_PAGES } from "utils/ssrPages";
 
 interface EditConcertProps {
   params: { id: string };
@@ -55,7 +57,15 @@ function UpdateConcert({ id }: UpdateConcertProps) {
           },
         },
       ],
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(
+        SSR_PAGES.HOME,
+        SSR_PAGES.CONCERTS_CALENDAR,
+        SSR_PAGES.PAST_CONCERTS,
+        SSR_PAGES.CONCERTS_ID
+      );
+      router.back();
+    });
   };
 
   if (!data || !venuesData || !artistsData || !data.concert) {
@@ -100,7 +110,14 @@ function CreateConcert() {
           },
         },
       ],
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(
+        SSR_PAGES.HOME,
+        SSR_PAGES.CONCERTS_CALENDAR,
+        SSR_PAGES.PAST_CONCERTS
+      );
+      router.back();
+    });
   };
 
   if (!venuesData?.venues || !artistsData?.artists) {

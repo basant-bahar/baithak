@@ -7,6 +7,8 @@ import { graphql } from "__generated__";
 import ArtistEditor from "components/artists/artistEditor";
 import { ArtistDetailsFragment } from "__generated__/graphql";
 import { getArtist, searchArtists } from "../../../../../graphql/artists";
+import { revalidateSSRPages } from "utils/revalidateSSRPage";
+import { SSR_PAGES } from "utils/ssrPages";
 
 interface EditArtistProps {
   params: { id: string };
@@ -38,7 +40,15 @@ function UpdateArtist({ id }: UpdateArtistProps) {
         id,
         data: artist,
       },
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(
+        SSR_PAGES.HOME,
+        SSR_PAGES.CONCERTS_CALENDAR,
+        SSR_PAGES.FEATURED_ARTISTS,
+        SSR_PAGES.ARTISTS_ID
+      );
+      router.back();
+    });
   };
 
   if (!data) return null;
@@ -58,7 +68,14 @@ function CreateArtist() {
       variables: {
         data: artist,
       },
-    }).then((_) => router.back());
+    }).then(async (_) => {
+      await revalidateSSRPages(
+        SSR_PAGES.HOME,
+        SSR_PAGES.CONCERTS_CALENDAR,
+        SSR_PAGES.FEATURED_ARTISTS
+      );
+      router.back();
+    });
   };
 
   return <ArtistEditor done={saveArtist} />;
