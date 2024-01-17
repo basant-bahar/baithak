@@ -112,7 +112,7 @@ async function toHtml(markdown: string): Promise<string> {
 
 const allSubscribersQuery = `
   query {
-    subscriptions {
+    subscriptions(orderBy: {email: ASC}) {
       email
     }
   }
@@ -120,7 +120,7 @@ const allSubscribersQuery = `
 
 const subscribersQuery = `
   query($group: String) {
-    subscriptions(where: {group: {eq: $group}}) {
+    subscriptions(where: {group: {eq: $group}}, orderBy: {email: ASC}) {
       email
     }
   }

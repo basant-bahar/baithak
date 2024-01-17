@@ -45,8 +45,10 @@ export async function sendEmail(input: {
     if (bccs) {
       const batchSize = 800;
       let remaining = bccs;
+      console.log("Sending email to ", bccs.length);
       while (remaining.length > 0) {
         const batchedBccs = remaining.slice(0, batchSize);
+        console.log("Sending batch of ", batchedBccs.length);
         await sendBatch(client, subject, message, from, to, cc, batchedBccs);
         remaining = remaining.slice(batchSize);
       }
