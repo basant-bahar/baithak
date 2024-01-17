@@ -35,7 +35,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   });
   const { data: concertsData, loading: concertsLoading } = useQuery(notificationConcerts);
   const [updateNotificationMutation] = useMutation(updateNotification, {
-    refetchQueries: [{ query: getNotification }, { query: formatedNotification }],
+    refetchQueries: [{ query: getNotification, variables: { id } }, { query: formatedNotification, variables: { id } }],
   });
 
   async function saveNotification(notificationUpdateData: NotificationDetailsFragment) {

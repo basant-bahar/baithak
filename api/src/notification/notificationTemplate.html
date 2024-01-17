@@ -23,6 +23,11 @@ if (it.upcomingConcert) {
   <% if (it.notification.concert) { %>
     <%~ E.include('concertPartial', {concert: it.notification.concert, fileServerUrl: it.fileServerUrl, hostUrl: it.hostUrl, description: it.description}) %>
   <% } %>
+  <% if (it.postMessage) { %>
+    <div style="padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px; text-align: justify;font-size: large;">
+      <%~ it.postMessage %>
+    </div>
+  <% } %>
   <% if (it.upcomingConcert) { %>
     <div style=<% it.upcomingConcert ? "" : "display: none" %>>
       <div
@@ -40,9 +45,6 @@ if (it.upcomingConcert) {
   <% } %>
   <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
     <a href="<%= `${it.hostUrl}/subscriptions` %>">Manage your subscription</a>
-  </div>
-  <div style=<% it.postMessage ? "padding: 20px;margin-bottom: 20px;background-color: #f9f7f7;border: 1px solid #eae3e3;border-radius: 4px; text-align: justify;font-size: large;" : "display: none" %>>
-    <%~ it.postMessage %>
   </div>
 </body>
 
