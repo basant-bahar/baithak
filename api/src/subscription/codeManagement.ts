@@ -1,4 +1,3 @@
-import type { ExographError } from "../../generated/exograph.d.ts";
 import { createJwt, verifyJwt } from "../utils/jwt.ts";
 
 export async function createCode(email: string, secret: string): Promise<string> {

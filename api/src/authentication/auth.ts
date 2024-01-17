@@ -1,4 +1,3 @@
-import type { ExographError } from "../../generated/exograph.d.ts";
 import type { Exograph, ExographPriv } from "../../generated/exograph.d.ts";
 import type { AuthContext } from "../../generated/contexts.d.ts";
 
