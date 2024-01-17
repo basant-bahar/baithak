@@ -3,9 +3,13 @@
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import Link from "next/link";
-import { getFragmentData, graphql } from "__generated__";
+import { getFragmentData } from "__generated__";
 import NotificationView from "components/notifications/notificationView";
-import { getNotification, notificationDetails } from "../../../../../graphql/notifications";
+import {
+  formatedNotification,
+  getNotification,
+  notificationDetails,
+} from "../../../../../graphql/notifications";
 
 interface NotificationProps {
   params: { id: string };
@@ -23,7 +27,7 @@ export default function ViewNotification({ params: { id } }: NotificationProps) 
   );
 
   if (loading || formatedNotificationLoading || !data || !formatedNotificationData) {
-    return <>Loading...</>;
+    return null;
   }
   const notification = getFragmentData(notificationDetails, data.notification);
 
@@ -50,9 +54,3 @@ export default function ViewNotification({ params: { id } }: NotificationProps) 
     </div>
   );
 }
-
-const formatedNotification = graphql(`
-  query formatedNotification($id: Uuid!) {
-    formatNotification(concertNotificationId: $id)
-  }
-`);

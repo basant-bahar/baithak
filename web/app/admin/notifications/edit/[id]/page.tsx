@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { graphql } from "__generated__";
 import {
+  formatedNotification,
   getNotification,
   getNotifications,
   notificationConcerts,
@@ -33,7 +34,9 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
     variables: { id },
   });
   const { data: concertsData, loading: concertsLoading } = useQuery(notificationConcerts);
-  const [updateNotificationMutation] = useMutation(updateNotification);
+  const [updateNotificationMutation] = useMutation(updateNotification, {
+    refetchQueries: [{ query: getNotification }, { query: formatedNotification }],
+  });
 
   async function saveNotification(notificationUpdateData: NotificationDetailsFragment) {
     const updateNotificationData = {
