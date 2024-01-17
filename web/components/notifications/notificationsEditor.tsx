@@ -37,12 +37,19 @@ export default function NotificationEditor(props: NotificationEditorProps) {
     const concert = concerts.find((c) => c.id === id);
     const title = concert ? concert.title : "";
 
+    let updatedNotificationData = { ...notificationData };
+    if (!concert) {
+      updatedNotificationData.concert = null;
+    }
+
     setNotificationData({
-      ...notificationData,
-      concert: {
-        id,
-        title,
-      },
+      ...updatedNotificationData,
+      ...(concert && {
+        concert: {
+          id,
+          title,
+        },
+      }),
     });
   };
 

@@ -55,7 +55,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   }
 
   if (loading || concertsLoading || !data || !concertsData) {
-    return <>Loading...</>;
+    return null;
   }
 
   return (
@@ -76,19 +76,19 @@ function CreateNotification() {
   });
 
   const saveNotification = (notification: NotificationDetailsFragment) => {
-    if (notification.concert?.id) {
-      const notificationToSave: NotificationCreationInput = {
-        ...notification,
+    const notificationToSave: NotificationCreationInput = {
+      ...notification,
+      ...(notification.concert && {
         concert: {
           id: notification.concert?.id,
         },
-      };
-      addNotification({
-        variables: {
-          data: notificationToSave,
-        },
-      }).then((_) => router.back());
-    }
+      }),
+    };
+    addNotification({
+      variables: {
+        data: notificationToSave,
+      },
+    }).then((_) => router.back());
   };
 
   if (concertsLoading || !concertsData || !concertsData.concerts) {
