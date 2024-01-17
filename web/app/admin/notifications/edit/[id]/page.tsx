@@ -35,19 +35,23 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   });
   const { data: concertsData, loading: concertsLoading } = useQuery(notificationConcerts);
   const [updateNotificationMutation] = useMutation(updateNotification, {
-    refetchQueries: [{ query: getNotification, variables: { id } }, { query: formatedNotification, variables: { id } }],
+    refetchQueries: [
+      { query: getNotification, variables: { id } },
+      { query: formatedNotification, variables: { id } },
+    ],
   });
 
   async function saveNotification(notificationUpdateData: NotificationDetailsFragment) {
+    const updatedConcert = notificationUpdateData.concert
+      ? {
+          id: notificationUpdateData.concert?.id,
+        }
+      : null;
     const updateNotificationData = {
       subject: notificationUpdateData.subject,
       message: notificationUpdateData.message,
       postMessage: notificationUpdateData.postMessage,
-      ...(notificationUpdateData.concert && {
-        concert: {
-          id: notificationUpdateData.concert?.id,
-        },
-      }),
+      concert: updatedConcert,
     };
     updateNotificationMutation({
       variables: {
