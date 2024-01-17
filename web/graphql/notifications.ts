@@ -49,7 +49,7 @@ export const notificationDetails = graphql(`
 // Get all concerts so we can show them in the dropdown when creating a notification
 export const notificationConcerts = graphql(`
   query notificationConcerts {
-    concerts {
+    concerts(orderBy: { startTime: DESC }, limit: 12) {
       id
       title
     }

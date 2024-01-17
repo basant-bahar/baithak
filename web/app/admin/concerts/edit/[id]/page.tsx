@@ -140,7 +140,7 @@ const getConcert = graphql(`
 
 const getArtistsBasicInfo = graphql(`
   query getArtistBasicInfo {
-    artists {
+    artists(orderBy: { name: ASC }) {
       ...ArtistBasicInfo
     }
   }

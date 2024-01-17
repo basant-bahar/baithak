@@ -8,8 +8,7 @@ import { ArtistDetailsFragment } from "__generated__/graphql";
 
 export default function ArtistList() {
   function descFn(artist: ArtistDetailsFragment) {
-    const title = artist.title ? artist.title + " " : "";
-    return title + artist.name;
+    return artist.name;
   }
 
   return (

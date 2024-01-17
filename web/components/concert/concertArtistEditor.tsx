@@ -72,8 +72,8 @@ export default function ConcertArtistEditor(props: ConcertArtistEditorProps) {
           {"--Artist--"}
         </option>
         {props.artists.map((artist) => (
-          <option key={artist.name} value={artist.id}>
-            {artist.title || "" + " " + artist.name}
+          <option key={artist.id} value={artist.id}>
+            {artist.name}
           </option>
         ))}
       </select>
