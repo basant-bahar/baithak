@@ -19,9 +19,7 @@ export const ssrApolloClient = new ApolloClient({
   ssrMode: true,
   link: createHttpLink({
     uri: process.env.NEXT_PUBLIC_API_URL,
-    credentials: 'same-origin',
-    headers: {
-    },
+    fetchOptions: { cache: "no-store" }
   }),
   cache: new InMemoryCache(),
   defaultOptions
