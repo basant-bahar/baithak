@@ -15,9 +15,12 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
   const router = useRouter();
   const membershipId = props.params.id;
   const [payments, setPayments] = useState<any[]>([]);
-  const [payment, setPayment] = useState<any>({ date: new Date(), note: "", infoOnly: false });
+  const [payment, setPayment] = useState<any>({
+    date: getServerDateOnly(new Date()),
+    note: "",
+    infoOnly: false,
+  });
   const [getPayments] = useLazyQuery(getPaymentsForMembership);
-  const paymentDate = getDateStr(new Date());
   const isPayment = !payment.infoOnly;
   const header = isPayment ? "Post Payment" : "Post Info";
   const [createPaymentMutation] = useMutation(createPayment, {
@@ -96,7 +99,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
         <div className="mb-4 mt-6">
           <input className="" type="checkbox" checked={isPayment} onChange={handlePaymentCheck} />
           <label className="pl-4">
-            Posting payment (If checked will update the expiration date)
+            Posting payment (If checked, will update the expiration date)
           </label>
         </div>
         <h3 className="font-bold">{header}</h3>
@@ -110,8 +113,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
               <input
                 className="simple-input"
                 type="date"
-                value={paymentDate}
-                step={15 * 60}
+                value={payment.date}
                 onChange={(date) => changePaymentDate(date)}
               />
             </div>
@@ -142,7 +144,7 @@ export default function PaymentAndInfo(props: PaymentInfoProps) {
 
 const getPaymentsForMembership = graphql(`
   query getPaymentsForMembership($id: Uuid!) {
-    payments(where: { membership: { id: { eq: $id } } }) {
+    payments(where: { membership: { id: { eq: $id } } }, orderBy: { date: ASC }) {
       id
       date
       note
