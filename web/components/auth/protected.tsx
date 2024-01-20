@@ -1,19 +1,16 @@
 import React from "react";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { UserResource } from "@clerk/types/dist/user";
-import { useUser } from "@clerk/clerk-react";
 
 interface ProtectedProps {
-  checkAccess: (user: UserResource | null | undefined) => boolean;
+  checkAccess: () => boolean;
   children: React.ReactNode;
 }
 
 export default function Protected({ checkAccess, children }: ProtectedProps) {
-  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
-  const haveAccess = checkAccess(user);
+  const haveAccess = checkAccess();
 
   useEffect(() => {
     const timeout = setTimeout(() => {

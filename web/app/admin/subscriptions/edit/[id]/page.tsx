@@ -14,7 +14,7 @@ interface EditSubscriptionProps {
 export default function EditSubscription(props: EditSubscriptionProps) {
   const id = props.params.id;
 
-  return <>{id === "new" ? <CreateSubscription /> : <UpdateSubscription id={id} />}</>;
+  return id === "new" ? <CreateSubscription /> : <UpdateSubscription id={id} />;
 }
 
 interface UpdateSubscriptionProps {
@@ -28,7 +28,9 @@ function UpdateSubscription({ id }: UpdateSubscriptionProps) {
     variables: { id },
   });
 
-  const [updateSubscriptionMutation] = useMutation(updateSubscription);
+  const [updateSubscriptionMutation] = useMutation(updateSubscription, {
+    refetchQueries: [{ query: SearchSubscriptionDocument, variables: { search: "%%" } }],
+  });
 
   const saveSubscription = async (subscription: SubscriptionDetailsFragment) => {
     updateSubscriptionMutation({

@@ -18,7 +18,6 @@ const newMembership = {
   spouseLastName: "",
   spouseEmail: "",
   type: "",
-  expiry: null,
 };
 
 export default function ManageMembership() {
@@ -35,7 +34,7 @@ export default function ManageMembership() {
   const { data: meData, loading: meLoading } = useQuery(me, {
     variables: { clerkId: user?.id as string },
   });
-  const myAuthUser = meData?.authUsers[0];
+  const myAuthUser = meData?.authUserByClerkId;
   const myAuthUserId = myAuthUser?.id;
 
   useEffect(() => {
@@ -91,12 +90,15 @@ export default function ManageMembership() {
         },
       });
     } else {
-      if (user && meData && meData.authUsers.length === 1) {
-        const myId = meData?.authUsers[0].id;
+      if (user && meData) {
+        const myId = meData?.authUserByClerkId?.id;
         createMembershipMutation({
           variables: {
             data: {
-              ...membershipToSave,
+              spouseFirstName: membershipToSave.spouseFirstName,
+              spouseLastName: membershipToSave.spouseLastName,
+              spouseEmail: membershipToSave.spouseEmail,
+              type: membershipToSave.type,
               authUser: {
                 id: myId,
               },
@@ -146,7 +148,7 @@ const getMembershipByAuthId = graphql(`
 
 const me = graphql(`
   query me($clerkId: String!) {
-    authUsers(where: { clerkId: { eq: $clerkId } }) {
+    authUserByClerkId(clerkId: $clerkId) {
       id
       firstName
       lastName

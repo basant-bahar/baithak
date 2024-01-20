@@ -13,8 +13,8 @@ export interface MemberAuthInfo {
 }
 
 interface MembershipEditorProps {
-  membershipId?: string;
-  membership?: MembershipOnlyDetailsFragment;
+  membershipId?: string | null;
+  membership?: MembershipOnlyDetailsFragment | null;
   authUserId: string;
   authUser: MemberAuthInfo;
   done: Function;
@@ -52,6 +52,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
         }
       : newMembership
   );
+
   const [memberAuthInfo, setMemberAuthInfo] = useState<MemberAuthInfo>(
     props.authUser
       ? {

@@ -8,13 +8,17 @@ import PageHeader from "components/common/pageHeader";
 import {
   getMembership,
   membershipDetails,
+  membershipOnlyDetails,
   searchMembership,
   updateMembershipAndUpdateAuthUser,
 } from "../../../../../graphql/memberships";
-import { MembershipDetailsFragment, MembershipUpdateInput } from "__generated__/graphql";
+import {
+  MembershipDetailsFragment,
+  MembershipOnlyDetailsFragment,
+  MembershipUpdateInput,
+} from "__generated__/graphql";
 import MembershipEditor, { MemberAuthInfo } from "components/memberships/membershipEditor";
 import { createAuthUser } from "../../../../../graphql/users";
-import { useUser } from "@clerk/clerk-react";
 
 interface MembershipProps {
   params: { id: string };
@@ -22,7 +26,7 @@ interface MembershipProps {
 export default function Membership(props: MembershipProps) {
   const id = props.params.id;
 
-  return <>{id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />}</>;
+  return id === "new" ? <CreateMembership /> : <UpdateMembership id={id} />;
 }
 
 interface UpdateMembershipProps {
@@ -37,7 +41,10 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
   });
 
   const [updateMembershipAndUpdateAuthUserMutation] = useMutation(
-    updateMembershipAndUpdateAuthUser
+    updateMembershipAndUpdateAuthUser,
+    {
+      refetchQueries: [{ query: searchMembership, variables: { search: "%%" } }],
+    }
   );
 
   if (loading || !data || !data.membership) {
@@ -111,10 +118,12 @@ type WithEmail = {
 
 type WithInfo = {
   __typename: "WithInfo";
-  id: string;
+  authUserId: string;
   email: string;
   firstName?: string | null;
   lastName?: string | null;
+  membershipId?: string | null;
+  membershipInfo?: MembershipOnlyDetailsFragment | null;
 };
 
 type WithNoEmailInfo = {
@@ -127,24 +136,9 @@ type MembershipEditorState = NewUser | HaveEmail | NoEmail | WithEmail | WithNoE
 
 function CreateMembership() {
   const router = useRouter();
-  const { user } = useUser();
   const [userInfoState, setUserInfoState] = useState<MembershipEditorState>({
     __typename: "NewUser",
   });
-  const [authUser, setAuthUser] = useState<{ id: string } & MemberAuthInfo>({
-    id: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
-
-  const newMembership = {
-    spouseFirstName: "",
-    spouseLastName: "",
-    spouseEmail: "",
-    type: "",
-    expiry: null,
-  };
 
   const [createMembership] = useMutation(createMembershipAndUpdateAuthUser, {
     refetchQueries: [{ query: searchMembership, variables: { search: "%%" } }],
@@ -153,6 +147,7 @@ function CreateMembership() {
   const [authUserQuery] = useLazyQuery(getAuthUserByEmail);
   const [authUserByNameQuery] = useLazyQuery(getAuthUserByFirstLastName);
   const [createAuthUserMutation] = useMutation(createAuthUser);
+  const [membershipByAuthUser] = useLazyQuery(getMembershipByAuthUser);
 
   const addAuthUser = useCallback(
     async (email: string | null, firstName: string, lastName: string) => {
@@ -166,15 +161,9 @@ function CreateMembership() {
         },
       });
       if (result.data?.createAuthUser.id) {
-        setAuthUser({
-          id: result?.data?.createAuthUser.id,
-          firstName,
-          lastName,
-          email: email ? email : "",
-        });
         setUserInfoState({
           __typename: "WithInfo",
-          id: result?.data?.createAuthUser.id,
+          authUserId: result?.data?.createAuthUser.id,
           email: email ? email : "",
           firstName,
           lastName,
@@ -187,22 +176,33 @@ function CreateMembership() {
   const findAuthUser = useCallback(
     async (email: string) => {
       const result = await authUserQuery({ variables: { email } });
-      if (result?.data?.authUsers && result.data.authUsers.length > 0) {
-        const authUser = result.data.authUsers[0];
+      const authUser = result?.data?.authUserByEmail;
+      if (authUser) {
         if (authUser.email) {
-          setUserInfoState({
-            __typename: "WithInfo",
-            id: authUser.id,
-            firstName: authUser.firstName,
-            lastName: authUser.lastName,
-            email: authUser.email,
-          });
-          setAuthUser({
-            id: authUser.id,
-            firstName: authUser.firstName,
-            lastName: authUser.lastName,
-            email: authUser.email,
-          });
+          const membership = await membershipByAuthUser({ variables: { authId: authUser.id } });
+          if (membership) {
+            const membershipData = getFragmentData(
+              membershipOnlyDetails,
+              membership.data?.membershipByAuthUser
+            );
+            setUserInfoState({
+              __typename: "WithInfo",
+              authUserId: authUser.id,
+              firstName: authUser.firstName,
+              lastName: authUser.lastName,
+              email: authUser.email,
+              membershipId: membership.data?.membershipByAuthUser?.id,
+              membershipInfo: membershipData,
+            });
+          } else {
+            setUserInfoState({
+              __typename: "WithInfo",
+              authUserId: authUser.id,
+              firstName: authUser.firstName,
+              lastName: authUser.lastName,
+              email: authUser.email,
+            });
+          }
         }
       } else if (userInfoState.__typename === "WithEmail") {
         addAuthUser(userInfoState.email, "", "");
@@ -221,7 +221,7 @@ function CreateMembership() {
         if (authUser.email) {
           setUserInfoState({
             __typename: "WithInfo",
-            id: authUser.id,
+            authUserId: authUser.id,
             firstName,
             lastName,
             email: authUser.email,
@@ -286,8 +286,14 @@ function CreateMembership() {
       case "WithInfo":
         return (
           <MembershipEditor
-            authUserId={authUser.id}
-            authUser={authUser}
+            membershipId={userInfoState.membershipId}
+            membership={userInfoState.membershipInfo}
+            authUserId={userInfoState.authUserId}
+            authUser={{
+              email: userInfoState.email,
+              firstName: userInfoState.firstName,
+              lastName: userInfoState.lastName,
+            }}
             done={saveMembership}
             validate={membershipDoesNotExists}
             allowAuthInfoUpdate={true}
@@ -297,14 +303,10 @@ function CreateMembership() {
   };
 
   return (
-    <>
-      {user && newMembership && (
-        <div className="main-container">
-          <PageHeader title={"Membership"} />
-          {getInnerComponent()}
-        </div>
-      )}
-    </>
+    <div className="main-container">
+      <PageHeader title={"Membership"} />
+      {getInnerComponent()}
+    </div>
   );
 }
 
@@ -422,7 +424,7 @@ const getMembershipsByEmail = graphql(`
 
 const getAuthUserByEmail = graphql(`
   query getAuthUserByEmail($email: String!) {
-    authUsers(where: { email: { eq: $email } }) {
+    authUserByEmail(email: $email) {
       id
       email
       firstName
@@ -438,6 +440,15 @@ const getAuthUserByFirstLastName = graphql(`
     ) {
       id
       email
+    }
+  }
+`);
+
+const getMembershipByAuthUser = graphql(`
+  query getMembershipByAuthUser($authId: Uuid!) {
+    membershipByAuthUser(authUser: { id: $authId }) {
+      id
+      ...MembershipOnlyDetails
     }
   }
 `);
