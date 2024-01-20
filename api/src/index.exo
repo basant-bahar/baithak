@@ -75,7 +75,7 @@ module Concertmodule {
   @access(AuthContext.role == "admin")
   type Subscription {
     @pk id: Uuid = generate_uuid()
-    @index email: String
+    @unique email: String
     group: String
   }
 

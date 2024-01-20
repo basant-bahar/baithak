@@ -97,7 +97,7 @@ export async function formatNotification(
       Eta.config
     );
   } catch (e) {
-    console.log("***** template", e);
+    console.log("Error processing template", e);
     throw e;
   }
 

@@ -1,6 +1,6 @@
 import * as Eta from "https://deno.land/x/eta@v1.12.3/mod.ts";
 import { sendEmail } from "../email/index.ts";
-import _type from "../../generated/exograph.d.ts";
+import { Exograph, ExographPriv } from "../../generated/exograph.d.ts";
 
 const concertQuery = `
   query getConcert($id: Int!) {
@@ -23,19 +23,10 @@ const concertQuery = `
 `;
 
 const rsvpQuery = `
-  query getRsvp($concertId: Uuid!, $email:String!) {
-    rsvps(where: {
-      and: [
-        {email: {eq: $email}},
-        {concert: {id: {eq: $concertId}}}
-      ]
-      }) {
+  query getRsvp($concertId: Uuid!, $email: String!) {
+    rsvpByConcertEmail(email: $email, concert: {id: $concertId}) {
       id
-      email
-      numTickets
-      concert {
-        id
-      }
+      numTickets      
     }
   }
 `;
@@ -106,11 +97,11 @@ export async function processRsvp(
   numTickets: number,
   exograph: ExographPriv
 ) {
-  const rsvps = (await exograph.executeQueryPriv(rsvpQuery, { concertId, email }, adminContext))
-    .rsvps;
+  const rsvp = (await exograph.executeQueryPriv(rsvpQuery, { concertId, email }, adminContext))
+    .rsvpByConcertEmail;
   await sendRsvpEmail(exograph, concertId, email, numTickets);
 
-  if (rsvps.length === 0) {
+  if (!rsvp) {
     await exograph.executeQueryPriv(
       createRsvp,
       {
@@ -126,20 +117,17 @@ export async function processRsvp(
     );
     return "OK";
   } else {
-    const rsvp = rsvps[0];
-    if (rsvp) {
-      if (rsvp.numTickets != numTickets) {
-        await exograph.executeQueryPriv(
-          updateRsvp,
-          {
-            id: rsvp.id,
-            data: {
-              numTickets,
-            },
+    if (rsvp.numTickets != numTickets) {
+      await exograph.executeQueryPriv(
+        updateRsvp,
+        {
+          id: rsvp.id,
+          data: {
+            numTickets,
           },
-          adminContext
-        );
-      }
+        },
+        adminContext
+      );
     }
 
     return "OK";

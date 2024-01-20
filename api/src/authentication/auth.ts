@@ -10,7 +10,7 @@ const signUpContext = {
 async function getUserByEmail(email: string, exo: ExographPriv) {
   const res = await exo.executeQueryPriv(
     `query($email: String!) {
-      authUsers(where: {email: {eq: $email}}) {
+      authUserByEmail(email: $email) {
         id
         clerkId
       }
@@ -19,14 +19,7 @@ async function getUserByEmail(email: string, exo: ExographPriv) {
     signUpContext
   );
 
-  const foundAuthUsers = res.authUsers;
-  if (foundAuthUsers.length === 1) {
-    return foundAuthUsers[0];
-  } else if (foundAuthUsers.length > 1) {
-    throw new Error(`Multiple users found for email ${email}`);
-  } else {
-    return null;
-  }
+  return res.authUserByEmail;
 }
 
 export async function syncAuthUser(authContext: AuthContext, exo: ExographPriv): Promise<string> {
@@ -82,19 +75,12 @@ export async function getAuthUserId(
 
   const res = await exo.executeQuery(
     `query($clerkId: String!) {
-        authUsers(where: {clerkId: {eq: $clerkId}}) {
+        authUserByClerkId(clerkId: $clerkId) {
           id
         }
       }`,
     { clerkId: authContext.clerkId }
   );
 
-  const foundAuthUsers = res.authUsers;
-  if (foundAuthUsers.length === 1) {
-    return foundAuthUsers[0].id;
-  } else if (foundAuthUsers.length > 1) {
-    throw new Error(`Multiple users found for clerkId ${authContext.clerkId}`);
-  } else {
-    return null;
-  }
+  return res.authUserByClerkId.id;
 }

@@ -1,10 +1,12 @@
-import _type, { ExographPriv } from "../../generated/exograph.d.ts";
+import { ExographPriv } from "../../generated/exograph.d.ts";
 import { processAndSendEmail } from "./processAndSendEmail.ts";
 import { verifyCode } from "./codeManagement.ts";
 
 const deleteSubscription = `
   mutation deleteSubscription($email: String) {
-    deleteSubscriptions(where:{email: {eq: $email}})
+    deleteSubscriptions(where:{email: {eq: $email}}) {
+      id
+    }
   }
 `;
 
@@ -18,7 +20,7 @@ const createSubscription = `
 
 const getSubscription = `
   query getSubscription($email: String) {
-    subscriptions(where: {email: {eq: $email}}) {
+    subscriptionByEmail(email: $email) {
       id
     }
   }
@@ -33,15 +35,18 @@ const adminContext = {
 const subscriptionJwtSecret = Deno.env.get("SUBSCRIPTION_JWT_SECRET");
 if (!subscriptionJwtSecret) throw new Error("SUBSCRIPTION_JWT_SECRET env must be defined");
 
+async function subscriptionByEmail(email: String, exograph: ExographPriv): any {
+  return (await exograph.executeQueryPriv(getSubscription, { email }, adminContext))
+    .subscriptionByEmail;
+}
+
 export async function initiateSubscribe(email: string, exograph: ExographPriv) {
   const from = Deno.env.get("CONTACT_EMAIL") || "";
   const subject = "Subscribe confirmation";
   const hostUrl = Deno.env.get("HOST_URL");
-  const existingSubscription = (
-    await exograph.executeQueryPriv(getSubscription, { email }, adminContext)
-  ).subscriptions;
+  const existingSubscription = await subscriptionByEmail(email, exograph);
 
-  if (existingSubscription.length === 0 && hostUrl) {
+  if (!existingSubscription && hostUrl) {
     await processAndSendEmail(
       "./src/subscription/subscriptionTemplate.html",
       email,
@@ -57,10 +62,9 @@ export async function initiateSubscribe(email: string, exograph: ExographPriv) {
 export async function verifySubscribe(email: string, code: string, exograph: ExographPriv) {
   await verifyCode(email, code, subscriptionJwtSecret as string);
 
-  const existingSubscription = (
-    await exograph.executeQueryPriv(getSubscription, { email }, adminContext)
-  ).subscriptions;
-  if (existingSubscription.length === 0) {
+  const existingSubscription = await subscriptionByEmail(email, exograph);
+
+  if (!existingSubscription) {
     await exograph.executeQueryPriv(
       createSubscription,
       { data: { email, group: "all" } },
@@ -75,10 +79,9 @@ export async function initiateUnsubscribe(email: string, exograph: ExographPriv)
   const subject = "Unsubscribe confirmation";
   const hostUrl = Deno.env.get("HOST_URL");
 
-  const existingSubscription = (
-    await exograph.executeQueryPriv(getSubscription, { email }, adminContext)
-  ).subscriptions;
-  if (existingSubscription.length > 0 && hostUrl) {
+  const existingSubscription = await subscriptionByEmail(email, exograph);
+
+  if (existingSubscription && hostUrl) {
     await processAndSendEmail(
       "./src/subscription/unsubscribeTemplate.html",
       email,
@@ -94,10 +97,9 @@ export async function initiateUnsubscribe(email: string, exograph: ExographPriv)
 export async function verifyUnsubscribe(email: string, code: string, exograph: ExographPriv) {
   await verifyCode(email, code, subscriptionJwtSecret as string);
 
-  const existingSubscription = (
-    await exograph.executeQueryPriv(getSubscription, { email }, adminContext)
-  ).subscriptions;
-  if (existingSubscription.length > 0) {
+  const existingSubscription = await subscriptionByEmail(email, exograph);
+
+  if (existingSubscription) {
     await exograph.executeQueryPriv(deleteSubscription, { email }, adminContext);
   }
   return "OK";
