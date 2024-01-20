@@ -17,7 +17,7 @@ interface EditArtistProps {
 export default function EditArtist(props: EditArtistProps) {
   const id = props.params.id;
 
-  return <>{id === "new" ? <CreateArtist /> : <UpdateArtist id={id} />}</>;
+  return id === "new" ? <CreateArtist /> : <UpdateArtist id={id} />;
 }
 
 interface UpdateArtistProps {
@@ -51,9 +51,9 @@ function UpdateArtist({ id }: UpdateArtistProps) {
     });
   };
 
-  if (!data) return null;
+  if (!data || !data.artist) return null;
 
-  return data && data.artist && <ArtistEditor artistData={data.artist} done={saveArtist} />;
+  return <ArtistEditor artistData={data.artist} done={saveArtist} />;
 }
 
 function CreateArtist() {

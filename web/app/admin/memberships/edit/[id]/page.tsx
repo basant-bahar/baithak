@@ -40,7 +40,7 @@ function UpdateMembership({ id }: UpdateMembershipProps) {
     updateMembershipAndUpdateAuthUser
   );
 
-  if (loading || !data) {
+  if (loading || !data || !data.membership) {
     return <>Loading...</>;
   }
 
@@ -213,7 +213,9 @@ function CreateMembership() {
 
   const findAuthUserByName = useCallback(
     async (firstName: string, lastName: string) => {
-      const result = await authUserByNameQuery({ variables: { firstName, lastName } });
+      const result = await authUserByNameQuery({
+        variables: { firstName, lastName },
+      });
       if (result?.data?.authUsers && result.data.authUsers.length > 0) {
         const authUser = result.data.authUsers[0];
         if (authUser.email) {
@@ -256,7 +258,10 @@ function CreateMembership() {
   const saveMembership = async (membership: MembershipDetailsFragment) => {
     await createMembership({
       variables: {
-        membershipData: { ...membership, authUser: { id: membership.authUser.id } },
+        membershipData: {
+          ...membership,
+          authUser: { id: membership.authUser.id },
+        },
         authId: membership.authUser.id,
         authUserData: {
           firstName: membership.authUser.firstName,

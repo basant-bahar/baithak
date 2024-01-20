@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { graphql } from "__generated__";
 import {
-  formatedNotification,
+  formattedNotification,
   getNotification,
   getNotifications,
   notificationConcerts,
@@ -37,7 +37,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
   const [updateNotificationMutation] = useMutation(updateNotification, {
     refetchQueries: [
       { query: getNotification, variables: { id } },
-      { query: formatedNotification, variables: { id } },
+      { query: formattedNotification, variables: { id } },
     ],
   });
 
@@ -61,7 +61,7 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
     }).then((_) => router.back());
   }
 
-  if (loading || concertsLoading || !data || !concertsData) {
+  if (loading || concertsLoading || !data || !concertsData || !data.notification) {
     return null;
   }
 

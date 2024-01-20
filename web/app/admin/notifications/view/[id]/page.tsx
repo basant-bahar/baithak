@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getFragmentData } from "__generated__";
 import NotificationView from "components/notifications/notificationView";
 import {
-  formatedNotification,
+  formattedNotification,
   getNotification,
   notificationDetails,
 } from "../../../../../graphql/notifications";
@@ -19,14 +19,20 @@ export default function ViewNotification({ params: { id } }: NotificationProps) 
   const { data, loading } = useQuery(getNotification, {
     variables: { id },
   });
-  const { data: formatedNotificationData, loading: formatedNotificationLoading } = useQuery(
-    formatedNotification,
+  const { data: formattedNotificationData, loading: formattedNotificationLoading } = useQuery(
+    formattedNotification,
     {
       variables: { id },
     }
   );
 
-  if (loading || formatedNotificationLoading || !data || !formatedNotificationData) {
+  if (
+    loading ||
+    formattedNotificationLoading ||
+    !data ||
+    !formattedNotificationData ||
+    !data.notification
+  ) {
     return null;
   }
   const notification = getFragmentData(notificationDetails, data.notification);
@@ -35,7 +41,7 @@ export default function ViewNotification({ params: { id } }: NotificationProps) 
     <div className="main-container mb-2">
       <NotificationView
         subject={notification.subject}
-        formatedBody={formatedNotificationData.formatNotification}
+        formatedBody={formattedNotificationData.formatNotification}
       />
       <div className="flex justify-center p-2">
         <Link

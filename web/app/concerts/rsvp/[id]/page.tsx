@@ -19,7 +19,7 @@ const ConcertsRsvp = (props: ConcertsRsvpProps) => {
     variables: { id },
   });
 
-  if (!data) return null;
+  if (!data || !data.concert) return null;
 
   const concert = getFragmentData(concertDetails, data.concert);
   const mainArtistsCount = concert.mainArtists.length;

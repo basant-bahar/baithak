@@ -17,7 +17,7 @@ interface EditVenueProps {
 export default function EditVenue(props: EditVenueProps) {
   const id = props.params.id;
 
-  return <>{id === "new" ? <CreateVenue /> : <UpdateVenue id={id} />}</>;
+  return id === "new" ? <CreateVenue /> : <UpdateVenue id={id} />;
 }
 
 interface UpdateVenueProps {
@@ -46,9 +46,9 @@ function UpdateVenue({ id }: UpdateVenueProps) {
     });
   };
 
-  if (!data) return null;
+  if (!data || !data.venue) return null;
 
-  return data && data.venue && <VenueEditor venueData={data.venue} done={saveVenue} />;
+  return <VenueEditor venueData={data.venue} done={saveVenue} />;
 }
 
 function CreateVenue() {

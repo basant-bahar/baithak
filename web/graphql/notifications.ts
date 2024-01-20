@@ -65,8 +65,8 @@ export const getNotification = graphql(`
   }
 `);
 
-export const formatedNotification = graphql(`
-  query formatedNotification($id: Uuid!) {
+export const formattedNotification = graphql(`
+  query formattedNotification($id: Uuid!) {
     formatNotification(concertNotificationId: $id)
   }
 `);

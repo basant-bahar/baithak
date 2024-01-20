@@ -15,7 +15,7 @@ interface EditUserProps {
 export default function EditUser(props: EditUserProps) {
   const id = props.params.id;
 
-  return <>{id === "new" ? <CreateUser /> : <UpdateUser id={id} />}</>;
+  return id === "new" ? <CreateUser /> : <UpdateUser id={id} />;
 }
 
 interface UpdateUserProps {
@@ -41,9 +41,9 @@ function UpdateUser({ id }: UpdateUserProps) {
     }).then((_) => router.back());
   };
 
-  if (!data) return null;
+  if (!data || !data.authUser) return null;
 
-  return data && data.authUser && <AuthUserEditor userData={data.authUser} done={saveUser} />;
+  return <AuthUserEditor userData={data.authUser} done={saveUser} />;
 }
 
 function CreateUser() {
