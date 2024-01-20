@@ -84,7 +84,7 @@ module Concertmodule {
           delete=AuthContext.role == "admin")
   type Membership {
     @pk id: Uuid = generate_uuid()
-    authUser: AuthUser
+    @unique authUser: AuthUser
     @index spouseFirstName: String?
     @index spouseLastName: String?
     spouseEmail: String?

@@ -35,7 +35,10 @@ const adminContext = {
 const subscriptionJwtSecret = Deno.env.get("SUBSCRIPTION_JWT_SECRET");
 if (!subscriptionJwtSecret) throw new Error("SUBSCRIPTION_JWT_SECRET env must be defined");
 
-async function subscriptionByEmail(email: String, exograph: ExographPriv): any {
+async function subscriptionByEmail(
+  email: string,
+  exograph: ExographPriv
+): Promise<{ id: string } | undefined> {
   return (await exograph.executeQueryPriv(getSubscription, { email }, adminContext))
     .subscriptionByEmail;
 }
