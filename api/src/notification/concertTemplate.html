@@ -27,7 +27,7 @@ const isNonSaturday = concertStartTime.getDay() !== 6;
 const isBefore5pm = concertStartTime.getHours() < 17;
 const specialNote = isNonSaturday || isBefore5pm
   ? `text-align: center;padding: 20px;background-color: ${bbGold}; color: ${bbRed};font-size: medium;font-weight: bold;width: 60%;margin-left: 20%;margin-bottom: 0px;`
-  : ""
+  : "";
 %>
 <div style=<% concert? "" : "display: none" %>>
   <div style="padding: 20px;border: 1px solid #eae3e3; border-radius: 4px;text-align: center">
@@ -66,7 +66,9 @@ const specialNote = isNonSaturday || isBefore5pm
       <span>
         Tickets: <%= concert.nonMemberPrice %>
       </span>
-      <span>&nbsp;(available at the gate), Basant Bahar Members: <%= concert.memberPrice === 0? "Free" : concert.memberPrice %></span>
+      <span>&nbsp;(available at the gate<% if(concert.ticketLink) { %>
+        or 
+        <a style="<%= `color: ${bbGold}` %>" href=<%= concert.ticketLink %>>online</a><%}%>), Basant Bahar Members: <%= concert.memberPrice === 0? "Free" : concert.memberPrice %></span>
     </div>
     <div style="margin-bottom: 5px">
       <span style="margin-bottom: 5px">Become a Basant Bahar member and attend all concerts free for one

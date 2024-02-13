@@ -48,6 +48,7 @@ const query = `
         photoUrl
         memberPrice
         nonMemberPrice
+        ticketLink
         main: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {
           artist {
             name
