@@ -1,32 +1,28 @@
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+// @deno-types="npm:@types/nodemailer"
+import nodemailer from "npm:nodemailer@6.9.8";
 
-function createClient(): SMTPClient {
+async function createClient(): nodemailer.Transporter {
   const host = Deno.env.get("SMTP_HOST") || "localhost";
   const port = Number(Deno.env.get("SMTP_PORT"));
   const username = Deno.env.get("SMTP_USERNAME") || "";
   const password = Deno.env.get("SMTP_PASSWORD") || "";
   const tls = Deno.env.get("SMTP_USE_TLS") === "true";
 
-  return new SMTPClient({
-    connection: {
-      hostname: host,
-      port,
-      tls,
-      auth: {
-        username,
-        password,
-      },
+  const smtpTransportOptions = {
+    host,
+    port,
+    auth: {
+      user: username,
+      pass: password,
     },
-    client: {
-      warning: "log",
-    },
-    debug: {
-      log: false,
-      allowUnsecure: true,
-      encodeLB: false,
-      noStartTLS: false,
-    },
-  });
+    secure: tls,
+    ignoreTLS: !tls,
+    logger: true,
+    debug: true,
+  };
+  const transporter = nodemailer.createTransport(smtpTransportOptions);
+  await transporter.verify();
+  return transporter;
 }
 
 export async function sendEmail(input: {
@@ -37,7 +33,7 @@ export async function sendEmail(input: {
   cc?: string;
   bcc?: string | [string];
 }): Promise<string> {
-  const client = createClient();
+  const client = await createClient();
   const { subject, message, from, to, cc, bcc } = input;
   const bccs = typeof bcc === "string" ? [bcc] : bcc;
 
@@ -49,8 +45,7 @@ export async function sendEmail(input: {
       while (remaining.length > 0) {
         const batchedBccs = remaining.slice(0, batchSize);
         console.log(
-          `Sending batch of: ${batchedBccs.length}, first email: ${batchedBccs[0]}, last email: ${
-            batchedBccs[batchedBccs.length - 1]
+          `Sending batch of: ${batchedBccs.length}, first email: ${batchedBccs[0]}, last email: ${batchedBccs[batchedBccs.length - 1]
           }`
         );
         await sendBatch(client, subject, message, from, to, cc, batchedBccs);
@@ -67,18 +62,11 @@ export async function sendEmail(input: {
   } catch (e) {
     console.log("Error sending email ", e);
     throw e;
-  } finally {
-    try {
-      await client.close();
-    } catch (e) {
-      // Denomailer errors when closing client after sending zero emails.
-      console.log("Error closing SMTP client", e);
-    }
   }
 }
 
 async function sendBatch(
-  client: SMTPClient,
+  client: nodemailer.Transporter,
   subject: string,
   message: string,
   from: string,
@@ -86,14 +74,14 @@ async function sendBatch(
   cc?: string,
   bccs?: string[]
 ): Promise<void> {
-  await client.send({
+  const email = {
+    from,
     to,
     cc,
     bcc: bccs,
-    from,
     subject,
-    content: "auto",
     html: message,
-    priority: "low",
-  });
+  };
+
+  await client.sendMail(email);
 }
