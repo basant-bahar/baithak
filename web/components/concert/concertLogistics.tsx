@@ -11,7 +11,7 @@ type ConcertLogisticsProps = {
   title: string;
   memberPrice: number;
   nonMemberPrice: number;
-  ticketLink?: string;
+  ticketLink?: string | null;
   startTime: string;
   endTime: string;
   venue: FragmentType<typeof venueDetails>;
@@ -28,8 +28,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
 
   const localDateStr = localizedStart.getDateDisplayString();
   const isNonSaturday = localizedStart.getDay() !== 6;
-  const isOddTime =
-    localizedStart.getHours() < 17 || localizedStart.getHours() > 18;
+  const isOddTime = localizedStart.getHours() < 17 || localizedStart.getHours() > 18;
   const specialNoteStyle = isNonSaturday || isOddTime ? "pb-4" : "";
   const day = localizedStart.getWeekdayString();
 
@@ -70,13 +69,9 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
 
   return (
     <div className="mx-auto max-w-screen-sm bg-gray-100 rounded-xl p-2">
-      <div
-        className={`text-center text-primary bg-secondary ${specialNoteStyle}`}
-      >
+      <div className={`text-center text-primary bg-secondary ${specialNoteStyle}`}>
         {isNonSaturday && (
-          <div className="font-bold p-4 pb-0">
-            Please note this is a {day} concert.
-          </div>
+          <div className="font-bold p-4 pb-0">Please note this is a {day} concert.</div>
         )}
         {isOddTime && (
           <div className="font-bold p-4 pb-0 pt-2">
@@ -92,15 +87,13 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
           </span>
           <span className="xs:block hidden mr-1">,</span>
           <span>
-            &nbsp;{`${ORGANIZATION_NAME}`} Members:{" "}
-            {isFree ? "Free" : props.memberPrice}
+            &nbsp;{`${ORGANIZATION_NAME}`} Members: {isFree ? "Free" : props.memberPrice}
           </span>
         </div>
         <div className="mb-4">
           {isFree && (
             <span>
-              Become a {`${ORGANIZATION_NAME}`} member and attend all concerts
-              free for one year.
+              Become a {`${ORGANIZATION_NAME}`} member and attend all concerts free for one year.
             </span>
           )}
           <div>
