@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/navigation";
 import { graphql } from "__generated__";
-import { getDateStr, getServerDateOnly } from "utils";
+import { getServerDateOnly } from "utils";
 import { getMembership } from "graphql/memberships";
 
 interface PaymentInfoProps {

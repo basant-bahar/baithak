@@ -20,7 +20,7 @@ export async function processPayment(operation: Operation, exograph: Exograph) {
   const dataArg = query.arguments.data as {
     membership: { id: number };
     date: string;
-    infoOnly: string;
+    infoOnly: boolean;
   };
   const membershipId = dataArg?.membership?.id;
   const paymentDateStr = dataArg?.date;

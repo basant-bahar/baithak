@@ -28,7 +28,6 @@ const newMembership: MembershipOnlyDetailsFragment = {
   spouseLastName: "",
   spouseEmail: "",
   type: "",
-  expiry: null,
 };
 
 const newAuthUserInfo: MemberAuthInfo = {
@@ -48,7 +47,6 @@ export default function MembershipEditor(props: MembershipEditorProps) {
           spouseFirstName: props.membership.spouseFirstName,
           spouseLastName: props.membership.spouseLastName,
           spouseEmail: props.membership.spouseEmail,
-          expiry: props.membership.expiry,
         }
       : newMembership
   );
@@ -203,13 +201,13 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             </div>
           </>
         )}
-        {membership.expiry && (
+        {props.membership?.expiry && (
           <div className="form-row">
             <label className="form-label">Expires On</label>
             <input
               className="simple-input"
               type="date"
-              value={getDateStr(membership.expiry)}
+              value={getDateStr(props.membership.expiry)}
               readOnly
               disabled={true}
             />

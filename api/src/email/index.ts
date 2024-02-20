@@ -18,7 +18,7 @@ async function createClient(): nodemailer.Transporter {
     secure: tls,
     ignoreTLS: !tls,
     logger: true,
-    debug: true,
+    debug: false,
   };
   const transporter = nodemailer.createTransport(smtpTransportOptions);
   await transporter.verify();
@@ -45,8 +45,9 @@ export async function sendEmail(input: {
       while (remaining.length > 0) {
         const batchedBccs = remaining.slice(0, batchSize);
         console.log(
-          `Sending batch of: ${batchedBccs.length}, first email: ${batchedBccs[0]}, last email: ${batchedBccs[batchedBccs.length - 1]
-          }`
+          `Sending batch of: ${batchedBccs.length},
+          first email: ${batchedBccs[0]},
+          last email: ${batchedBccs[batchedBccs.length - 1]}`
         );
         await sendBatch(client, subject, message, from, to, cc, batchedBccs);
         remaining = remaining.slice(batchSize);
