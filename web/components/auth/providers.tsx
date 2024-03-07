@@ -29,7 +29,7 @@ const httpLink = createHttpLink({
 
 const persistedQueryLink = createPersistedQueryLink(
   generatePersistedQueryIdsFromManifest({
-    loadManifest: () => import("/persisted-query-manifest.json"),
+    loadManifest: () => import("persisted-query-manifest.json"),
   })
 );
 
