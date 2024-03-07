@@ -1,0 +1,444 @@
+{
+  "format": "apollo-persisted-query-manifest",
+  "version": 1,
+  "operations": [
+    {
+      "id": "e0be30b17d922885ef320b52033c39f653d3554b2c5731e950009fc526bc22f5",
+      "name": "concertRsvps",
+      "type": "query",
+      "body": "query concertRsvps {\n  concerts(orderBy: {startTime: DESC}) {\n    ...ConcertRsvpDetails\n    __typename\n  }\n}\n\nfragment ConcertRsvpDetails on Concert {\n  id\n  title\n  startTime\n  rsvpsAgg {\n    numTickets {\n      sum\n      __typename\n    }\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "fc76288f2ad51478ff00102d1c4680a92339521428ec03774dba6e76f581dd26",
+      "name": "concertRsvpsPrint",
+      "type": "query",
+      "body": "query concertRsvpsPrint {\n  concerts(orderBy: {startTime: DESC}) {\n    ...ConcertRsvpPrintDetails\n    __typename\n  }\n}\n\nfragment ConcertRsvpPrintDetails on Concert {\n  id\n  title\n  startTime\n  rsvps {\n    email\n    numTickets\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "c24cab2b5103f6010d11e5627fc19c011ababf1b21a2695ab4e4559079070c87",
+      "name": "concertYearList",
+      "type": "query",
+      "body": "query concertYearList {\n  firstConcert: concerts(\n    where: {publish: {eq: true}}\n    orderBy: {startTime: ASC}\n    limit: 1\n  ) {\n    id\n    startTime\n    __typename\n  }\n  lastConcert: concerts(\n    where: {publish: {eq: true}}\n    orderBy: {startTime: DESC}\n    limit: 1\n  ) {\n    id\n    startTime\n    __typename\n  }\n}"
+    },
+    {
+      "id": "c05283b0ca14739b15889f790edf907e53ce495a41e42c5a8ba8c8ab981dd218",
+      "name": "concertsBetweenDates",
+      "type": "query",
+      "body": "query concertsBetweenDates($start: LocalDateTime, $end: LocalDateTime) {\n  concerts(\n    where: {and: [{startTime: {gte: $start}}, {startTime: {lt: $end}}, {publish: {eq: true}}]}\n  ) {\n    ...PastConcertDetail\n    __typename\n  }\n}\n\nfragment PastConcertDetail on Concert {\n  id\n  title\n  photoUrl\n  startTime\n  concertArtists {\n    artist {\n      title\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "08208c4ef3169dbc2949c2fc7c81e7a9959caf059e3eab1b6c521c8012a3b02e",
+      "name": "concertsForCalendar",
+      "type": "query",
+      "body": "query concertsForCalendar($start: LocalDateTime, $end: LocalDateTime) {\n  concerts(\n    where: {and: [{startTime: {gte: $start}}, {startTime: {lte: $end}}], publish: {eq: true}}\n    orderBy: {startTime: ASC}\n  ) {\n    ...ConcertCalendarDetail\n    __typename\n  }\n}\n\nfragment ConcertCalendarDetail on Concert {\n  id\n  title\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    artist {\n      title\n      name\n      __typename\n    }\n    __typename\n  }\n  startTime\n  photoUrl\n  venue {\n    id\n    name\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "25dc196a37fc2525f634b2ffbcc292ad3af3b087c60a678251058bc5d2bf28fa",
+      "name": "createAdvisory",
+      "type": "mutation",
+      "body": "mutation createAdvisory($data: AdvisoryCreationInput!) {\n  advisory: createAdvisory(data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+    },
+    {
+      "id": "b96e8555568da65351aa2aa6cb24c7aee53aee4468b66d8dbb7d83e7eba0c8be",
+      "name": "createArtist",
+      "type": "mutation",
+      "body": "mutation createArtist($data: ArtistCreationInput!) {\n  createArtist(data: $data) {\n    ...ArtistDetails\n    __typename\n  }\n}\n\nfragment ArtistDetails on Artist {\n  title\n  name\n  bio\n  photoUrl\n  youtubeVideoIds\n  instruments\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "01370dca632a4a6ff55703c6e4f11a57dad38ff1fe45e8a1a37480f06475f4b1",
+      "name": "createAuthUser",
+      "type": "mutation",
+      "body": "mutation createAuthUser($data: AuthUserCreationInput!) {\n  createAuthUser(data: $data) {\n    id\n    ...AuthUserDetails\n    __typename\n  }\n}\n\nfragment AuthUserDetails on AuthUser {\n  clerkId\n  firstName\n  lastName\n  email\n  __typename\n}"
+    },
+    {
+      "id": "afb7a158fb17c364694a5070e684d02c8667b81360b1fe37139d51b5c1aafa8c",
+      "name": "createConcert",
+      "type": "mutation",
+      "body": "mutation createConcert($data: ConcertCreationInput!) {\n  createConcert(data: $data) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "373f8d51292463fadfc71f2326a3d558c3c30b9617e44b4bee9ec4cb3fc71fa3",
+      "name": "createMembership",
+      "type": "mutation",
+      "body": "mutation createMembership($data: MembershipCreationInput!) {\n  createMembership(data: $data) {\n    id\n    ...MembershipOnlyDetails\n    __typename\n  }\n}\n\nfragment MembershipOnlyDetails on Membership {\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "da12035399e0da6a90a1b2cc9d2c1aed78904607a2ff8e1a5fa1bfa364d80ec9",
+      "name": "createMembershipAndUpdateAuthUser",
+      "type": "mutation",
+      "body": "mutation createMembershipAndUpdateAuthUser($membershipData: MembershipCreationInput!, $authId: Uuid!, $authUserData: AuthUserUpdateInput!) {\n  createMembership(data: $membershipData) {\n    ...MembershipDetails\n    __typename\n  }\n  updateAuthUser(id: $authId, data: $authUserData) {\n    id\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "5454b3c899627765bfa3ab52dab48934ff62e65e407a5049f269a9558880d7b2",
+      "name": "createNotification",
+      "type": "mutation",
+      "body": "mutation createNotification($data: NotificationCreationInput!) {\n  createNotification(data: $data) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "7b459b70b0bfa0dab6757d1f43bee387056597dcd23d4e96ff3d4f257ce9e815",
+      "name": "createPayment",
+      "type": "mutation",
+      "body": "mutation createPayment($data: PaymentCreationInput!) {\n  createPayment(data: $data) {\n    membership {\n      id\n      __typename\n    }\n    date\n    note\n    infoOnly\n    __typename\n  }\n}"
+    },
+    {
+      "id": "7c1a69b8c72770f1386718ff1ec5f56ba411b938311dc181bf8afd850c799519",
+      "name": "createSubscription",
+      "type": "mutation",
+      "body": "mutation createSubscription($data: SubscriptionCreationInput!) {\n  createSubscription(data: $data) {\n    id\n    ...SubscriptionDetails\n    __typename\n  }\n}\n\nfragment SubscriptionDetails on Subscription {\n  email\n  group\n  __typename\n}"
+    },
+    {
+      "id": "06c7c11c838284ef9a3b0be51c8e6829f00391b1eb72e4e3ad89e15d936e4fb0",
+      "name": "createVenue",
+      "type": "mutation",
+      "body": "mutation createVenue($data: VenueCreationInput!) {\n  createVenue(data: $data) {\n    ...VenueDetails\n    __typename\n  }\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "9d0c5b950b12576ada6bb2e62757a4d87b08f6df0218161240be99236df1ae50",
+      "name": "deleteAdvisory",
+      "type": "mutation",
+      "body": "mutation deleteAdvisory($id: Uuid!) {\n  deleteAdvisory(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "8eff0c2aa5c79631b017381b49aa1bb43915093b4a029c74ea7e336ab1d237ef",
+      "name": "deleteArtist",
+      "type": "mutation",
+      "body": "mutation deleteArtist($id: Uuid!) {\n  deleteArtist(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "54ec7f77d1d128cbe6e912bfb2f69b89cf4745f6dada6f7d3030a85ed26f531e",
+      "name": "deleteAuthUser",
+      "type": "mutation",
+      "body": "mutation deleteAuthUser($id: Uuid!) {\n  deleteAuthUser(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "0f1c1182ebad63195b667a3ce969addbb9795e26c5c7df976f62ff97bd9bbbf3",
+      "name": "deleteConcert",
+      "type": "mutation",
+      "body": "mutation deleteConcert($id: Uuid!) {\n  deleteConcertArtists(where: {concert: {id: {eq: $id}}}) {\n    id\n    __typename\n  }\n  deleteConcert(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "e0d57cc01605b05fb758f5253b7837b36b655d1ca3405625936e611186ee2769",
+      "name": "deleteMembership",
+      "type": "mutation",
+      "body": "mutation deleteMembership($id: Uuid!) {\n  deleteMembership(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "dc395a5797df42191f14838dc226bdee8e2e99cbbc3710f19162f8300153ce37",
+      "name": "deleteNotification",
+      "type": "mutation",
+      "body": "mutation deleteNotification($id: Uuid!) {\n  deleteNotification(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "cb58d0cd896dee7c9efc6b5e5898d426b190d5d7173147236015aa2135183c12",
+      "name": "deleteSubscription",
+      "type": "mutation",
+      "body": "mutation deleteSubscription($id: Uuid!) {\n  deleteSubscription(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "093d1d895460b42eb825790a7dfbbfa7c8832420457f559ab428043f898d38d0",
+      "name": "deleteVenue",
+      "type": "mutation",
+      "body": "mutation deleteVenue($id: Uuid!) {\n  deleteVenue(id: $id) {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "5af27da7a07109f7066350c25b8e124f4f027d9f27eac69ca681c9f547915acc",
+      "name": "deskPrintout",
+      "type": "query",
+      "body": "query deskPrintout($expiry: LocalDate) {\n  memberships(\n    where: {expiry: {gt: $expiry}}\n    orderBy: {authUser: {firstName: ASC}}\n  ) {\n    id\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "afd0c3ef76f7be58f01ca7ffbae450afd72d40fb80aeacaebb5373c8458b0e33",
+      "name": "emailExpiryNotifications",
+      "type": "mutation",
+      "body": "mutation emailExpiryNotifications($fromDate: LocalDate!, $toDate: LocalDate!) {\n  emailExpiryNotifications(fromDate: $fromDate, toDate: $toDate)\n}"
+    },
+    {
+      "id": "6b04fa7cae6a445d5f01ea37dd2059bcdf21f05740e8405b0e788d2fc3720331",
+      "name": "emailNotification",
+      "type": "mutation",
+      "body": "mutation emailNotification($id: Uuid!, $emailGroupName: String!) {\n  emailNotification(concertNotificationId: $id, emailGroupName: $emailGroupName)\n}"
+    },
+    {
+      "id": "1270a9374726595d7d2e3276c6ef197a38c714e2601880a324d479e8e0f54514",
+      "name": "formattedNotification",
+      "type": "query",
+      "body": "query formattedNotification($id: Uuid!) {\n  formatNotification(concertNotificationId: $id)\n}"
+    },
+    {
+      "id": "aa0d28cf7d7c7f5ea15a45cc9013591f08e2777f7493b7239d636eda0f8bc2eb",
+      "name": "getAdvisories",
+      "type": "query",
+      "body": "query getAdvisories {\n  advisories {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+    },
+    {
+      "id": "e78a32b51f1e58f76fda55bdf932a2f67d73bebdd2d11de1669f4188a472d360",
+      "name": "getAdvisory",
+      "type": "query",
+      "body": "query getAdvisory($id: Uuid!) {\n  advisory(id: $id) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+    },
+    {
+      "id": "5b0266eadb52d6ab71fda1d44a05a95f28b5eb22aab7882bd3aef4057d7ec1d0",
+      "name": "getArtist",
+      "type": "query",
+      "body": "query getArtist($id: Uuid!) {\n  artist(id: $id) {\n    id\n    ...ArtistDetails\n    __typename\n  }\n}\n\nfragment ArtistDetails on Artist {\n  title\n  name\n  bio\n  photoUrl\n  youtubeVideoIds\n  instruments\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "3768da638f77f1df5caf11569db9e29248231e5b1335a10bdcb42fbd5e7fcedd",
+      "name": "getArtistBasicInfo",
+      "type": "query",
+      "body": "query getArtistBasicInfo {\n  artists(orderBy: {name: ASC}) {\n    ...ArtistBasicInfo\n    __typename\n  }\n}\n\nfragment ArtistBasicInfo on Artist {\n  id\n  title\n  name\n  photoUrl\n  instruments\n  __typename\n}"
+    },
+    {
+      "id": "c8b9be7bcb9e512960b89857a5486448f24a6bb8a4d0bed613b3beab7e5f8d25",
+      "name": "getArtistsByNameStart",
+      "type": "query",
+      "body": "query getArtistsByNameStart($first: String!, $second: String!) {\n  artists(\n    where: {or: [{name: {startsWith: $first}}, {name: {startsWith: $second}}]}\n    orderBy: {name: ASC}\n  ) {\n    ...ArtistBasicInfo\n    __typename\n  }\n}\n\nfragment ArtistBasicInfo on Artist {\n  id\n  title\n  name\n  photoUrl\n  instruments\n  __typename\n}"
+    },
+    {
+      "id": "8cfa936a3204496ef0a65e7a29f92d4e6adab0cd4bb45af0a55089062f016025",
+      "name": "getAuthUser",
+      "type": "query",
+      "body": "query getAuthUser($id: Uuid!) {\n  authUser(id: $id) {\n    id\n    ...AuthUserDetails\n    __typename\n  }\n}\n\nfragment AuthUserDetails on AuthUser {\n  clerkId\n  firstName\n  lastName\n  email\n  __typename\n}"
+    },
+    {
+      "id": "5a8aeec3c63d6b81dfe4766370038f2500842d3f438ae0978f3506a579ca9594",
+      "name": "getAuthUserByEmail",
+      "type": "query",
+      "body": "query getAuthUserByEmail($email: String!) {\n  authUserByEmail(email: $email) {\n    id\n    email\n    firstName\n    lastName\n    __typename\n  }\n}"
+    },
+    {
+      "id": "a5316e403b5f54ba3f8efb07999f10d272f886500eaf8d7fe76199ee165295be",
+      "name": "getAuthUserByFirstLastName",
+      "type": "query",
+      "body": "query getAuthUserByFirstLastName($firstName: String!, $lastName: String!) {\n  authUsers(\n    where: {and: [{firstName: {eq: $firstName}}, {lastName: {eq: $lastName}}]}\n  ) {\n    id\n    email\n    __typename\n  }\n}"
+    },
+    {
+      "id": "bb8d862e32ca30fa49224911b1eec1b3764056c1cfdd5de6ea59e4ab2f77c370",
+      "name": "getConcert",
+      "type": "query",
+      "body": "query getConcert($id: Uuid!) {\n  concert(id: $id) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "9dbfd79177747b52fffd0f6bd28bcaf5c0ee0fdc61591588fb39c92632502001",
+      "name": "getConcertView",
+      "type": "query",
+      "body": "query getConcertView($id: Uuid!) {\n  concert(id: $id) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "f80cd81327cb896351fd3e0c144be07b47b4491b3b130f2b74a66ab146765036",
+      "name": "getLastConcert",
+      "type": "query",
+      "body": "query getLastConcert($today: LocalDateTime) {\n  concerts(where: {startTime: {lte: $today}}, orderBy: {startTime: DESC}) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "1a4ecc3d069f839164e98ae61ae8d6b3687ee6c0837736c9f8896db7d0308ae5",
+      "name": "getMembership",
+      "type": "query",
+      "body": "query getMembership($id: Uuid!) {\n  membership(id: $id) {\n    id\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "62d2d52b6d6d8514a6373fcbcf64a8aae171535fa8d7b13e56e8753a40638236",
+      "name": "getMembershipAggs",
+      "type": "query",
+      "body": "query getMembershipAggs($expiry: LocalDate) {\n  life: membershipsAgg(\n    where: {and: [{type: {eq: \"Life\"}}, {expiry: {gte: $expiry}}]}\n  ) {\n    ...MembershipCount\n    __typename\n  }\n  couple: membershipsAgg(\n    where: {and: [{type: {eq: \"Couple\"}}, {expiry: {gte: $expiry}}]}\n  ) {\n    ...MembershipCount\n    __typename\n  }\n  family: membershipsAgg(\n    where: {and: [{type: {eq: \"Family\"}}, {expiry: {gte: $expiry}}]}\n  ) {\n    ...MembershipCount\n    __typename\n  }\n  individual: membershipsAgg(\n    where: {and: [{type: {eq: \"Individual\"}}, {expiry: {gte: $expiry}}]}\n  ) {\n    ...MembershipCount\n    __typename\n  }\n}\n\nfragment MembershipCount on MembershipAgg {\n  id {\n    count\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "c014ea8aea03ad0a3bbb37d589f3d79f245607cb47a36caba8082ef8316e7f5c",
+      "name": "getMembershipByAuthId",
+      "type": "query",
+      "body": "query getMembershipByAuthId($clerkId: String!) {\n  memberships(where: {authUser: {clerkId: {eq: $clerkId}}}) {\n    id\n    ...MembershipOnlyDetails\n    __typename\n  }\n}\n\nfragment MembershipOnlyDetails on Membership {\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "6e4f152abd6263a4dbdd4a3ad0db04c71d76e03cf3bbd365df8bf6772e422f9d",
+      "name": "getMembershipByAuthUser",
+      "type": "query",
+      "body": "query getMembershipByAuthUser($authId: Uuid!) {\n  membershipByAuthUser(authUser: {id: $authId}) {\n    id\n    ...MembershipOnlyDetails\n    __typename\n  }\n}\n\nfragment MembershipOnlyDetails on Membership {\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "ad6577e1c18e2fb44f4bac3a9d2404e1d00630fc9e943d66fe0fff5fb23f7121",
+      "name": "getMembershipsByEmail",
+      "type": "query",
+      "body": "query getMembershipsByEmail($email: String!) {\n  memberships(where: {authUser: {email: {eq: $email}}}) {\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "606dcff10dff4bd8752dfe969aefb03e16dee882167c1d563fcb9989313939a4",
+      "name": "getNotification",
+      "type": "query",
+      "body": "query getNotification($id: Uuid!) {\n  notification(id: $id) {\n    id\n    ...NotificationDetails\n    __typename\n  }\n}\n\nfragment NotificationDetails on Notification {\n  subject\n  message\n  postMessage\n  concert {\n    id\n    title\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "fbbd8333190dcdbeafba65332889e36b300ce7c5755c91afee870254b172eb3f",
+      "name": "getNotifications",
+      "type": "query",
+      "body": "query getNotifications($search: String) {\n  notifications(\n    where: {or: [{subject: {ilike: $search}}, {concert: {or: [{title: {ilike: $search}}, {concertArtists: {artist: {name: {ilike: $search}}}}]}}]}\n    orderBy: {concert: {startTime: DESC}}\n  ) {\n    ...NotificationShortDetails\n    __typename\n  }\n}\n\nfragment NotificationShortDetails on Notification {\n  id\n  subject\n  concert {\n    id\n    title\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "a95d30f2baddaae42df2cd52945f32a7b7163827ca1b74d7715de83985161f8b",
+      "name": "getPaymentsForMembership",
+      "type": "query",
+      "body": "query getPaymentsForMembership($id: Uuid!) {\n  payments(where: {membership: {id: {eq: $id}}}, orderBy: {date: ASC}) {\n    id\n    date\n    note\n    infoOnly\n    __typename\n  }\n}"
+    },
+    {
+      "id": "14ff4e2b2c13039267573490baba8e494e8a3cc03002828ea8a7373d69937884",
+      "name": "getSubscription",
+      "type": "query",
+      "body": "query getSubscription($id: Uuid!) {\n  subscription(id: $id) {\n    id\n    ...SubscriptionDetails\n    __typename\n  }\n}\n\nfragment SubscriptionDetails on Subscription {\n  email\n  group\n  __typename\n}"
+    },
+    {
+      "id": "fbea3ffb086713a3f77cdfbb709a2ef3c601ee470daa8cafabaa7303fbca1d4c",
+      "name": "getUpcomingConcert",
+      "type": "query",
+      "body": "query getUpcomingConcert($today: LocalDateTime) {\n  concerts(where: {endTime: {gte: $today}}, orderBy: {endTime: ASC}) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "4a038cf27a3cd82bbec4e33a1ce14852594a708fcc2738b6ac6e340e2d2175b7",
+      "name": "getVenue",
+      "type": "query",
+      "body": "query getVenue($id: Uuid!) {\n  venue(id: $id) {\n    id\n    ...VenueDetails\n    __typename\n  }\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "5944c5b30b1a111bf840367085c3a7eb61403f6cb3b35494dbdd23d886c2ca3c",
+      "name": "initiateSubscribe",
+      "type": "mutation",
+      "body": "mutation initiateSubscribe($email: String!) {\n  initiateSubscribe(email: $email)\n}"
+    },
+    {
+      "id": "6be220ec73b04bb0b0cfd871e63898196805b99083adaf211f0ea811e9e25a09",
+      "name": "initiateUnsubscribe",
+      "type": "mutation",
+      "body": "mutation initiateUnsubscribe($email: String!) {\n  initiateUnsubscribe(email: $email)\n}"
+    },
+    {
+      "id": "4d8c5b2809938a423913a3201577a4f80d4779addb7bc3ec02097eef3dd3c910",
+      "name": "me",
+      "type": "query",
+      "body": "query me($clerkId: String!) {\n  authUserByClerkId(clerkId: $clerkId) {\n    id\n    firstName\n    lastName\n    __typename\n  }\n}"
+    },
+    {
+      "id": "d5aebdbcd2a079d6154af7f39166a0009d5c724aa22c8293e1b96f498f161dd5",
+      "name": "membershipExpiry",
+      "type": "query",
+      "body": "query membershipExpiry($start: LocalDate, $end: LocalDate) {\n  memberships(\n    where: {expiry: {gt: $start, lt: $end}}\n    orderBy: {authUser: {firstName: ASC}}\n  ) {\n    ...MembershipExpiryDetails\n    __typename\n  }\n}\n\nfragment MembershipExpiryDetails on Membership {\n  id\n  authUser {\n    firstName\n    lastName\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  expiry\n  __typename\n}"
+    },
+    {
+      "id": "18b5e03e8be9e7476f94a08ad1434efe07648c8c7ac30cd4178ee2f388e066d8",
+      "name": "notificationConcerts",
+      "type": "query",
+      "body": "query notificationConcerts {\n  concerts(orderBy: {startTime: DESC}, limit: 12) {\n    id\n    title\n    __typename\n  }\n}"
+    },
+    {
+      "id": "6e6d236afbd5772f6d2ff7531c0f84f08399e457b9f824ceb53d98cee298f72e",
+      "name": "processRsvp",
+      "type": "mutation",
+      "body": "mutation processRsvp($concertId: Uuid!, $email: String!, $numTickets: Int!) {\n  processRsvp(concertId: $concertId, email: $email, numTickets: $numTickets)\n}"
+    },
+    {
+      "id": "0e542a7284f0d9721e1a819b3abc43e559c27c964f37ef9f366c53f236bfa491",
+      "name": "searchArtists",
+      "type": "query",
+      "body": "query searchArtists($search: String) {\n  artists(where: {name: {ilike: $search}}, orderBy: {name: ASC}) {\n    id\n    ...ArtistDetails\n    __typename\n  }\n}\n\nfragment ArtistDetails on Artist {\n  title\n  name\n  bio\n  photoUrl\n  youtubeVideoIds\n  instruments\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "55b28be2c69e3c799d130ba28d9bbca879a935407eda44b84d3bd961221ccc01",
+      "name": "searchAuthUsers",
+      "type": "query",
+      "body": "query searchAuthUsers($search: String) {\n  authUsers(\n    where: {or: [{email: {ilike: $search}}, {firstName: {ilike: $search}}, {lastName: {ilike: $search}}]}\n    orderBy: {lastName: ASC}\n  ) {\n    id\n    ...AuthUserDetails\n    __typename\n  }\n}\n\nfragment AuthUserDetails on AuthUser {\n  clerkId\n  firstName\n  lastName\n  email\n  __typename\n}"
+    },
+    {
+      "id": "1ee62ad7deb2f89123ed0ef6c734d92b8bcd0f70b0789577e7b8b16a41e1e941",
+      "name": "searchConcert",
+      "type": "query",
+      "body": "query searchConcert($search: String) {\n  concerts(\n    where: {or: [{title: {ilike: $search}}, {concertArtists: {artist: {name: {ilike: $search}}}}]}\n    orderBy: {startTime: DESC}\n  ) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "6112d7817cae2a463ecfc807fd1fc6504039ab01fab90b75c050e3a42c3df97b",
+      "name": "searchMembership",
+      "type": "query",
+      "body": "query searchMembership($search: String) {\n  memberships(\n    where: {or: [{authUser: {firstName: {ilike: $search}}}, {authUser: {lastName: {ilike: $search}}}, {authUser: {email: {ilike: $search}}}, {spouseFirstName: {ilike: $search}}, {spouseLastName: {ilike: $search}}]}\n    orderBy: {authUser: {firstName: ASC}}\n  ) {\n    id\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "e1d3439ad801946497bfd2f6d2f61fad2a54d6a226ffc6f2257a3061d4feefec",
+      "name": "searchSubscription",
+      "type": "query",
+      "body": "query searchSubscription($search: String) {\n  subscriptions(where: {email: {like: $search}}, orderBy: {email: ASC}) {\n    id\n    ...SubscriptionDetails\n    __typename\n  }\n}\n\nfragment SubscriptionDetails on Subscription {\n  email\n  group\n  __typename\n}"
+    },
+    {
+      "id": "937117f4e51ad5f28e55ce5bfdd72f9c1133adfeacef57dc5623bceb199424c5",
+      "name": "searchVenues",
+      "type": "query",
+      "body": "query searchVenues($search: String) {\n  venues(where: {name: {ilike: $search}}, orderBy: {name: ASC}) {\n    id\n    ...VenueDetails\n    __typename\n  }\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "b4805a228c80ae82c0aeade108616452ce6c236ffeceba10f1449e2434c789fb",
+      "name": "syncAuthUser",
+      "type": "mutation",
+      "body": "mutation syncAuthUser {\n  syncAuthUser\n}"
+    },
+    {
+      "id": "c4c09a2961873a8fc804c1d07112291894014ba78e5d8932cd6d2923be960543",
+      "name": "updateAdvisory",
+      "type": "mutation",
+      "body": "mutation updateAdvisory($id: Uuid!, $data: AdvisoryUpdateInput!) {\n  updateAdvisory(id: $id, data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+    },
+    {
+      "id": "c7d7e525ac50d5001db1fb9e7c8cb88dcbbe7da56d950f79d8c696da2dd4a8dc",
+      "name": "updateArtist",
+      "type": "mutation",
+      "body": "mutation updateArtist($id: Uuid!, $data: ArtistUpdateInput!) {\n  updateArtist(id: $id, data: $data) {\n    ...ArtistDetails\n    __typename\n  }\n}\n\nfragment ArtistDetails on Artist {\n  title\n  name\n  bio\n  photoUrl\n  youtubeVideoIds\n  instruments\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "630c69c69876ee0b9116e3ee2c3c1681d310a18432d3c9e588b3929dab1ca91c",
+      "name": "updateAuthUser",
+      "type": "mutation",
+      "body": "mutation updateAuthUser($id: Uuid!, $data: AuthUserUpdateInput!) {\n  updateAuthUser(id: $id, data: $data) {\n    ...AuthUserDetails\n    __typename\n  }\n}\n\nfragment AuthUserDetails on AuthUser {\n  clerkId\n  firstName\n  lastName\n  email\n  __typename\n}"
+    },
+    {
+      "id": "fdc25254571ea98230784fbe71499733faf4d2a55e1b80a1f3da3313f3ada7b8",
+      "name": "updateConcert",
+      "type": "mutation",
+      "body": "mutation updateConcert($id: Uuid!, $data: ConcertUpdateInput!) {\n  updateConcert(id: $id, data: $data) {\n    id\n    ...ConcertDetails\n    __typename\n  }\n}\n\nfragment ConcertArtistInfo on ConcertArtist {\n  id\n  artist {\n    id\n    title\n    name\n    __typename\n  }\n  isMain\n  rank\n  instrument\n  __typename\n}\n\nfragment ConcertDetails on Concert {\n  title\n  description\n  memberPrice\n  nonMemberPrice\n  ticketLink\n  photoUrl\n  startTime\n  endTime\n  publish\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  accompanyingArtists: concertArtists(\n    where: {isMain: {eq: false}}\n    orderBy: {rank: ASC}\n  ) {\n    ...ConcertArtistInfo\n    __typename\n  }\n  venue {\n    id\n    ...VenueDetails\n    __typename\n  }\n  __typename\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "cec08f65c9a5147dbe9496eff9e5edd5ec8fc0950b77dd47f5edb95195fb47ad",
+      "name": "updateMembership",
+      "type": "mutation",
+      "body": "mutation updateMembership($id: Uuid!, $data: MembershipUpdateInput!) {\n  updateMembership(id: $id, data: $data) {\n    id\n    ...MembershipOnlyDetails\n    __typename\n  }\n}\n\nfragment MembershipOnlyDetails on Membership {\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "918fb654e56e370a62ed6d8dcf765452fc46a5c14762e9f71fbb405337727a84",
+      "name": "updateMembershipAndUpdateAuthUser",
+      "type": "mutation",
+      "body": "mutation updateMembershipAndUpdateAuthUser($id: Uuid!, $data: MembershipUpdateInput!, $authId: Uuid!, $authUserData: AuthUserUpdateInput!) {\n  updateMembership(id: $id, data: $data) {\n    id\n    ...MembershipOnlyDetails\n    __typename\n  }\n  updateAuthUser(id: $authId, data: $authUserData) {\n    id\n    __typename\n  }\n}\n\nfragment MembershipOnlyDetails on Membership {\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+    },
+    {
+      "id": "ecef0935582d9ba064cb44cb1e628625f2ff4a68927d56f571d36812564eefd8",
+      "name": "updateNotification",
+      "type": "mutation",
+      "body": "mutation updateNotification($id: Uuid!, $data: NotificationUpdateInput!) {\n  updateNotification(id: $id, data: $data) {\n    id\n    ...NotificationDetails\n    __typename\n  }\n}\n\nfragment NotificationDetails on Notification {\n  subject\n  message\n  postMessage\n  concert {\n    id\n    title\n    __typename\n  }\n  __typename\n}"
+    },
+    {
+      "id": "329b53d63c80451e8438b84422135475f6a516ef4aff17de2aa874853af326f8",
+      "name": "updateSubscription",
+      "type": "mutation",
+      "body": "mutation updateSubscription($id: Uuid!, $data: SubscriptionUpdateInput!) {\n  updateSubscription(id: $id, data: $data) {\n    id\n    ...SubscriptionDetails\n    __typename\n  }\n}\n\nfragment SubscriptionDetails on Subscription {\n  email\n  group\n  __typename\n}"
+    },
+    {
+      "id": "bb73ab78b9668871d7b1a4511ac7c28cd1bc2958fb81d26c8bb563c474cbe182",
+      "name": "updateVenue",
+      "type": "mutation",
+      "body": "mutation updateVenue($id: Uuid!, $data: VenueUpdateInput!) {\n  updateVenue(id: $id, data: $data) {\n    ...VenueDetails\n    __typename\n  }\n}\n\nfragment VenueDetails on Venue {\n  name\n  street\n  city\n  state\n  zip\n  publish\n  __typename\n}"
+    },
+    {
+      "id": "981a14969aa8b67bf6bf6bf6f8de44d6c75b663bb1daa200f75384edf127a6cd",
+      "name": "verifySubscribe",
+      "type": "mutation",
+      "body": "mutation verifySubscribe($email: String!, $code: String!) {\n  verifySubscribe(email: $email, code: $code)\n}"
+    },
+    {
+      "id": "94f8221a95eee33898f409c1a4eebcda94a03e70142aaeecea136520eb6f5ac7",
+      "name": "verifyUnsubscribe",
+      "type": "mutation",
+      "body": "mutation verifyUnsubscribe($email: String!, $code: String!) {\n  verifyUnsubscribe(email: $email, code: $code)\n}"
+    }
+  ]
+}

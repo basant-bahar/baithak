@@ -1,0 +1,11 @@
+{
+  "documents": [
+    "app/**/*.{ts,tsx}",
+    "!app/gql/**/*",
+    "graphql/**/*.{ts,tsx}",
+    "!graphql/gql/**/*",
+    "components/**/*.{ts,tsx}",
+    "!components/gql/**/*"
+  ],
+  "output": "persisted-query-manifest.json"
+}

@@ -5,6 +5,7 @@ import { ssrApolloClient } from "../../../apollo-client";
 import PageHeader from "components/common/pageHeader";
 import { ArtistCard } from "components/artists/artistCard";
 import { ORGANIZATION_NAME } from "utils";
+import { artistBasicInfo } from "graphql/concert";
 
 interface FeaturedArtistsProps {
   params: { names: string };
@@ -56,16 +57,6 @@ export default async function FeaturedArtists(props: FeaturedArtistsProps) {
     </div>
   );
 }
-
-const artistBasicInfo = graphql(`
-  fragment ArtistBasicInfo on Artist {
-    id
-    title
-    name
-    photoUrl
-    instruments
-  }
-`);
 
 const getArtistsByName = graphql(`
   query getArtistsByNameStart($first: String!, $second: String!) {

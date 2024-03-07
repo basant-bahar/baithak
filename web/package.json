@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "graphql-codegen",
+    "predev": "graphql-codegen && npx generate-persisted-query-manifest && cp persisted-query-manifest.json ../api/trusted-documents",
     "dev": "next dev -p 3000",
     "prebuild": "graphql-codegen",
     "build": "next build",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.8.4",
+    "@apollo/persisted-query-lists": "^1.0.0",
     "@apollo/react-hooks": "4.0.0",
     "@clerk/clerk-react": "^4.28.1",
     "@heroicons/react": "^2.0.18",
@@ -29,6 +30,7 @@
     "sharp": "^0.33.1"
   },
   "devDependencies": {
+    "@apollo/generate-persisted-query-manifest": "^1.2.0",
     "@flydotio/dockerfile": "^0.3.3",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
