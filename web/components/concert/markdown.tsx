@@ -3,7 +3,7 @@ import rehypeRaw from "rehype-raw";
 
 export default function Markdown(props: { children: string }) {
   return (
-    <ReactMarkdown.default className="react-markdown" rehypePlugins={[rehypeRaw]}>
+    <ReactMarkdown.default className="prose max-w-full leading-4" rehypePlugins={[rehypeRaw]}>
       {props.children}
     </ReactMarkdown.default>
   );
