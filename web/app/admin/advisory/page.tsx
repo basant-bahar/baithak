@@ -10,10 +10,17 @@ import Markdown from "components/concert/markdown";
 import { revalidateSSRPages } from "utils/revalidateSSRPage";
 import { SSR_PAGES } from "utils/ssrPages";
 
-const newAdvisory = {
+type Advisory = {
+  level: string;
+  message: string;
+  footer?: string;
+};
+
+const newAdvisory: Advisory = {
   level: "Warning",
   message: "",
 };
+
 const levels = ["Critical", "Warning", "Info"];
 
 export default function Advisory() {
@@ -36,7 +43,11 @@ export default function Advisory() {
     if (data && data.advisories && data.advisories[0]) {
       const currentAdvisory = getFragmentData(advisoryDetails, data.advisories[0]);
       setAdvisoryId(currentAdvisory.id);
-      setAdvisoryData({ level: currentAdvisory.level, message: currentAdvisory.message });
+      setAdvisoryData({
+        level: currentAdvisory.level,
+        message: currentAdvisory.message,
+        ...(currentAdvisory.footer && { footer: currentAdvisory.footer }),
+      });
     }
   }, [data]);
 
@@ -50,6 +61,11 @@ export default function Advisory() {
   function changeMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setDirty(true);
     setAdvisoryData({ ...advisoryData, message: e.target.value });
+  }
+
+  function changeFooter(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setDirty(true);
+    setAdvisoryData({ ...advisoryData, footer: e.target.value });
   }
 
   async function handleAdvisoryDeletion(id?: string) {
@@ -117,6 +133,16 @@ export default function Advisory() {
               value={advisoryData.message}
             />
           </div>
+          <div className="form-row">
+            <label className="form-label">Footer</label>
+            <textarea
+              className="border col-span-2 p-2"
+              rows={5}
+              placeholder="Footer text"
+              onChange={changeFooter}
+              value={advisoryData.footer}
+            />
+          </div>
           <div className="form-row mb-4">
             <div className="flex gap-2 col-start-2 max-xs:col-start-1">
               <button
@@ -140,6 +166,11 @@ export default function Advisory() {
       {advisoryData && advisoryData.message && (
         <div className={getAdvisoryClass(advisoryData.level)}>
           <Markdown>{advisoryData.message}</Markdown>
+        </div>
+      )}
+      {advisoryData && advisoryData.footer && (
+        <div className="bordered-container p-2 mt-4">
+          <Markdown>{advisoryData.footer}</Markdown>
         </div>
       )}
     </>

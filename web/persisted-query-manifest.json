@@ -33,10 +33,10 @@
       "body": "query concertsForCalendar($start: LocalDateTime, $end: LocalDateTime) {\n  concerts(\n    where: {and: [{startTime: {gte: $start}}, {startTime: {lte: $end}}], publish: {eq: true}}\n    orderBy: {startTime: ASC}\n  ) {\n    ...ConcertCalendarDetail\n    __typename\n  }\n}\n\nfragment ConcertCalendarDetail on Concert {\n  id\n  title\n  mainArtists: concertArtists(where: {isMain: {eq: true}}, orderBy: {rank: ASC}) {\n    artist {\n      title\n      name\n      __typename\n    }\n    __typename\n  }\n  startTime\n  photoUrl\n  venue {\n    id\n    name\n    __typename\n  }\n  __typename\n}"
     },
     {
-      "id": "25dc196a37fc2525f634b2ffbcc292ad3af3b087c60a678251058bc5d2bf28fa",
+      "id": "12ceb56dd9240326e5a3b35d3c8a7dd7c830edee3f1a4b718d92b2285d82d0d0",
       "name": "createAdvisory",
       "type": "mutation",
-      "body": "mutation createAdvisory($data: AdvisoryCreationInput!) {\n  advisory: createAdvisory(data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+      "body": "mutation createAdvisory($data: AdvisoryCreationInput!) {\n  advisory: createAdvisory(data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  footer\n  __typename\n}"
     },
     {
       "id": "b96e8555568da65351aa2aa6cb24c7aee53aee4468b66d8dbb7d83e7eba0c8be",
@@ -165,16 +165,16 @@
       "body": "query formattedNotification($id: Uuid!) {\n  formatNotification(concertNotificationId: $id)\n}"
     },
     {
-      "id": "aa0d28cf7d7c7f5ea15a45cc9013591f08e2777f7493b7239d636eda0f8bc2eb",
+      "id": "278f871e02d80737907449e6fd79e559079757128113d694a11c0e6cc7d780f8",
       "name": "getAdvisories",
       "type": "query",
-      "body": "query getAdvisories {\n  advisories {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+      "body": "query getAdvisories {\n  advisories {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  footer\n  __typename\n}"
     },
     {
-      "id": "e78a32b51f1e58f76fda55bdf932a2f67d73bebdd2d11de1669f4188a472d360",
+      "id": "f8e0ee739f71674820db7bbaba4813b2f0039f3ae018026d0d029d589f5eb2e2",
       "name": "getAdvisory",
       "type": "query",
-      "body": "query getAdvisory($id: Uuid!) {\n  advisory(id: $id) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+      "body": "query getAdvisory($id: Uuid!) {\n  advisory(id: $id) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  footer\n  __typename\n}"
     },
     {
       "id": "5b0266eadb52d6ab71fda1d44a05a95f28b5eb22aab7882bd3aef4057d7ec1d0",
@@ -375,10 +375,10 @@
       "body": "mutation syncAuthUser {\n  syncAuthUser\n}"
     },
     {
-      "id": "c4c09a2961873a8fc804c1d07112291894014ba78e5d8932cd6d2923be960543",
+      "id": "92388f416318ec7ecdc77118f8962fa87781fc26b8005da23a219831016d132e",
       "name": "updateAdvisory",
       "type": "mutation",
-      "body": "mutation updateAdvisory($id: Uuid!, $data: AdvisoryUpdateInput!) {\n  updateAdvisory(id: $id, data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  __typename\n}"
+      "body": "mutation updateAdvisory($id: Uuid!, $data: AdvisoryUpdateInput!) {\n  updateAdvisory(id: $id, data: $data) {\n    ...AdvisoryDetails\n    __typename\n  }\n}\n\nfragment AdvisoryDetails on Advisory {\n  id\n  level\n  message\n  footer\n  __typename\n}"
     },
     {
       "id": "c7d7e525ac50d5001db1fb9e7c8cb88dcbbe7da56d950f79d8c696da2dd4a8dc",

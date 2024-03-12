@@ -5,7 +5,7 @@ import { getFragmentData } from "../../__generated__";
 import Markdown from "../concert/markdown";
 import { getAdvisoryClass } from "./util";
 
-export default function Advisory({ children }: { children: React.ReactNode }) {
+export function Advisory({ children }: { children: React.ReactNode }) {
   const advisoriesData = use(getAdvisory());
   const advisory = getFragmentData(advisoryDetails, advisoriesData);
 
@@ -16,12 +16,27 @@ export default function Advisory({ children }: { children: React.ReactNode }) {
           <Markdown>{advisory.message}</Markdown>
         </div>
       )}
-      <div className={`main-container ${advisory ? "mt-4" : ""}`}>{children}</div>
+      <div className={`main-container ${advisory ? "mt-4 mb-1" : ""}`}>{children}</div>
     </>
   );
 }
 
-export async function getAdvisory() {
+export function AdvisoryFooter() {
+  const advisoriesData = use(getAdvisory());
+  const advisory = getFragmentData(advisoryDetails, advisoriesData);
+
+  return (
+    <>
+      {advisory?.footer && advisory.footer.length > 0 && (
+        <div className="bordered-container static bottom-0 mb-1">
+          <Markdown>{advisory.footer}</Markdown>
+        </div>
+      )}
+    </>
+  );
+}
+
+async function getAdvisory() {
   const { data } = await ssrApolloClient.query({
     query: getAdvisories,
   });

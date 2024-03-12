@@ -5,6 +5,7 @@ export const advisoryDetails = graphql(`
     id
     level
     message
+    footer
   }
 `);
 

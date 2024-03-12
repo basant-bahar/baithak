@@ -122,6 +122,7 @@ module Concertmodule {
     @pk id: Uuid = generate_uuid()
     level: String
     message: String
+    footer: String?
   }
 
   @access(query=self.clerkId == AuthContext.clerkId || AuthContext.role == "admin", mutation=AuthContext.role == "admin")

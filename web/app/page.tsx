@@ -1,9 +1,9 @@
-import Advisory from "components/advisory";
 import { ConcertRsvp } from "components/concert/concertRsvp";
 import ConcertView from "components/concert/concertView";
 import { graphql } from "__generated__";
 import { ssrApolloClient } from "./apollo-client";
 import { getServerDateTime } from "utils";
+import { Advisory, AdvisoryFooter } from "components/advisory";
 
 export default async function Home() {
   const concertData = await getFrontPageConcert();
@@ -14,8 +14,9 @@ export default async function Home() {
     <>
       <Advisory>
         <ConcertView concert={concertData} />
+        <ConcertRsvp concertId={concertData?.id} />
       </Advisory>
-      <ConcertRsvp concertId={concertData?.id} />
+      <AdvisoryFooter />
     </>
   );
 }

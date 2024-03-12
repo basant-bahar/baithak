@@ -37,7 +37,7 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
   };
 
   return (
-    <div className="bordered-container mt-1 mb-1 text-center flex justify-center max-xs:gap-0 gap-2">
+    <div className="mt-8 mb-1 text-center flex justify-center max-xs:gap-0 gap-2">
       {!rsvpDone && (
         <>
           <input
