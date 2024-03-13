@@ -41,7 +41,7 @@ export const ConcertRsvp = (props: ConcertRsvpProps) => {
       {!rsvpDone && (
         <>
           <input
-            className="simple-input mr-2 w-64"
+            className="simple-input mr-2 w-64 max-xs:w-48"
             placeholder="Your email"
             onChange={changeEmail}
             value={rsvp.email}
