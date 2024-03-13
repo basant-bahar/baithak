@@ -11,12 +11,18 @@ export function Advisory({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {advisory && (
+      {advisory && advisory.message.length > 0 && (
         <div className={getAdvisoryClass(advisory.level)}>
           <Markdown>{advisory.message}</Markdown>
         </div>
       )}
-      <div className={`main-container ${advisory ? "mt-4 mb-1" : ""}`}>{children}</div>
+      <div
+        className={`main-container ${
+          advisory && advisory.message.length > 0 ? "mt-4 mb-1" : "mt-20"
+        }`}
+      >
+        {children}
+      </div>
     </>
   );
 }
@@ -27,8 +33,8 @@ export function AdvisoryFooter() {
 
   return (
     <>
-      {advisory?.footer && advisory.footer.length > 0 && (
-        <div className="bordered-container static bottom-0 mb-1">
+      {advisory && advisory?.footer && advisory.footer.length > 0 && (
+        <div className="bordered-container static bottom-0 mt-1 mb-1">
           <Markdown>{advisory.footer}</Markdown>
         </div>
       )}
