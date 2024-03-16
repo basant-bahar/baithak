@@ -1,6 +1,7 @@
 import rehypeStringify from "npm:rehype-stringify";
 import remarkParse from "npm:remark-parse";
 import remarkRehype from "npm:remark-rehype";
+import rehypeRaw from 'npm:rehype-raw'
 import { unified } from "npm:unified";
 
 import * as Eta from "https://deno.land/x/eta@v1.12.3/mod.ts";
@@ -77,7 +78,7 @@ export async function formatNotification(
   let template = await Deno.readTextFile("./src/notification/notificationTemplate.html");
   const templateFunction = Eta.compile(template);
 
-  const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
+    const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
     .notification;
   const concert = notification.concert;
   const message = await toHtml(notification.message);
@@ -107,7 +108,12 @@ export async function formatNotification(
 
 async function toHtml(markdown: string): Promise<string> {
   return String(
-    await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(markdown)
+    await unified()
+      .use(remarkParse)
+      .use(remarkRehype, {allowDangerousHtml: true})
+      .use(rehypeRaw)
+      .use(rehypeStringify)
+      .process(markdown)
   );
 }
 
