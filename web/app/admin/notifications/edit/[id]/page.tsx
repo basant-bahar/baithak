@@ -47,16 +47,17 @@ function UpdateNotification({ id }: UpdateNotificationProps) {
           id: notificationUpdateData.concert?.id,
         }
       : null;
-    const updateNotificationData = {
+    const updatedNotificationData = {
       subject: notificationUpdateData.subject,
       message: notificationUpdateData.message,
       postMessage: notificationUpdateData.postMessage,
       concert: updatedConcert,
     };
+
     updateNotificationMutation({
       variables: {
         id,
-        data: updateNotificationData,
+        data: updatedNotificationData,
       },
     }).then((_) => router.back());
   }
