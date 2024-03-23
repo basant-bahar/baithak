@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { InternalRefetchQueryDescriptor, useMutation, useQuery } from "@apollo/react-hooks";
 import { DocumentNode } from "graphql";
+import PageHeader from "./pageHeader.tsx";
 
 type Entity<D> = { id: number } & D;
 
@@ -63,10 +64,15 @@ export default function EntityList<D>(props: EntityListProps<D>) {
 
   const entities = extractEntities(data);
 
+  const updatedRefetchQueries = [
+    ...(deleteRefetchQueries || []),
+    { query: searchQueryDocument, variables: { search: "%%" } },
+  ];
   const [deleteMutation] = useMutation(deleteMutationDocument, {
     onCompleted: () => {
       setSearchStr("");
     },
+    refetchQueries: updatedRefetchQueries,
   });
 
   function extractEntities<T>(data?: any): Entity<D>[] {
@@ -74,14 +80,8 @@ export default function EntityList<D>(props: EntityListProps<D>) {
   }
 
   async function deleteEntity(id: number) {
-    const updatedRefetchQueries = deleteRefetchQueries || [];
-    updatedRefetchQueries?.push({ query: searchQueryDocument, variables: { search: "%%" } });
-
     await deleteMutation({
       variables: { id },
-      refetchQueries: updatedRefetchQueries,
-    }).then((_) => {
-      setSearchStr("");
     });
   }
 
@@ -91,7 +91,7 @@ export default function EntityList<D>(props: EntityListProps<D>) {
 
   return (
     <div className="main-container">
-      <h2 className="mb-8 text-center">{pluralName}</h2>
+      <PageHeader title={pluralName} />
       {additionalButtons && additionalButtons}
       <div className="flex justify-between max-xs:flex-col-reverse p-4 mb-2 max-xs:mb-4 max-xs:p-0">
         <input
