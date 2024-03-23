@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { InternalRefetchQueryDescriptor, useMutation, useQuery } from "@apollo/react-hooks";
 import { DocumentNode } from "graphql";
-import PageHeader from "./pageHeader.tsx";
+import PageHeader from "./pageHeader";
 
 type Entity<D> = { id: number } & D;
 
