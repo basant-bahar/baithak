@@ -208,7 +208,7 @@ function CreateMembership() {
         addAuthUser(userInfoState.email, "", "");
       }
     },
-    [userInfoState, addAuthUser, authUserQuery]
+    [userInfoState, addAuthUser, authUserQuery, membershipByAuthUser]
   );
 
   const findAuthUserByName = useCallback(
