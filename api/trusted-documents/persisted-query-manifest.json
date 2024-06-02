@@ -141,10 +141,10 @@
       "body": "mutation deleteVenue($id: Uuid!) {\n  deleteVenue(id: $id) {\n    id\n    __typename\n  }\n}"
     },
     {
-      "id": "5af27da7a07109f7066350c25b8e124f4f027d9f27eac69ca681c9f547915acc",
+      "id": "7b1e79f45b4c1dff735b43f0be33d0847893d3f0c3296fd5c96e84607d8a6be9",
       "name": "deskPrintout",
       "type": "query",
-      "body": "query deskPrintout($expiry: LocalDate) {\n  memberships(\n    where: {expiry: {gt: $expiry}}\n    orderBy: {authUser: {firstName: ASC}}\n  ) {\n    id\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
+      "body": "query deskPrintout($expiry: LocalDate) {\n  memberships(\n    where: {expiry: {gt: $expiry}}\n    orderBy: {authUser: {lastName: ASC}}\n  ) {\n    id\n    ...MembershipDetails\n    __typename\n  }\n}\n\nfragment MembershipDetails on Membership {\n  authUser {\n    id\n    clerkId\n    firstName\n    lastName\n    email\n    __typename\n  }\n  spouseFirstName\n  spouseLastName\n  spouseEmail\n  expiry\n  type\n  __typename\n}"
     },
     {
       "id": "afd0c3ef76f7be58f01ca7ffbae450afd72d40fb80aeacaebb5373c8458b0e33",

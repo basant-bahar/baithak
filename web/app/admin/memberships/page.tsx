@@ -89,8 +89,8 @@ const AdditionalButtons = () => {
         return (
           acc +
           `
-              <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.authUser.firstName} ${membership.authUser.lastName}</div>
-              <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.spouseFirstName} ${membership.spouseLastName}</div>
+              <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.authUser.lastName} ${membership.authUser.firstName}</div>
+              <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.spouseLastName} ${membership.spouseFirstName}</div>
               <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.type}</div>
               <div style="border-bottom: ${border};${secondCol}">${membership.expiry}</div>
             `
@@ -152,7 +152,7 @@ const AdditionalButtons = () => {
 
 const deskPrintout = graphql(`
   query deskPrintout($expiry: LocalDate) {
-    memberships(where: { expiry: { gt: $expiry } }, orderBy: { authUser: { firstName: ASC } }) {
+    memberships(where: { expiry: { gt: $expiry } }, orderBy: { authUser: { lastName: ASC } }) {
       id
       ...MembershipDetails
     }
