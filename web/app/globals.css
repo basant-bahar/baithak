@@ -31,7 +31,7 @@
   }
 
   .bordered-container {
-    @apply mx-auto max-w-screen-lg rounded-xl p-6 flex-auto bg-gray-50 border border-solid border-gray-200;
+    @apply mx-auto max-w-screen-lg rounded-xl p-6 max-xs:p-2 flex-auto bg-gray-50 border border-solid border-gray-200;
   }
 
   .menu-horizontal li {

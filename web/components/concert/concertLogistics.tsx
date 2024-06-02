@@ -34,7 +34,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
 
   const localStartTimeStr = localizedStart.getTimeString();
   const localEndTimeStr = localizedEnd.getTimeString();
-  const dateStr = `${localDateStr} ${localStartTimeStr} -  ${localEndTimeStr}`;
+  const localTimeStr = `${localStartTimeStr} -  ${localEndTimeStr}`;
 
   const venueAddress = getVenueAddress(venue);
 
@@ -106,15 +106,18 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
         <hr />
         <div className="mt-4">
           <div className="flex justify-center items-center max-xs:flex-col">
-            {dateStr}
-            <a
-              className="link-icon lg:ml-1 w-5 max-xs:w-7"
-              href={googleEventDateLink()}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <CalendarIcon />
-            </a>
+            <div className="flex flex-wrap justify-center items-center">
+              <div>{localDateStr}&nbsp;</div>
+              <div>{localTimeStr}</div>
+              <a
+                className="link-icon lg:ml-1 w-5 max-xs:w-7 pl-1"
+                href={googleEventDateLink()}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <CalendarIcon />
+              </a>
+            </div>
           </div>
           <VenueView venueData={props.venue} />
         </div>
