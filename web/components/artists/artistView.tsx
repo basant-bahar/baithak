@@ -22,18 +22,12 @@ export default function ArtistView(props: ArtistViewProps) {
         <img className="mx-auto" src={imageSrc} width={600} height={450} alt="Artist photo" />
       </picture>
       <div className="p-2 mt-4 mb-4">{artist.bio && <Markdown>{artist.bio}</Markdown>}</div>
-      <div className="flex mb-4 justify-center">
+      <div className="flex flex-wrap gap-4 mb-4 justify-center">
         {artist.youtubeVideoIds &&
-          artist.youtubeVideoIds.map((youtubeVideoId, index) =>
-            youtubeVideoId.length > 0 ? (
-              <iframe
-                width="420"
-                height="315"
-                key={index}
-                src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-              />
-            ) : null
-          )}
+          artist.youtubeVideoIds.length > 0 &&
+          artist.youtubeVideoIds.map((youtubeVideoId, index) => (
+            <iframe key={index} src={`https://www.youtube.com/embed/${youtubeVideoId}`} />
+          ))}
       </div>
     </div>
   );
