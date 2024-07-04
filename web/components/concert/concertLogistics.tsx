@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { CalendarIcon } from "@heroicons/react/20/solid";
-import format from "date-fns/format";
+import { formatDate } from "date-fns/format";
 import { venueDetails } from "../../graphql/venues";
 import { FragmentType, getFragmentData } from "../../__generated__";
 import VenueView from "../venues/venueView";
@@ -57,7 +57,7 @@ export const ConcertLogistics = (props: ConcertLogisticsProps) => {
   function googleEventDateLink() {
     const venueString = venue ? `${venue.name}, ${venueAddress}` : "Venue TBD";
     const googleDate = (date: Date) => {
-      return format(date, "yyyyMMdd'T'HHmmssX");
+      return formatDate(date, "yyyyMMdd'T'HHmmssX");
     };
     const text = `text=${props.title}`;
     const dates = `dates=${googleDate(utcDate)}/${googleDate(utcEndDate)}`;
