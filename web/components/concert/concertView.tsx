@@ -12,21 +12,13 @@ type ConcertViewProps = {
 
 export default function ConcertView(props: ConcertViewProps) {
   const concert = getFragmentData(concertDetails, props.concert);
-  const imageSrc = concert.photoUrl
-    ? imageUrl(concert.photoUrl)
-    : "/images/placeholder.png";
+  const imageSrc = concert.photoUrl ? imageUrl(concert.photoUrl) : "/images/placeholder.png";
 
   return (
     <>
-      <div className="mb-4 text-3xl text-center text-primary font-bold">
-        {concert.title}
-      </div>
+      <div className="mb-4 text-3xl text-center text-primary font-bold">{concert.title}</div>
       {concert.mainArtists.length > 0 && (
-        <ArtistLink
-          key={"main"}
-          isMain={true}
-          concertArtistsData={concert.mainArtists}
-        />
+        <ArtistLink key={"main"} isMain={true} concertArtistsData={concert.mainArtists} />
       )}
       <div className="flex justify-center">
         <picture>
@@ -35,9 +27,7 @@ export default function ConcertView(props: ConcertViewProps) {
       </div>
       {concert.accompanyingArtists.length > 0 && (
         <>
-          <div className="mt-8 text-lg text-center color-primary">
-            Accompanied by
-          </div>
+          <div className="mt-8 text-lg text-center color-primary">Accompanied by</div>
           <ArtistLink
             key={"accompany"}
             isMain={false}
@@ -77,9 +67,7 @@ const ArtistLink = ({
     const artist = concertArtist.artist;
     if (artist) {
       const nameText =
-        artistsCount > 1
-          ? `${artist.name} (${concertArtist.instrument})`
-          : artist.name;
+        artistsCount > 1 ? `${artist.name} (${concertArtist.instrument})` : artist.name;
       return (
         <Link
           href={`/artists/${artist.id}`}
