@@ -19,7 +19,7 @@ const defaultOptions = {
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_API_URL,
-  fetchOptions: { cache: "no-store" }
+  fetchOptions: { cache: "no-cache" }
 });
 
 const persistedQueryLink = createPersistedQueryLink(
