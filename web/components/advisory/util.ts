@@ -1,6 +1,5 @@
 export const getAdvisoryClass = (level: string) => {
-  const advisoryClass =
-    "flex-auto mx-auto max-w-screen-lg p-6 flex-auto rounded mt-20 border border-solid";
+  const advisoryClass = "flex-auto mx-auto max-w-screen-lg p-6 rounded mt-20 border border-solid";
 
   switch (level) {
     case "Critical":

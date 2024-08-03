@@ -17,7 +17,7 @@ export function Advisory({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <div
-        className={`main-container ${
+        className={`bordered-container ${
           advisory && advisory.message.length > 0 ? "mt-4 mb-1" : "mt-20"
         }`}
       >
