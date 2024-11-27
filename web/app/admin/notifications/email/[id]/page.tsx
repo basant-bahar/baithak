@@ -12,6 +12,11 @@ interface EmailNotificationProps {
 export default function EmailNotification({ params: { id } }: EmailNotificationProps) {
   const router = useRouter();
   const [emailTo, setEmailTo] = useState("test");
+  const groupOptions = [
+    { key: "test", text: "Test" },
+    { key: "all", text: "All subscribers" },
+    { key: "activeMembers", text: "Active members" },
+  ];
   let [sendNotificationEmail] = useMutation(emailNotification);
 
   function changeEmailTo(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -31,16 +36,18 @@ export default function EmailNotification({ params: { id } }: EmailNotificationP
       <div className="flex justify-center mt-4">
         <label className="form-label">Email to</label>
         <select
-          className="border-b bg-transparent focus:outline-none disabled:opacity-50"
+          className="border-b pr-2 bg-transparent focus:outline-none disabled:opacity-50"
           onChange={changeEmailTo}
           value={emailTo}
         >
-          <option key="test" value="test">
-            Test
-          </option>
-          <option key="all" value="all">
-            All subscribers
-          </option>
+          {groupOptions.map((value) => {
+            const { key, text } = value;
+            return (
+              <option key={key} value={key}>
+                {text}
+              </option>
+            );
+          })}
         </select>
       </div>
       <div className="flex justify-center p-10">
