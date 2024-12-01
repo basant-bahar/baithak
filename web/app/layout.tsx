@@ -3,6 +3,7 @@
 import "./globals.css";
 import Drawer from "components/navbar/drawer";
 import Providers from "components/auth/providers";
+import { Footer } from "components/footer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <Drawer>
-            <main>{children}</main>
+            <main className="flex flex-col h-screen items-center gap-1">
+              {children}
+              <Footer />
+            </main>
           </Drawer>
         </Providers>
       </body>

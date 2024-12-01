@@ -9,7 +9,7 @@ import { ConcertRsvpDetailsFragment, ConcertRsvpPrintDetailsFragment } from "__g
 
 export default function Rsvps() {
   const descFn = (concertRsvp: ConcertRsvpDetailsFragment) => {
-    return `${concertRsvp.title} (${getDateStr(concertRsvp.startTime)})`;
+    return `${concertRsvp.title} (${getDateStr(new Date(concertRsvp.startTime))})`;
   };
 
   const [concertRsvpsForPrint] = useLazyQuery(concertRsvpsPrint);

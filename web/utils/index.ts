@@ -70,13 +70,14 @@ export class LocalizedDate {
   }
 }
 
+// Get only the date part (no time) in the "yyyy-MM-dd" format.
 export function getDateStr(rawDate?: string | Date): string {
   let normalizedDate: Date | string;
   if (rawDate && rawDate instanceof Date) {
     normalizedDate = rawDate;
   } else {
     // string date
-    normalizedDate = rawDate + " T23:59:59";
+    normalizedDate = rawDate + "T23:59:59";
   }
   return formatInTimeZone(normalizedDate, ORG_TIMEZONE as string, "yyyy-MM-dd");
 }
