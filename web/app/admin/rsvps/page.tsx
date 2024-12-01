@@ -3,13 +3,13 @@
 import React from "react";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import { getFragmentData, graphql } from "__generated__";
-import { getDateStr } from "utils";
+import { getDateOnlyStr } from "utils";
 import PageHeader from "components/common/pageHeader";
 import { ConcertRsvpDetailsFragment, ConcertRsvpPrintDetailsFragment } from "__generated__/graphql";
 
 export default function Rsvps() {
   const descFn = (concertRsvp: ConcertRsvpDetailsFragment) => {
-    return `${concertRsvp.title} (${getDateStr(new Date(concertRsvp.startTime))})`;
+    return `${concertRsvp.title} (${getDateOnlyStr(new Date(concertRsvp.startTime))})`;
   };
 
   const [concertRsvpsForPrint] = useLazyQuery(concertRsvpsPrint);

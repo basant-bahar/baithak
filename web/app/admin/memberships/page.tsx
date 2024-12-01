@@ -6,7 +6,7 @@ import { useLazyQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import { graphql, getFragmentData } from "__generated__";
 import { membershipDetails, searchMembership } from "../../../graphql/memberships";
-import { getDateStr, getServerDateOnly } from "utils";
+import { getDateOnlyStr, getServerDateOnly } from "utils";
 import { MembershipDetailsFragment } from "__generated__/graphql";
 
 export default function MembershipList() {
@@ -19,7 +19,7 @@ export default function MembershipList() {
     const isExpired = membership.expiry && new Date(membership.expiry) < today;
     const labelClass = isExpired ? "" : "text-green-600";
     const label = `${name}${spouse ? ", " + spouseName : ""} (${
-      membership.expiry ? getDateStr(membership.expiry) : "Not paid"
+      membership.expiry ? getDateOnlyStr(membership.expiry) : "Not paid"
     })`;
 
     return <span className={labelClass}>{label}</span>;

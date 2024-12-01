@@ -3,7 +3,7 @@
 import { useLazyQuery, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getDateStr, parseDateYYYYMMDD } from "utils";
+import { getDateOnlyStr, parseDateYYYYMMDD } from "utils";
 import { FragmentType, getFragmentData, graphql } from "__generated__";
 
 export default function MembershipExpiryNotifications() {
@@ -33,7 +33,7 @@ export default function MembershipExpiryNotifications() {
     let fetchActive = true;
     const fetchData = async () => {
       const { data, loading } = await expiryNotifications({
-        variables: { start: getDateStr(startDate), end: getDateStr(endDate) },
+        variables: { start: getDateOnlyStr(startDate), end: getDateOnlyStr(endDate) },
       });
       if (fetchActive && data?.memberships) {
         setMemberships(data?.memberships);
@@ -63,13 +63,13 @@ export default function MembershipExpiryNotifications() {
         <input
           className="simple-input w-40 mr-4"
           type="date"
-          value={getDateStr(startDate)}
+          value={getDateOnlyStr(startDate)}
           onChange={(date) => changeStartDate(date)}
         />
         <input
           className="simple-input w-40"
           type="date"
-          value={getDateStr(endDate)}
+          value={getDateOnlyStr(endDate)}
           onChange={(date) => changeEndDate(date)}
         />
         <button

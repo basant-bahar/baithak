@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getDateStr } from "utils";
+import { getDateOnlyStr } from "utils";
 import { MembershipOnlyDetailsFragment } from "../../__generated__/graphql";
 import ManagePayment from "./managePayment";
 import TermsAndConditions from "./terms";
@@ -207,7 +207,7 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             <input
               className="simple-input"
               type="date"
-              value={getDateStr(props.membership.expiry)}
+              value={getDateOnlyStr(props.membership.expiry)}
               readOnly
               disabled={true}
             />

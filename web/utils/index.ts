@@ -71,7 +71,7 @@ export class LocalizedDate {
 }
 
 // Get only the date part (no time) in the "yyyy-MM-dd" format.
-export function getDateStr(rawDate?: string | Date): string {
+export function getDateOnlyStr(rawDate?: string | Date): string {
   let normalizedDate: Date | string;
   if (rawDate && rawDate instanceof Date) {
     normalizedDate = rawDate;
