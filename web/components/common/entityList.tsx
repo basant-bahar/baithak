@@ -10,7 +10,7 @@ type Entity<D> = { id: number } & D;
 
 type EntityListProps<D> = {
   entityInfo: EntityInfo<D>;
-  descFn: (details: D) => string;
+  descFn: (details: D) => string | JSX.Element;
 };
 
 export class EntityInfo<D> {
