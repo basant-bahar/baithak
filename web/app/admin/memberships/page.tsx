@@ -17,7 +17,8 @@ export default function MembershipList() {
     const spouseName = `${membership.spouseFirstName} ${membership.spouseLastName}`;
     const spouse = membership.spouseFirstName !== "";
     const isExpired = membership.expiry && new Date(membership.expiry) < today;
-    const labelClass = isExpired ? "" : "text-green-600";
+    const notPaid = membership.expiry === null;
+    const labelClass = isExpired || notPaid ? "" : "text-green-600";
     const label = `${name}${spouse ? ", " + spouseName : ""} (${
       membership.expiry ? getDateOnlyStr(membership.expiry) : "Not paid"
     })`;
