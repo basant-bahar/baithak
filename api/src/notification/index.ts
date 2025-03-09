@@ -1,12 +1,12 @@
 import rehypeStringify from "npm:rehype-stringify";
 import remarkParse from "npm:remark-parse";
 import remarkRehype from "npm:remark-rehype";
-import rehypeRaw from 'npm:rehype-raw'
+import rehypeRaw from "npm:rehype-raw";
 import { unified } from "npm:unified";
 
 import * as Eta from "https://deno.land/x/eta@v1.12.3/mod.ts";
 import { sendEmail } from "../email/index.ts";
-import type { Exograph } from "../../generated/exograph.d.ts";
+import { Exograph } from "../../generated/exograph.d.ts";
 
 const upcomingConcertQuery = `
   query($today: LocalDateTime) {
@@ -78,7 +78,7 @@ export async function formatNotification(
   let template = await Deno.readTextFile("./src/notification/notificationTemplate.html");
   const templateFunction = Eta.compile(template);
 
-    const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
+  const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
     .notification;
   const concert = notification.concert;
   const message = await toHtml(notification.message);
@@ -110,7 +110,7 @@ async function toHtml(markdown: string): Promise<string> {
   return String(
     await unified()
       .use(remarkParse)
-      .use(remarkRehype, {allowDangerousHtml: true})
+      .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeRaw)
       .use(rehypeStringify)
       .process(markdown)
@@ -125,10 +125,22 @@ const allSubscribersQuery = `
   }
 `;
 
-const subscribersQuery = `
+const subscribersForGroupQuery = `
   query($group: String) {
     subscriptions(where: {group: {eq: $group}}, orderBy: {email: ASC}) {
       email
+    }
+  }
+`;
+
+const allActiveMembersQuery = `
+  query($today: LocalDate) {
+    memberships (where: {expiry: {gte: $today}}) {
+      id
+      expiry
+      authUser {
+        email
+      }
     }
   }
 `;
@@ -141,26 +153,39 @@ export async function emailNotification(
   const notification = (await exograph.executeQuery(query, { id: concertNotificationId }))
     .notification;
   const notificationText = await formatNotification(concertNotificationId, exograph);
-  let subscribers;
+  let bccs: [string];
   if (emailGroupName === "all") {
-    subscribers = await exograph.executeQuery(allSubscribersQuery);
+    const subscribers = await exograph.executeQuery(allSubscribersQuery);
+    bccs = subscribers.subscriptions.map((s: { email: string }) => s.email);
+  } else if (emailGroupName === "activeMembers") {
+    const today = new Date().toISOString();
+    const members = await exograph.executeQuery(allActiveMembersQuery, { today });
+    bccs = members.memberships.map((m: { authUser: { email: string } }) => m.authUser.email);
+  } else if (emailGroupName === "test") {
+    const subscribers = await exograph.executeQuery(subscribersForGroupQuery, {
+      group: emailGroupName,
+    });
+    bccs = subscribers.subscriptions.map((s: { email: string }) => s.email);
   } else {
-    subscribers = await exograph.executeQuery(subscribersQuery, { group: emailGroupName });
+    throw new ExographError("Invalid email group");
   }
+
   const subject = notification.subject;
   const toFrom = Deno.env.get("EMAIL_NOTIFICATION_FROM_ADDRESS");
   if (!toFrom) throw Error("Env EMAIL_NOTIFICATION_FROM_ADDRESS is not set");
 
   try {
-    const bccs: [string] = subscribers.subscriptions.map((s: { email: string }) => s.email);
-
-    return await sendEmail({
-      subject: subject,
-      message: notificationText,
-      to: toFrom,
-      from: toFrom,
-      bcc: bccs,
-    });
+    if (bccs.length > 0) {
+      return await sendEmail({
+        subject: subject,
+        message: notificationText,
+        to: toFrom,
+        from: toFrom,
+        bcc: bccs,
+      });
+    } else {
+      throw new ExographError("Not sending email since group is empty");
+    }
   } catch (e) {
     console.log(e);
     throw e;
