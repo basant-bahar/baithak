@@ -6,8 +6,9 @@ import { useLazyQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import { graphql, getFragmentData } from "__generated__";
 import { membershipDetails, searchMembership } from "../../../graphql/memberships";
-import { getDateOnlyStr, getServerDateOnly } from "utils";
+import { getDateOnlyStr, getServerDateOnly, ORG_TIMEZONE } from "utils";
 import { MembershipDetailsFragment } from "__generated__/graphql";
+import { formatInTimeZone } from "date-fns-tz";
 
 export default function MembershipList() {
   const today = new Date();
@@ -72,6 +73,56 @@ const AdditionalButtons = () => {
     summaryVisible && getMemberships();
   }, [summaryVisible, getActiveMembershipsQuery]);
 
+  async function downloadCSV(e: React.MouseEvent<HTMLButtonElement>) {
+    const today = new Date();
+    const start = new Date();
+    start.setMonth(today.getMonth() - 6);
+    const { data } = await membershipsForDeskPrintout({
+      variables: { expiry: getServerDateOnly(start) },
+    });
+    const header =
+      "First Name,Last Name,Email,Phone,Number Of Tickets,Member Type,Start Date (mm/dd/yyyy),End Date (mm/dd/yyyy),Other Names,Other Emails,Other Phones\n";
+    const csv = data?.memberships
+      .map((membershipDetailsFragment) => {
+        const membership = getFragmentData(membershipDetails, membershipDetailsFragment);
+
+        const numberOfTickets = () => {
+          switch (membership.type) {
+            case "Couple":
+              return 2;
+            case "Family":
+              return 4;
+            case "Individual":
+              return 1;
+            case "Life":
+              return 4;
+          }
+        };
+        const expiry = formatInTimeZone(membership.expiry, ORG_TIMEZONE as string, "MM/dd/yyyy");
+
+        return [
+          `${membership.authUser.firstName}`,
+          `${membership.authUser.lastName}`,
+          `${membership.authUser.email}`,
+          ``,
+          `${numberOfTickets()}`,
+          `${membership.type}`,
+          ``,
+          `${expiry}`,
+          `${membership.spouseFirstName} ${membership.spouseLastName}`,
+          `${membership.spouseEmail}`,
+          ``,
+        ].join(",");
+      })
+      .join("\n");
+    const blob = new Blob([header + csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "memberships.csv";
+    a.click();
+  }
+
   async function createDeskPrintout(e: React.MouseEvent<HTMLButtonElement>) {
     const today = new Date();
     const start = new Date();
@@ -133,22 +184,28 @@ const AdditionalButtons = () => {
     <div className="flex justify-between mx-auto mb-2">
       <div>
         <button
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-md:h-fit max-md:w-28 max-md:mb-4"
           onClick={showSummary}
         >
           Membership Summary
         </button>
         {summaryVisible && summaryMap && summaryComponent()}
       </div>
-      <div className="flex">
+      <div className="flex flex-wrap">
         <button
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex  items-center disabled:opacity-50 p-2 h-8 max-md:h-fit max-md:w-28 max-md:mb-4"
+          onClick={downloadCSV}
+        >
+          Download CSV
+        </button>
+        <button
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-md:h-fit max-md:w-28 max-md:mb-4"
           onClick={createDeskPrintout}
         >
           Desk Printout
         </button>
         <Link
-          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-xs:h-fit max-xs:w-28 max-xs:mb-4"
+          className="bg-orange-200 hover:bg-orange-300 mr-2 rounded-md flex items-center disabled:opacity-50 p-2 h-8 max-md:h-fit max-md:w-28 max-md:mb-4"
           href={`memberships/expiry-notifications`}
         >
           Send Expiry Notificaions
