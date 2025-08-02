@@ -1,0 +1,4 @@
+[build]
+after-model-change = [
+  "exo graphql schema --output ../web/schema.graphql", 
+]

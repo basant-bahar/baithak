@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "graphql-codegen && npx generate-persisted-query-manifest && cp persisted-query-manifest.json ../api/trusted-documents",
+    "predev": "npm run create-schema && graphql-codegen && npx generate-persisted-query-manifest && cp persisted-query-manifest.json ../api/trusted-documents",
     "dev": "next dev -p 3000",
     "prebuild": "graphql-codegen",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "create-schema": "cd ../api && exo graphql schema -o ../web/schema.graphql"
   },
   "dependencies": {
     "@apollo/client": "3.10.8",
