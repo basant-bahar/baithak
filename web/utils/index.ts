@@ -71,7 +71,7 @@ export class LocalizedDate {
 }
 
 // Get only the date part (no time) in the "yyyy-MM-dd" format.
-export function getDateOnlyStr(rawDate?: string | Date): string {
+export function getDateOnlyStr(rawDate?: string | Date, dateFormat: string = "yyyy-MM-dd"): string {
   let normalizedDate: Date | string;
   if (rawDate && rawDate instanceof Date) {
     normalizedDate = rawDate;
@@ -79,7 +79,7 @@ export function getDateOnlyStr(rawDate?: string | Date): string {
     // string date
     normalizedDate = rawDate + "T23:59:59";
   }
-  return formatInTimeZone(normalizedDate, ORG_TIMEZONE as string, "yyyy-MM-dd");
+  return formatInTimeZone(normalizedDate, ORG_TIMEZONE as string, dateFormat);
 }
 
 export function getServerDateOnly(date: Date): string {
@@ -100,6 +100,13 @@ export function parseDateYYYYMMDD(dateStr: string) {
   startDate.setDate(parseInt(day));
   return startDate;
 }
+
+export function getMembershipExpiryDate(expiry?: string, type?: string): string {
+  if (!expiry) return "Not paid";
+  if (type === "Life") return "Never";
+  return getDateOnlyStr(expiry, "MM/dd/yyyy");
+}
+
 
 export async function handleFileUpload(
   file: File,

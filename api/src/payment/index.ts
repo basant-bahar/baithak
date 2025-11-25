@@ -4,6 +4,7 @@ const membershipExpiry = `
 query getMembership($id: Int!) {
   membership(id: $id) {
     expiry
+    type
   }
 }
 `;
@@ -27,9 +28,8 @@ export async function processPayment(operation: Operation, exograph: Exograph) {
   const infoOnly = dataArg?.infoOnly;
 
   if (!infoOnly) {
-    const currentExpiryStr = (await exograph.executeQuery(membershipExpiry, { id: membershipId }))
-      .membership?.expiry;
-    const newExpiry = computeExpiry(currentExpiryStr, paymentDateStr);
+    const membership = (await exograph.executeQuery(membershipExpiry, { id: membershipId })).membership;
+    const newExpiry = computeExpiry(paymentDateStr, membership?.expiry, membership?.type);
 
     await exograph.executeQuery(updateMembership, {
       id: membershipId,

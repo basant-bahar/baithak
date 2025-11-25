@@ -6,7 +6,7 @@ import { useLazyQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import { graphql, getFragmentData } from "__generated__";
 import { membershipDetails, searchMembership } from "../../../graphql/memberships";
-import { getDateOnlyStr, getServerDateOnly, ORG_TIMEZONE } from "utils";
+import { getMembershipExpiryDate, getServerDateOnly, ORG_TIMEZONE } from "utils";
 import { MembershipDetailsFragment } from "__generated__/graphql";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -20,8 +20,9 @@ export default function MembershipList() {
     const isExpired = membership.expiry && new Date(membership.expiry) < today;
     const notPaid = membership.expiry === null;
     const labelClass = isExpired || notPaid ? "" : "text-green-600";
+
     const label = `${name}${spouse ? ", " + spouseName : ""} (${
-      membership.expiry ? getDateOnlyStr(membership.expiry) : "Not paid"
+      getMembershipExpiryDate(membership.expiry, membership.type)
     })`;
 
     return <span className={labelClass}>{label}</span>;
@@ -145,13 +146,14 @@ const AdditionalButtons = () => {
     const formatedBody =
       data?.memberships.reduce((acc, membershipDetailsFragment) => {
         const membership = getFragmentData(membershipDetails, membershipDetailsFragment);
+        const expiry = getMembershipExpiryDate(membership.expiry, membership.type);
         return (
           acc +
           `
               <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.authUser.lastName} ${membership.authUser.firstName}</div>
               <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.spouseLastName} ${membership.spouseFirstName}</div>
               <div style="border-bottom: ${border};${firstCol}">&nbsp;${membership.type}</div>
-              <div style="border-bottom: ${border};${secondCol}">${membership.expiry}</div>
+              <div style="border-bottom: ${border};${secondCol}">${expiry}</div>
             `
         );
       }, header) + "</div>";

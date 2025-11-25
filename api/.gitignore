@@ -2,3 +2,4 @@ target/*
 generated/*
 .env.local
 docker-compose.yml
+node_modules/*

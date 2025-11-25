@@ -32,11 +32,10 @@ Open a new terminal window and run the following commands:
 
 ```bash
 cd api
-source .env.local
 exo yolo
 ```
 
-This will run the server in the [yolo mode](https://exograph.dev/docs/cli-reference/development/yolo). This creates a temporary database that lasts while the command is running. Therefore, once you get everything working, you should switch to the [dev mode](https://exograph.dev/docs/cli-reference/development/dev).
+This will run the server in the [yolo mode](https://exograph.dev/docs/cli-reference/development/yolo). This creates a temporary database that lasts while the command is running. Therefore, once you get everything working, you should switch to the [dev mode](https://exograph.dev/docs/cli-reference/development/dev). When running in dev mode, pass `--read-write` flag to `exo dev` command.
 
 ## Launch file upload server
 

@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getDateOnlyStr } from "utils";
+import { getMembershipExpiryDate } from "utils";
 import { MembershipOnlyDetailsFragment } from "../../__generated__/graphql";
 import ManagePayment from "./managePayment";
 import TermsAndConditions from "./terms";
@@ -201,18 +201,12 @@ export default function MembershipEditor(props: MembershipEditorProps) {
             </div>
           </>
         )}
-        {props.membership?.expiry && (
-          <div className="form-row">
-            <label className="form-label">Expires On</label>
-            <input
-              className="simple-input"
-              type="date"
-              value={getDateOnlyStr(props.membership.expiry)}
-              readOnly
-              disabled={true}
-            />
+        <div className="form-row">
+          <label className="form-label">Expires On</label>
+          <div className="text-gray-400 cursor-not-allowed">
+            {getMembershipExpiryDate(props.membership?.expiry, props.membership?.type)}
           </div>
-        )}
+        </div>
         {errorMessage && (
           <div className="form-row text-red-600">
             <div className="col-start-2">{errorMessage}</div>
